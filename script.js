@@ -141,7 +141,90 @@ const questions = [
   {chapter:"Vinter", question:"Varför ska du hålla längre avstånd vintertid?", answers:["Du behöver längre tid att stanna","För att köra snabbare","För att slippa blinka"], correct:0},
   {chapter:"Vinter", question:"Vad ska du tänka på vid broar och viadukter?", answers:["De kan bli hala snabbare","De är alltid torra","De har alltid värme"], correct:0},
   {chapter:"Vinter", question:"Vad ska du göra om bilen får sladd?", answers:["Släppa gasen och styra lugnt","Bromsa hårt direkt","Blunda"], correct:0},
-  {chapter:"Vinter", question:"Vad är bäst vid vinterkörning?", answers:["Planera, köra lugnt och ha god marginal","Stressa","Köra nära andra"], correct:0}
+  {chapter:"Vinter", question:"Vad är bäst vid vinterkörning?", answers:["Planera, köra lugnt och ha god marginal","Stressa","Köra nära andra"], correct:0},
+// INLÄRNING & MOGNAD
+{chapter:"Inlärning & mognad", question:"Vad är viktigt när du lär dig köra bil?", answers:["Att köra fort direkt","Att öva steg för steg","Att bara läsa skyltar","Att undvika stadstrafik"], correct:1},
+{chapter:"Inlärning & mognad", question:"Vad betyder mognad i trafiken?", answers:["Att kunna ta ansvar och inte chansa","Att alltid köra långsamt","Att aldrig köra på landsväg","Att kunna alla bilmärken"], correct:0},
+{chapter:"Inlärning & mognad", question:"Vad är bäst när du är ny förare?", answers:["Köra stressad","Ta stora risker","Öva mycket och köra lugnt","Köra utan plan"], correct:2},
+{chapter:"Inlärning & mognad", question:"Vad kan stress leda till i trafiken?", answers:["Bättre reaktion","Säkrare körning","Mindre risk","Sämre beslut"], correct:3},
+{chapter:"Inlärning & mognad", question:"Vad ska du göra om du känner dig osäker?", answers:["Köra ändå snabbt","Sänka farten och ta det lugnt","Tuta på andra","Byta körfält ofta"], correct:1},
+{chapter:"Inlärning & mognad", question:"Vad är erfarenhet bra för?", answers:["Den hjälper dig upptäcka risker tidigare","Den gör att regler inte gäller","Den gör bilen snabbare","Den tar bort alla risker"], correct:0},
+{chapter:"Inlärning & mognad", question:"Vad ska en mogen förare göra?", answers:["Visa hänsyn","Köra nära andra","Chansa vid korsning","Ignorera cyklister"], correct:0},
+{chapter:"Inlärning & mognad", question:"Vad är farligt med övertro?", answers:["Man tror att man klarar mer än man gör","Man kör långsammare","Man bromsar tidigare","Man visar mer hänsyn"], correct:0},
+{chapter:"Inlärning & mognad", question:"Hur lär man sig bäst trafiksäkerhet?", answers:["Genom att bara gissa","Genom teori och praktisk övning","Genom att köra utan handledare","Genom att ignorera misstag"], correct:1},
+{chapter:"Inlärning & mognad", question:"Vad ska du göra efter ett misstag i trafiken?", answers:["Skylla på andra","Lära dig av det","Köra snabbare","Strunta i det"], correct:1},
+
+// ALKOHOL
+{chapter:"Alkohol", question:"Hur påverkar alkohol körningen?", answers:["Du kör säkrare","Reaktionen blir bättre","Omdöme och reaktion försämras","Synen blir bättre"], correct:2},
+{chapter:"Alkohol", question:"Vad är rattfylleri?", answers:["Att köra med alkohol över laglig gräns","Att köra trött","Att köra sakta","Att köra med vinterdäck"], correct:0},
+{chapter:"Alkohol", question:"Vad ska du göra om du druckit alkohol?", answers:["Köra sakta hem","Vänta och inte köra","Köra bara kort sträcka","Köra med varningsblinkers"], correct:1},
+{chapter:"Alkohol", question:"Kan små mängder alkohol påverka körningen?", answers:["Nej aldrig","Bara på motorväg","Ja","Bara på vintern"], correct:2},
+{chapter:"Alkohol", question:"Vad påverkas ofta först av alkohol?", answers:["Bilmotorn","Omdömet","Däcktrycket","Blinkers"], correct:1},
+{chapter:"Alkohol", question:"Vad är bäst dagen efter fest?", answers:["Köra direkt på morgonen","Köra om du känner dig pigg","Tänka på att alkohol kan finnas kvar","Dricka kaffe och köra direkt"], correct:2},
+{chapter:"Alkohol", question:"Vad kan alkohol ge för effekt?", answers:["Sämre uppmärksamhet","Kortare bromssträcka","Bättre mörkerseende","Snabbare reaktion"], correct:0},
+{chapter:"Alkohol", question:"Vad ska du göra om en vän vill köra berusad?", answers:["Låta personen köra","Stoppa personen från att köra","Åka med ändå","Säga att köra långsamt"], correct:1},
+{chapter:"Alkohol", question:"Varför är alkohol farligt i trafiken?", answers:["Det gör bilen tyngre","Det minskar risker","Det försämrar kontroll och beslut","Det förbättrar koncentration"], correct:2},
+{chapter:"Alkohol", question:"Vad gäller vid droger och bilkörning?", answers:["Det är okej ibland","Det är farligt och olagligt","Det påverkar inte","Det gäller bara lastbil"], correct:1},
+
+// TRÖTTHET
+{chapter:"Trötthet", question:"Hur påverkar trötthet körningen?", answers:["Du reagerar långsammare","Du ser bättre","Du kör säkrare","Du bromsar snabbare"], correct:0},
+{chapter:"Trötthet", question:"Vad ska du göra om du blir mycket trött?", answers:["Öka farten","Stanna och vila","Öppna bara fönstret","Köra vidare"], correct:1},
+{chapter:"Trötthet", question:"Vad är mikrosömn?", answers:["Att blinka normalt","Att somna till mycket kort","Att vila bilen","Att bromsa mjukt"], correct:1},
+{chapter:"Trötthet", question:"När är risken för trötthet ofta stor?", answers:["Efter god sömn","På natten och tidig morgon","När bilen är ny","Vid låg hastighet bara"], correct:1},
+{chapter:"Trötthet", question:"Vad är bästa lösningen mot trötthet?", answers:["Hög musik","Kaffe bara","Sömn och vila","Köra snabbare"], correct:2},
+{chapter:"Trötthet", question:"Vad kan vara tecken på trötthet?", answers:["Du gäspar och tappar koncentration","Du ser bättre","Du blir lugnare alltid","Du får kortare reaktionstid"], correct:0},
+{chapter:"Trötthet", question:"Är trötthet farligt som alkohol?", answers:["Nej aldrig","Ja, det kan vara mycket farligt","Bara i stad","Bara på sommaren"], correct:1},
+{chapter:"Trötthet", question:"Vad ska du göra vid lång körning?", answers:["Planera pauser","Köra utan stopp","Äta mycket och köra vidare","Undvika rastplats"], correct:0},
+{chapter:"Trötthet", question:"Vad kan monotona vägar leda till?", answers:["Mindre risk","Mer vakenhet","Trötthet och sämre uppmärksamhet","Bättre syn"], correct:2},
+{chapter:"Trötthet", question:"Vad ska du inte lita på när du är trött?", answers:["Att du alltid orkar lite till","Att vila hjälper","Att sömn behövs","Att pauser är bra"], correct:0},
+
+// SYNEN
+{chapter:"Synen", question:"Varför är synen viktig i trafiken?", answers:["Du får bättre ljud","Du upptäcker risker i tid","Bilen går snabbare","Du sparar bränsle"], correct:1},
+{chapter:"Synen", question:"Vad händer med synfältet vid hög hastighet?", answers:["Det blir bredare","Det blir smalare","Det försvinner helt","Det påverkas inte"], correct:1},
+{chapter:"Synen", question:"Vad är tunnelseende?", answers:["Att synfältet blir smalare","Att se genom tunnel","Att se bättre åt sidan","Att blunda kort"], correct:0},
+{chapter:"Synen", question:"Vad ska du göra i mörker?", answers:["Köra fortare","Anpassa hastigheten efter sikten","Titta bara rakt fram","Köra nära bilen framför"], correct:1},
+{chapter:"Synen", question:"Vad kan bländning göra?", answers:["Förbättra reaktion","Göra att du ser sämre en stund","Göra vägen bredare","Minska stoppsträcka"], correct:1},
+{chapter:"Synen", question:"Vad ska du göra vid möte i mörker?", answers:["Titta rakt in i ljuset","Titta mer mot vägkanten","Släcka alla lampor","Öka farten"], correct:1},
+{chapter:"Synen", question:"Vad är viktigt med backspeglar?", answers:["De används bara vid parkering","De hjälper dig hålla koll bakåt","De ersätter döda vinkeln helt","De behövs inte"], correct:1},
+{chapter:"Synen", question:"Vad är döda vinkeln?", answers:["Område du inte ser i speglarna","En mörk väg","En trasig backspegel","En parkeringsplats"], correct:0},
+{chapter:"Synen", question:"Vad ska du göra innan körfältsbyte?", answers:["Bara blinka","Kontrollera speglar och döda vinkeln","Köra direkt","Titta bara framåt"], correct:1},
+{chapter:"Synen", question:"Vad påverkar mörkerseendet negativt?", answers:["Rena rutor","Bländning och smutsiga rutor","Låg hastighet","Bra belysning"], correct:1},
+
+// NEDSATT FÖRMÅGA
+{chapter:"Nedsatt förmåga", question:"Vad kan ge nedsatt körförmåga?", answers:["Trötthet, sjukdom, alkohol eller medicin","Bra sömn","Lugn körning","Rena rutor"], correct:0},
+{chapter:"Nedsatt förmåga", question:"Vad ska du göra om medicin gör dig dåsig?", answers:["Köra ändå","Inte köra om du påverkas","Köra bara fort","Köra utan bälte"], correct:1},
+{chapter:"Nedsatt förmåga", question:"Kan sjukdom påverka körningen?", answers:["Nej aldrig","Ja","Bara vid feber över 40","Bara på motorväg"], correct:1},
+{chapter:"Nedsatt förmåga", question:"Vad ska du göra om du känner dig yr?", answers:["Stanna säkert och kör inte vidare","Öka farten","Köra hem snabbt","Ignorera det"], correct:0},
+{chapter:"Nedsatt förmåga", question:"Vad är farligt med starka känslor i trafiken?", answers:["De kan försämra omdömet","De förbättrar synen","De gör bilen snabbare","De minskar risker"], correct:0},
+{chapter:"Nedsatt förmåga", question:"Vad ska du göra om du är arg eller stressad?", answers:["Köra aggressivt","Ta det lugnt eller vänta med att köra","Tuta mycket","Köra nära andra"], correct:1},
+{chapter:"Nedsatt förmåga", question:"Vad kan mobiltelefon göra?", answers:["Öka uppmärksamhet","Minska koncentrationen","Förbättra reaktion","Minska risk"], correct:1},
+{chapter:"Nedsatt förmåga", question:"Vad är bäst om du inte är körduglig?", answers:["Låta bli att köra","Köra långsamt ändå","Köra med varningsblinkers","Köra bara i stan"], correct:0},
+{chapter:"Nedsatt förmåga", question:"Vad kan läkemedel påverka?", answers:["Bara bilens motor","Reaktion, uppmärksamhet och omdöme","Däckens färg","Vägskyltarna"], correct:1},
+{chapter:"Nedsatt förmåga", question:"Vem ansvarar för att du är lämplig att köra?", answers:["Du själv","Passageraren","Bilen","Vägverket varje minut"], correct:0},
+
+// BARN
+{chapter:"Barn", question:"Varför ska du vara extra försiktig nära barn?", answers:["Barn kan vara impulsiva","Barn kör alltid bil","Barn ser alltid dig","Barn följer alltid regler"], correct:0},
+{chapter:"Barn", question:"Vad ska du göra vid skolor?", answers:["Sänka hastigheten och vara beredd","Öka farten","Köra nära trottoaren","Tuta hela tiden"], correct:0},
+{chapter:"Barn", question:"Hur bedömer barn trafik?", answers:["Alltid perfekt","Sämre än vuxna","Bättre än förare","De ser allt"], correct:1},
+{chapter:"Barn", question:"Vad ska du göra om en boll rullar ut på vägen?", answers:["Vara beredd på att barn kan springa efter","Köra över den snabbt","Tuta och öka farten","Ignorera"], correct:0},
+{chapter:"Barn", question:"Vad är viktigt vid övergångsställe nära barn?", answers:["Köra snabbt","Vara extra uppmärksam","Stanna mitt på övergångsstället","Köra om"], correct:1},
+{chapter:"Barn", question:"Varför är barn svåra att se?", answers:["De är ofta korta och kan döljas bakom bilar","De lyser i mörker","De står alltid still","De går bara på trottoar"], correct:0},
+{chapter:"Barn", question:"Vad gäller vid skolpatrull?", answers:["Visa särskild hänsyn","Köra förbi snabbt","Tuta","Ignorera dem"], correct:0},
+{chapter:"Barn", question:"Vad ska du tänka på vid buss med barn?", answers:["Barn kan springa framför eller bakom bussen","Bussen kör alltid först","Barn syns alltid","Du ska alltid köra om"], correct:0},
+{chapter:"Barn", question:"Vad är en säker körstil nära lekplats?", answers:["Låg fart och beredskap","Hög fart","Köra nära parkerade bilar","Omkörning"], correct:0},
+{chapter:"Barn", question:"Vad är bäst när du ser barn vid vägkanten?", answers:["Sänka farten och öka uppmärksamheten","Köra nära dem","Blinka med helljus","Öka farten"], correct:0},
+
+// TRAFIKOLYCKOR
+{chapter:"Trafikolyckor", question:"Vad ska du göra först vid en trafikolycka?", answers:["Säkra platsen och varna andra","Ta bilder först","Köra därifrån","Flytta alla bilar direkt"], correct:0},
+{chapter:"Trafikolyckor", question:"Vilket nummer ringer du vid allvarlig olycka?", answers:["112","114 14","1177","911"], correct:0},
+{chapter:"Trafikolyckor", question:"Vad betyder LABC?", answers:["Livsfarligt läge, Andning, Blödning, Chock","Ljus, ABS, Broms, Cykel","Last, Alkohol, Bil, Cirkulation","Larm, Avgift, Bälte, Kontroll"], correct:0},
+{chapter:"Trafikolyckor", question:"Vad ska du göra om någon blöder kraftigt?", answers:["Stoppa blödningen","Ge personen mat","Lämna platsen","Flytta personen långt"], correct:0},
+{chapter:"Trafikolyckor", question:"Vad ska du göra vid livsfarligt läge?", answers:["Flytta personen till säker plats om det behövs","Alltid låta personen ligga kvar","Ta bort bilnyckeln bara","Vänta utan att agera"], correct:0},
+{chapter:"Trafikolyckor", question:"Varför ska du varna andra trafikanter?", answers:["För att undvika fler olyckor","För att stoppa all trafik för alltid","För att samla folk","För att hinna filma"], correct:0},
+{chapter:"Trafikolyckor", question:"Vad kan du använda för att varna?", answers:["Varningstriangel och varningsblinkers","Helljus hela tiden","Signalhorn i 10 minuter","Parkeringsljus bara"], correct:0},
+{chapter:"Trafikolyckor", question:"Vad ska du göra om någon inte andas normalt?", answers:["Larma 112 och starta HLR om du kan","Ge personen vatten","Sätta personen i bilen","Vänta tills någon annan kommer"], correct:0},
+{chapter:"Trafikolyckor", question:"Får du lämna en olycksplats där du är inblandad?", answers:["Nej, du måste stanna och hjälpa till","Ja alltid","Bara om du har bråttom","Ja om bilen fungerar"], correct:0},
+{chapter:"Trafikolyckor", question:"Vad är viktigt efter mindre krock utan personskada?", answers:["Byta uppgifter med den andra föraren","Köra därifrån direkt","Skylla på andra","Ta bort registreringsskylt"], correct:0}
 ];
 
 const extraWrongAnswers = [
