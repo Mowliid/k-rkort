@@ -1,0 +1,148 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #eef3f8;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: white;
+  padding: calc(18px + env(safe-area-inset-top)) 16px calc(22px + env(safe-area-inset-bottom));
+}
+
+h1 {
+  text-align: center;
+  color: #1e4f8a;
+  font-size: 30px;
+  margin: 12px 0 20px;
+}
+
+.label {
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #173b66;
+}
+
+select,
+button {
+  width: 100%;
+  padding: 16px;
+  margin: 8px 0 12px;
+  font-size: 18px;
+  border-radius: 14px;
+  border: 1px solid #aaa;
+}
+
+button {
+  background: #1e4f8a;
+  color: white;
+  cursor: pointer;
+  border: none;
+  font-weight: bold;
+}
+
+button:active,
+.answer:active {
+  transform: scale(0.98);
+}
+
+.top-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: #1e4f8a;
+  font-size: 15px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 8px 0 18px;
+}
+
+#progressFill {
+  width: 0%;
+  height: 100%;
+  background: #1e4f8a;
+  transition: width 0.25s ease;
+}
+
+.question {
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 20px;
+  line-height: 1.35;
+  color: #111827;
+}
+
+.answer {
+  background: #f1f1f1;
+  margin: 14px 0;
+  padding: 18px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1.35;
+  border: 2px solid transparent;
+}
+
+.answer:hover {
+  background: #dbeafe;
+}
+
+.correct {
+  background: #b7f7c1 !important;
+  border-color: #22c55e;
+}
+
+.wrong {
+  background: #ffb3b3 !important;
+  border-color: #ef4444;
+}
+
+.disabled {
+  pointer-events: none;
+}
+
+#result {
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 25px;
+  text-align: center;
+  color: #1e4f8a;
+  line-height: 1.4;
+}
+
+p {
+  font-size: 17px;
+}
+
+@media (min-width: 600px) {
+  .container {
+    margin: 40px auto;
+    border-radius: 18px;
+    box-shadow: 0 0 15px #aaa;
+    min-height: auto;
+    max-width: 800px;
+    padding: 30px;
+  }
+}
