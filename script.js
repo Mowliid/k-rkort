@@ -142,7 +142,7 @@ const questions = [
   {chapter:"Vinter", question:"Vad ska du tänka på vid broar och viadukter?", answers:["De kan bli hala snabbare","De är alltid torra","De har alltid värme"], correct:0},
   {chapter:"Vinter", question:"Vad ska du göra om bilen får sladd?", answers:["Släppa gasen och styra lugnt","Bromsa hårt direkt","Blunda"], correct:0},
   {chapter:"Vinter", question:"Vad är bäst vid vinterkörning?", answers:["Planera, köra lugnt och ha god marginal","Stressa","Köra nära andra"], correct:0},
-// INLÄRNING & MOGNAD
+  // INLÄRNING & MOGNAD
   {chapter:"Inlärning & mognad", question:"Vad är viktigt när du lär dig köra bil?", answers:["Att köra fort direkt","Att öva steg för steg","Att bara läsa skyltar","Att undvika stadstrafik"], correct:1},
   {chapter:"Inlärning & mognad", question:"Vad betyder mognad i trafiken?", answers:["Att kunna ta ansvar och inte chansa","Att alltid köra långsamt","Att aldrig köra på landsväg","Att kunna alla bilmärken"], correct:0},
   {chapter:"Inlärning & mognad", question:"Vad är bäst när du är ny förare?", answers:["Köra stressad","Ta stora risker","Öva mycket och köra lugnt","Köra utan plan"], correct:2},
@@ -284,7 +284,7 @@ const questions = [
   {chapter:"Bromsar", question:"Vad är viktigt vid bromsning på halt väglag?", answers:["Bromsa mjukt och i god tid","Bromsa sent och hårt","Köra närmare bilen framför","Stänga av ABS"], correct:0},
   {chapter:"Bromsar", question:"Vad varnar bromsvarningslampan för?", answers:["Fel i bromssystemet eller låg bromsvätska","Att radion är på","Att däcken är nya","Att bilen är tvättad"], correct:0},
   {chapter:"Bromsar", question:"Varför ska bromsarna testas ibland?", answers:["För att veta att de fungerar säkert","För att spara blinkers","För att minska synfältet","För att bilen ska låta mer"], correct:0},
-   // KROCKSÄKERHET
+  // KROCKSÄKERHET
   {chapter:"Krocksäkerhet", question:"Vad är bilens deformationszon till för?", answers:["Att ta upp krockkraften","Att göra bilen snabbare","Att minska bränsleförbrukningen","Att öka motoreffekten"], correct:0},
   {chapter:"Krocksäkerhet", question:"Vad gör säkerhetsbältet?", answers:["Håller kvar dig vid en krock","Ökar bilens hastighet","Stänger av motorn","Tänder airbags"], correct:0},
   {chapter:"Krocksäkerhet", question:"Vad gör en airbag?", answers:["Minskar risken för skador vid kollision","Ökar bromssträckan","Gör bilen lättare","Förbättrar styrningen"], correct:0},
