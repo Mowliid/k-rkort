@@ -15,8 +15,7 @@ const PROVS = [
           "assets/prov1/1_1.jpg",
           "assets/prov1/100px-1_1_23.svg.png"
         ],
-        "correct": 3,
-        "estimatedCorrect": false
+        "correct": 3
       },
       {
         "text": "Du kör en personbil och har kommet till dena situationen.\n\nFår du passera en av de vägmärkena?",
@@ -30,8 +29,7 @@ const PROVS = [
           "assets/prov1/100px-1_2_7.svg.png",
           "assets/prov1/11_411.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": false
+        "correct": 2
       },
       {
         "text": "Du parkera öfta din bil där\nvägmärket och tilläggstavlorna gäller (se A)\n\nvilken av följande tider får du\nparkera där utan att betala avgift\n(se B)?",
@@ -44,8 +42,7 @@ const PROVS = [
         "images": [
           "assets/prov1/2.jpg"
         ],
-        "correct": 3,
-        "estimatedCorrect": false
+        "correct": 3
       },
       {
         "text": "Hur ska du uppträde när du köra om?",
@@ -57,8 +54,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 1,
-        "estimatedCorrect": false
+        "correct": 1
       },
       {
         "text": "När ska du använda horn?",
@@ -71,8 +67,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": false
+        "correct": 1
       },
       {
         "text": "Du har jobbat hela natten och du ska kör tillbaka hemma.\n\nVilken del av resan finns stor risk att somna när du kör ?",
@@ -84,8 +79,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": false
+        "correct": 0
       },
       {
         "text": "Tänk dig att situationerna på\nbilderna inträffs när du kör i\nmörker\n\nI vilken situation är det\natt fortsätta med helljus?",
@@ -98,8 +92,7 @@ const PROVS = [
         "images": [
           "assets/prov1/4.jpg"
         ],
-        "correct": 3,
-        "estimatedCorrect": false
+        "correct": 3
       },
       {
         "text": "Vilket efterräkning har koldioxid?",
@@ -112,8 +105,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": false
+        "correct": 0
       },
       {
         "text": "Du ska svänga höger. Vilken dold fara måste du vara beredd på i den här situation?",
@@ -126,8 +118,7 @@ const PROVS = [
         "images": [
           "assets/prov1/6.jpg"
         ],
-        "correct": 1,
-        "estimatedCorrect": false
+        "correct": 1
       },
       {
         "text": "Vad innebär detta vägmärke?",
@@ -141,8 +132,7 @@ const PROVS = [
           "assets/prov1/1_1_33.png",
           "assets/prov1/11_18_1.png"
         ],
-        "correct": 3,
-        "estimatedCorrect": false
+        "correct": 2
       },
       {
         "text": "Du möter en bil som kör på fel sida\nav vägen.\n\nHur bör du göra?",
@@ -153,8 +143,7 @@ const PROVS = [
         "images": [
           "assets/prov1/11.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": false
+        "correct": 0
       },
       {
         "text": "Vad gäller när du kör i cirkulationsplatsen?",
@@ -166,8 +155,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": false
+        "correct": 2
       },
       {
         "text": "När ska du använda dubbdäck?",
@@ -180,8 +168,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 1,
-        "estimatedCorrect": false
+        "correct": 1
       },
       {
         "text": "Du blivet stopp under nätt tid på grund av hjulens bytt\n\nVilket belysning är                             att\nha tänd på bilen när du bytt hjulet?",
@@ -194,8 +181,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 3,
-        "estimatedCorrect": false
+        "correct": 3
       },
       {
         "text": "Du råkar backa på en parkerad bil.\n\nVad är riktigt?",
@@ -208,8 +194,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": false
+        "correct": 2
       },
       {
         "text": "Du kör denna bil med 270 kg i bagaget\n\nhur mycke är bruttovikt?",
@@ -222,8 +207,7 @@ const PROVS = [
         "images": [
           "assets/prov1/16.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": false
+        "correct": 2
       },
       {
         "text": "När händer mest av alkoholsolyckor?",
@@ -236,8 +220,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 3,
-        "estimatedCorrect": false
+        "correct": 3
       },
       {
         "text": "Får du stanna i motorvägen och\nta en liftare?",
@@ -250,8 +233,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 1,
-        "estimatedCorrect": false
+        "correct": 1
       },
       {
         "text": "Hur ska du uppträda mot\nfötgångaren\ni den här situationen?",
@@ -263,8 +245,7 @@ const PROVS = [
         "images": [
           "assets/prov1/25.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": false
+        "correct": 0
       },
       {
         "text": "Du har kommet till tunnelen, hur påverkar din seende?",
@@ -277,8 +258,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 3,
-        "estimatedCorrect": false
+        "correct": 3
       },
       {
         "text": "Trafiksignalen visar röttljus.\n\nFår du köra eller ska du stanna i den\nhär situationen?",
@@ -292,8 +272,7 @@ const PROVS = [
           "assets/prov1/f1.jpg",
           "assets/prov1/1_4_21.png"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Du kör personbil.\n\nFår du köra om i en eller flera av situationen?",
@@ -306,8 +285,7 @@ const PROVS = [
           "assets/prov1/9.jpg",
           "assets/prov1/100px-1_2_63.svg.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Hur ska du uppträda när du blir om köred?",
@@ -319,8 +297,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Nya bilar är utrustad med säkerhetssystemet\n\nfinns nyckdeler på detta eller inte?",
@@ -333,8 +310,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 1,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "I vilken av de situationer får du inte stanna?",
@@ -346,8 +322,7 @@ const PROVS = [
         "images": [
           "assets/prov1/25_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du kör en bil med släp\ndet är vinterväglag\n\nVad är rätt angående dubbdäck på\nkombinationen bil och släpvagn?",
@@ -358,8 +333,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Du kör en bil med de uppgiften du\nser på registreringsbiviset, Du har\nbagage i bilen som väger 400 kg.\n\nFår du dessutom ta med dig\npassagerare?",
@@ -370,8 +344,7 @@ const PROVS = [
         "images": [
           "assets/prov1/27.jpg"
         ],
-        "correct": 1,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Hur ska du uppträda om du ska svänga till vänster?",
@@ -384,8 +357,7 @@ const PROVS = [
         "images": [
           "assets/prov1/68.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Hur ska du uppträda i denna\nsituationen?",
@@ -398,8 +370,7 @@ const PROVS = [
         "images": [
           "assets/prov1/29.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vad innebär vägmärke?",
@@ -411,8 +382,7 @@ const PROVS = [
         "images": [
           "assets/prov1/jarn.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vad ska du göra när du kännar sig sömnen?",
@@ -425,8 +395,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du ska svänga till höger\nmåste du stanna i någon av situationerna?",
@@ -440,8 +409,7 @@ const PROVS = [
           "assets/prov1/58.jpg",
           "assets/prov1/115px-1_2_50.svg.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du ska på kvällen den 15 mars\nparkera din bil på gatan där\nvägmärket gäller.\n\nDu ska hämta bilen på morgonen\nden 16 mars.\n\nVar är det tillåtet att parkera?",
@@ -453,8 +421,7 @@ const PROVS = [
         "images": [
           "assets/prov1/33.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du kör på en motorväg. Du närmar\ndig fordonen framför och du vill köra\nförbi.\n\nFår du köra om flera fordon i en gång?",
@@ -466,8 +433,7 @@ const PROVS = [
         "images": [
           "assets/prov1/34.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Du ska kör raktfram i korsningen\n\nvad är riktigt?",
@@ -480,8 +446,7 @@ const PROVS = [
           "assets/prov1/36.jpg",
           "assets/prov1/100px-1_1_23.svg.png"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du ska förtsätter till höger\n\ni vilket situationen ska du blinka?",
@@ -496,8 +461,7 @@ const PROVS = [
           "assets/prov1/100px-1_1_1_1.svg.png",
           "assets/prov1/hvdldr.jpg"
         ],
-        "correct": 3,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Du har blivit inblandad i en\ntrafikolycka\n\när du skyldig att se till att polisen\nunderrättad?",
@@ -510,8 +474,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du ska svänga till vänster\n\nhar du väjningsplikt från höger i en av korsningar?",
@@ -527,8 +490,7 @@ const PROVS = [
           "assets/prov1/100px-1_4_5.svg.png",
           "assets/prov1/hvdldr.jpg"
         ],
-        "correct": 3,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Du med dina kamrater är på väg till\nfjällen. Ni har två timmars restid kvar\noch du känner dig trött efter några\ntimmars körning.\n\nVad är bäst att göra för att resten\nav resan ska bli så säker som\nmöjligt?",
@@ -541,8 +503,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vad innebar vägmärken?",
@@ -554,8 +515,7 @@ const PROVS = [
         "images": [
           "assets/prov1/1_5_4_4.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vad innebar vägmärken?",
@@ -568,8 +528,7 @@ const PROVS = [
         "images": [
           "assets/prov1/1_4_1.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vad innebär två vägmärkna\nsom visar på bilden?",
@@ -582,8 +541,7 @@ const PROVS = [
           "assets/prov1/30h.jpg",
           "assets/prov1/1_4_17-2111.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Trafiksignalenvisar gult blinkande\nljus.\n\nVilken färg visar trafiksignalen på\ndenkorsande gatan?",
@@ -596,8 +554,7 @@ const PROVS = [
         "images": [
           "assets/prov1/43_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vilket körsätt kan kallas defensiv?",
@@ -609,8 +566,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "I vilken trafikmiljö är det stort risk\nför att föraren blir trött ( sömnig )?",
@@ -623,8 +579,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Du konstaterar att bilens\nstötdämbare är slitna\n\nHur påverkas väggreppet av detta?",
@@ -637,8 +592,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Vilket vägmärke varnar dig för att\nvägsträckan ofta korsas av cyklister\noch mopedförare?",
@@ -654,8 +608,7 @@ const PROVS = [
           "assets/prov1/100px-1_2_10.svg.png",
           "assets/prov1/100px-1_6_7.svg.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Du ska förtsätta rakt fram\n\nHur bör du göra i den här\nsituationen för att underlätta\nkörfältsbytet för föraren i den vita\nbilen?",
@@ -668,8 +621,7 @@ const PROVS = [
         "images": [
           "assets/prov1/f48.jpg"
         ],
-        "correct": 3,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Du kör på en landsväg i mörker med\nhelljuset tänt och närmar dig ett\nbackrön.\n\nAv vilken anledning kan det vara bra\natt bländs av till halvljus för en\nsekund?",
@@ -682,8 +634,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 3,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vad innebär den heldragna gula\nlenjen?",
@@ -696,8 +647,7 @@ const PROVS = [
         "images": [
           "assets/prov1/4_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Du kommer fram till en olyckasplats.\nEtt av de inblandade fordonen är en\nlastbil märkt medden här skylten.\n\nVad bör du göra?",
@@ -710,8 +660,7 @@ const PROVS = [
         "images": [
           "assets/prov1/farligt.jpg"
         ],
-        "correct": 1,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "En person har varit berusad en kväll.\nDagen efter är alkoholhalten i blodet\nnoll\n\nÄr personen en lika bra bilförare som\nvanligt den dagen?",
@@ -723,8 +672,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Vilka får trafikera körfält A där vägmärket gäller?",
@@ -736,8 +684,7 @@ const PROVS = [
         "images": [
           "assets/prov1/8_124.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Du ska svänga till vänster i\nkorsningen på bilden.\n\nVar ska du placera bilen?",
@@ -749,8 +696,7 @@ const PROVS = [
         "images": [
           "assets/prov1/5_87.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vilken belysning är tänd här\nljus......................i den\nhär positionen?",
@@ -763,8 +709,7 @@ const PROVS = [
         "images": [
           "assets/prov1/f55.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Varför inträffer de flesta dödsolyckor\ni trafiken mellan klockan 16 och\nklockan 18?",
@@ -777,8 +722,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vilken är den storst risken i den här\nsituationen?",
@@ -791,8 +735,7 @@ const PROVS = [
         "images": [
           "assets/prov1/8_13.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "På bilens instrumentpanel blinkar\nkontrollampan på bilden när du kör\n\nvad innebär det?",
@@ -805,8 +748,7 @@ const PROVS = [
         "images": [
           "assets/prov1/f58.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Är det tillåtet att parkera som den\ninringade grå bilen gjört?",
@@ -819,8 +761,7 @@ const PROVS = [
         "images": [
           "assets/prov1/f59.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du ska förtsätta rakt fram i\nkorsningen\n\nHar du väjningsplikt mot några\nfordon?",
@@ -836,8 +777,7 @@ const PROVS = [
           "assets/prov1/100px-1_1_10.svg.png",
           "assets/prov1/11_23_1.png"
         ],
-        "correct": 3,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Vad innebär det att ett\nbromssystem är hydrauliskt?",
@@ -850,8 +790,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "I vilken situation finns storst risk för\nen olycka med dödlig utgång?",
@@ -864,8 +803,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Vilken bild visar en fordons-\nkombination som du får köra när du\nhar körkort med behörighet B?",
@@ -878,8 +816,7 @@ const PROVS = [
         "images": [
           "assets/prov1/f63.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Du kopplar en lastad släpvagn till din\nbil\n\nHur ska du enklast ändra kultrycket?",
@@ -892,8 +829,7 @@ const PROVS = [
         "images": [
           "assets/prov1/7.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Vilken drivmedel bidrar\nväxthuseffeken?",
@@ -906,8 +842,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du lånar en bakhjulsdriven bil i\nstället för den framhjulsdrivna som\ndu är van att köra.\n\n\nVilken skillnad är viktig att känna till\nnär du ska köra i halt väglag?",
@@ -919,8 +854,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vilken av följande beteende är\nviktigast för att så den information\nman behöver i trafiken?",
@@ -933,8 +867,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 3,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du närmar dig backkrönet och\nanpassar därför hastigheten.\n\nVar ska du placera bilen i den här\nsituationen?",
@@ -946,8 +879,7 @@ const PROVS = [
         "images": [
           "assets/prov1/68_1.jpg"
         ],
-        "correct": 1,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du ska köra rakt fram.\n\nVad är mest förrädiskt i den\nhär situationen?",
@@ -959,8 +891,7 @@ const PROVS = [
         "images": [
           "assets/prov1/69.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du har fått en ny medicin utskriven\nav din läkare.\n\nVem har ansvaret för att bedöma\nom du kan köra bil. När du använder\nmedicinen?",
@@ -973,8 +904,7 @@ const PROVS = [
         "images": [
           "assets/prov1/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 3
       }
     ]
   },
@@ -992,8 +922,7 @@ const PROVS = [
           "assets/prov2/1.jpg",
           "assets/prov2/100px-1_2_653.svg.png"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vad är skillnaden mellan\nmotortrafikleder och motorvägar?",
@@ -1006,8 +935,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Du upptäcker att kylvätskenivån i din\nbil är låg\n\nska du fylla på med något mer än\nbara vanligt vatten?",
@@ -1020,8 +948,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vilken är den högsta tillåtna\nhastigheten vid bogsering med\nbogserlina?",
@@ -1033,8 +960,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du ska svängatill vänster möt\nHullsjö.\n\nVilken är den storsta riskeni den här\nsituationen?",
@@ -1047,8 +973,7 @@ const PROVS = [
         "images": [
           "assets/prov2/5.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du kör under de siktförhållande som bilden visar.\n\nVilken av de här belysningarna är\nlämpigast att använda framtill på\nbilen?",
@@ -1060,8 +985,7 @@ const PROVS = [
         "images": [
           "assets/prov2/6.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Du parkera öfta din bil där\nvägmärket och tilläggstavlorna gäller (se A)\n\nvilken av följande tider får du\nparkera där utan att betala avgift\n(se B)?",
@@ -1074,8 +998,7 @@ const PROVS = [
         "images": [
           "assets/prov2/7.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Hur påverkas körningen om man\nprata i mobiltelefon när man kör bil?",
@@ -1088,8 +1011,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Du ska köra rakt fram.\n\nHar du väjningsplikt mot någon\ntrafik i korsningen?",
@@ -1102,8 +1024,7 @@ const PROVS = [
         "images": [
           "assets/prov2/2_58.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vad införmerar vägmärket om?",
@@ -1117,8 +1038,7 @@ const PROVS = [
           "assets/prov2/10.jpg",
           "assets/prov2/100px-1_4_17.svg.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Förbjudet att parkera fordon på\ndag med udda datum",
@@ -1131,8 +1051,7 @@ const PROVS = [
         "images": [
           "assets/prov2/100px-Dateparking1.svg.png"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Du ska köra rakt fram i\nvägkorsningen. Trafiksignalen är ur\nfunktion.\n\nHar du väjningsplikt mot någon\ntrafik i korsningen?",
@@ -1146,8 +1065,7 @@ const PROVS = [
           "assets/prov2/12.jpg",
           "assets/prov2/100px-1_1_23.svg.png"
         ],
-        "correct": 3,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Vilka linjer ska du följa i den här\nsituationen?",
@@ -1160,8 +1078,7 @@ const PROVS = [
           "assets/prov2/13.jpg",
           "assets/prov2/100px-1_3_2_2.svg.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Måste du stanna innan du passerar\njärnvägen?",
@@ -1174,8 +1091,7 @@ const PROVS = [
           "assets/prov2/14.jpg",
           "assets/prov2/115px-1_2_50.svg.png"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vad gäller i korsningen?",
@@ -1187,8 +1103,7 @@ const PROVS = [
         "images": [
           "assets/prov2/7_74.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Värför bygger man så kallade\nspanska svängar( se bilden)?",
@@ -1200,8 +1115,7 @@ const PROVS = [
         "images": [
           "assets/prov2/16.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du köri 30 km/tim och det är torrt\nväglag . Bromssträckan är då\nca 6 meter.\n\nHur lång blir bromssträckan om du\nökar hastigheten till 90 km/tim?",
@@ -1214,8 +1128,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Du har råkat köra ner ett vägmärke\noch kan inte själv sätta upp det\nigen. Du gör vad du kan för att det\ninte ska bli problem för trafiken.\n\nMåste du göra något mer?",
@@ -1227,8 +1140,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vad innebär vägmärkena?",
@@ -1243,8 +1155,7 @@ const PROVS = [
           "assets/prov2/1_5_1_5.png",
           "assets/prov2/400.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du kör på en rak landsväg och du\nska svänga till vänster.\n\nVilket mötande fordon är det oftast\nsvårast att bedöma hastigheten på?",
@@ -1257,8 +1168,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du kör på en enkelriktad gatan och\nser detta vägmärke längre fram.\n\nVad innebär märket?",
@@ -1271,8 +1181,7 @@ const PROVS = [
         "images": [
           "assets/prov2/1_1_52.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du kör i 70 km/tim på en landsväg.\nHjulen på bilens högre sida har\nhamnat utanför asfältkanten.\n\nHur bör du göra?",
@@ -1285,8 +1194,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 3,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Vilken av dessaegenskaper hos en\nförare är mest avgörande för att\nhan eller hon ska undvika\ntrafikolyckor?",
@@ -1299,8 +1207,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vilken av dessa åtgärder är den\nbästa om du vill minska utsläppen av koldioxid från din bil?",
@@ -1313,8 +1220,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Vilket påstående om\när riktigt?",
@@ -1326,8 +1232,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Du ska köra iväg från en korsning.\n\ndär du stått stilla och väglaget är\nmycket halt\n\nhur ska du göra för att lättast\nkomma iväg?",
@@ -1340,8 +1245,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Hur ska du göra efter detta vägmärke?",
@@ -1353,8 +1257,7 @@ const PROVS = [
         "images": [
           "assets/prov2/2-1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "När du kör tänds den här lampan på\nbilens instrumentpanel.\n\nVad innebär det?",
@@ -1367,8 +1270,7 @@ const PROVS = [
         "images": [
           "assets/prov2/handbroms.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Du ska förtsätta rakt fram.\n\nGäller högerregeln i någon av\nkorsningarna?",
@@ -1381,8 +1283,7 @@ const PROVS = [
         "images": [
           "assets/prov2/29.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Du kör personbil med en tillkopplad\nlastad släpvagn.\n\nVad bör du göra efter att ha\npasserat detta vägmärke?",
@@ -1395,8 +1296,7 @@ const PROVS = [
         "images": [
           "assets/prov2/1_1_2_1.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Du ska köra in på motorvägen från\naccelerationsfältet.\n\nVad är riktigt?",
@@ -1408,8 +1308,7 @@ const PROVS = [
         "images": [
           "assets/prov2/31.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "En 20-årig förare har några\njämnåriga kamrater som\npassagerare.\n\ni vilken situation är det störst risk\nför en trafikolycka?",
@@ -1422,8 +1321,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "För vilka skador gäller din\ntrafikförsäkring vid en kollision?",
@@ -1435,8 +1333,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vad är det som avgör hur länge man\nska låta en motorvärmare vara\ninkopplad före start?",
@@ -1449,8 +1346,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du har börjat köra om lastbilen.\n\nHur ska du göra i denna situation?",
@@ -1462,8 +1358,7 @@ const PROVS = [
         "images": [
           "assets/prov2/5_94.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Du kolliderar med ett rådjur som dör i kollisionen.\n\nVad är du skyldig att göra?",
@@ -1476,8 +1371,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Är någon ab bilarna parkerad på\ntillåten plats?",
@@ -1495,8 +1389,7 @@ const PROVS = [
           "assets/prov2/100px-1_2_40.svg.png",
           "assets/prov2/11_7_2.png"
         ],
-        "correct": 3,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Får du i någon av situationerna\nsvänga till höger utan att först\nstanna?",
@@ -1511,8 +1404,7 @@ const PROVS = [
           "assets/prov2/64.jpg",
           "assets/prov2/100px-1_2_53_2.svg.png"
         ],
-        "correct": 3,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Varför blir vana förare i 50-årsåldern\nmer sällan inblandade i olyckor än\nunga förare?",
@@ -1525,8 +1417,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Du ska svänga vänster\n\nvad gäller?",
@@ -1540,8 +1431,7 @@ const PROVS = [
           "assets/prov2/40.jpg",
           "assets/prov2/11_23_2.png"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Du närmar dig en korsning där du\nhar väjningsplikt.\n\nHur kan du bäst visa andra\ntrafikanter att du tänker lämna\nföreträde?",
@@ -1553,8 +1443,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Finns det fordon som är bredare än\n260 cm som får föras på allmänna\nvägar?",
@@ -1567,8 +1456,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Vilken av följande utrustningar i bilen\när viktigast för att minska risken att\ndu blir skadad om du blir påkörd\nbakifrån?",
@@ -1581,8 +1469,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du ska med din bil hämta en\nrullstolsburn kamrat som\nbor på den här gatan.\n\nFår du köra in på gatan och hämta honom?",
@@ -1596,8 +1483,7 @@ const PROVS = [
           "assets/prov2/44.jpg",
           "assets/prov2/100px-1_4_12.svg.png"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vilket påstående stämmer med hur\nunga förare i allmänhet uppfattar sin egen körförmåga?",
@@ -1609,8 +1495,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Hur kan du minska bränsle-\nförbrukningen på din bil?",
@@ -1622,8 +1507,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vilket avstånd måste det                  vara mellan den heldragna linjen och fordonet för att du ska få stanna som fordonet på bilen?",
@@ -1635,8 +1519,7 @@ const PROVS = [
         "images": [
           "assets/prov2/47.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vad innebär polismannens tecken?",
@@ -1649,8 +1532,7 @@ const PROVS = [
         "images": [
           "assets/prov2/2_6.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Du ska förtsätta köra rakt fram.\n\nHur ska du köra i den här\nsituationen för att släppa ut så lite\navgaser som möjligt?",
@@ -1662,8 +1544,7 @@ const PROVS = [
         "images": [
           "assets/prov2/49.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "En sysnskadad som använder vit\nkäpp står vid trottoaren.\nHan sträcker käppen snett framåt\n\nvad bör du vara beredd på att den\nsynskadade tänker göra?",
@@ -1676,8 +1557,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 3,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du ska svänga till vänster.\n\nKan mötande fordon ha grönt ljus\nsamtidigt som du i någon av\nsituationerna?",
@@ -1692,8 +1572,7 @@ const PROVS = [
           "assets/prov2/51a.jpg",
           "assets/prov2/HOGER.png"
         ],
-        "correct": 3,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "I vilken situation är olycksrisken\nstörst för unga förare?",
@@ -1705,8 +1584,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Kan du förkorta katalysatorns\nuppvärmmningstid när du ska starta bilen en kall dag och på det sättet minska utsläppen?",
@@ -1719,8 +1597,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 3,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Jag får             stanna i korsningen\nnär jag har grönt ljus",
@@ -1731,8 +1608,7 @@ const PROVS = [
         "images": [
           "assets/prov2/4_8.jpg"
         ],
-        "correct": 1,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vad bör du göra när du närmar dig\ndetta vägmärke?",
@@ -1744,8 +1620,7 @@ const PROVS = [
         "images": [
           "assets/prov2/1_1_43_1.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Kan det här vägmärket få någon\nsärskild betydelse när det är halt\nväglag?",
@@ -1757,8 +1632,7 @@ const PROVS = [
         "images": [
           "assets/prov2/1_1_51_1.png"
         ],
-        "correct": 1,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "På motorvägar finns det tvärgående\nförbindelsevägar mellan körbanorna\n( se bilden )\n\nvilka av de här förarna får använda\nen sådan öppning?",
@@ -1771,8 +1645,7 @@ const PROVS = [
         "images": [
           "assets/prov2/57.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Vid en omkörning ska flera\nbedömningar göras.\n\nVilken bedömning är oftast svårst\natt göra?",
@@ -1785,8 +1658,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vilket alternativ är exempel på\ndefensiv körning?",
@@ -1799,8 +1671,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du ska följa vägeni vänstersväng.\n\nHar du väjningsplikt mot trafik från\ndenanslutande vägen?",
@@ -1814,8 +1685,7 @@ const PROVS = [
           "assets/prov2/60a.jpg",
           "assets/prov2/60b.jpg"
         ],
-        "correct": 3,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Hur kan du veta att bilens ABS-\nbromsar fungerar som de ska när du gör en kraftig provbromsning?",
@@ -1827,8 +1697,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du bör hålla tillräckligt långt avstånd\ntill bilen framför av flera skäl.\n\nVilket är det viktigaste miljöskälet?",
@@ -1841,8 +1710,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Bilen har fått motorfel och du\ntvingas stanna i mörker på en väg\nsom saknar gatubelysning.\n\nVilket ljus, utöver varningsblinkers\noch baklyktor, ska du ha tänt på\nbilen när du stannat?",
@@ -1854,8 +1722,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Hur påverkas förarens syn om han\neller hon är alkoholpåverkad?",
@@ -1868,8 +1735,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vad avgör                              om ett\nbarn ska sitta i en bakåtvänd\nbilbarnstol eller på en bälteskudde\neller bältestol?",
@@ -1881,8 +1747,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Har du väjningsplikt mot\nfotgängaren i den här situationen?",
@@ -1894,8 +1759,7 @@ const PROVS = [
         "images": [
           "assets/prov2/2_51.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Får du vid en omkörning överskrida\nmittlinjen med vänster hjulpar\nsamtidigt som du har mötande\ntrafik?",
@@ -1907,8 +1771,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vägen du kör på har enbart ett\nkörfält i vardera riktningen och det\nfinns ingen vägren.\n\nFår du köra om strax före ett\nbackrön där sikten är skymd?",
@@ -1920,8 +1783,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Du vill öva upp din förmåga att\nmanövrera bilen i halt väglag.\n\nVar är det säkrast att öva?",
@@ -1934,8 +1796,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "När måste du ha vinterdäck på din\npersonbil?",
@@ -1948,8 +1809,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       }
     ]
   },
@@ -1969,8 +1829,7 @@ const PROVS = [
           "assets/prov3/f1.jpg",
           "assets/prov3/100px-1_4_21.svg.png"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Många unga förare omkommer i\ntrafiken på helgnätter under\nsommaren.\n\nVilken är den vanligaste orsaken?",
@@ -1983,8 +1842,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Du ska hämta en passagerare.\n\nFår du stanna som föraren i den här bilen gjort?",
@@ -1997,8 +1855,7 @@ const PROVS = [
         "images": [
           "assets/prov3/4_52.jpg"
         ],
-        "correct": 3,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Du har lånat en personbil en dag\ni mars när det ser ut som på bilden.\n\nVid säkerhetskontrollen ser du att\nbilen har vinterdäck märkta M+S.\nMönsterdjupet på bakdäcken är\n4 mm och framdäcken 2 mm.\n\nFår du köra med bilen?",
@@ -2010,8 +1867,7 @@ const PROVS = [
         "images": [
           "assets/prov3/8_22.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vilken av dessa personer kan lättast\npåverkas av grupptryck vid\nbilkörning?",
@@ -2023,8 +1879,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Du ska transportera ett tungt\nföremåll i en övertäckt släpvägn inom\ntättbebyggt område.\n\nBehöver du lastsäkra föremålet?",
@@ -2037,8 +1892,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vilket alternativ anger rätt\nrangordning för trafik\nanvisningar?",
@@ -2051,8 +1905,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vad varnar vägmärket för?",
@@ -2066,8 +1919,7 @@ const PROVS = [
           "assets/prov3/f8.jpg",
           "assets/prov3/100px-1_1_1_3.svg.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vilken av de här förarna visar\nexempel för säkert samspel i\ntrafiken?",
@@ -2079,8 +1931,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Får du svänga till vänster vid\ntrafiksignalen?",
@@ -2093,8 +1944,7 @@ const PROVS = [
           "assets/prov3/f10.jpg",
           "assets/prov3/100px-1_2_62.svg.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vilket är det lämpligaste sättet att\nvända i korningen på bilden?",
@@ -2107,8 +1957,7 @@ const PROVS = [
         "images": [
           "assets/prov3/f11.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vilka veckodagar är högsta tillåtna\nhastighet 30 km/tim efter vägmärket\npå bilden?",
@@ -2122,8 +1971,7 @@ const PROVS = [
           "assets/prov3/Untitled2-5.jpg",
           "assets/prov3/100px-1_2_651.svg.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Påverkar ditt körsätt hur mycket\ndäcken slits?",
@@ -2135,8 +1983,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 1,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vad innebär vägmärket för dig?",
@@ -2150,8 +1997,7 @@ const PROVS = [
           "assets/prov3/f14.jpg",
           "assets/prov3/100px-1_3_11.svg.png"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Är omkörning tillåten i någon av\nsituationen på bilderna?",
@@ -2166,8 +2012,7 @@ const PROVS = [
           "assets/prov3/100px-1_1_31.svg.png",
           "assets/prov3/100px-1_4_28.svg.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vilken information om vägsträckan\nfår du av vägmärkerna?",
@@ -2183,8 +2028,7 @@ const PROVS = [
           "assets/prov3/11_20.png",
           "assets/prov3/11_21.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Det är septemper månad\n\ndet börjar snöa kraftigt och det är\nminusgrader så snön ligger kvar på\nvägen.\n\nFår du ha dubbdäck på bilen när du kör?",
@@ -2196,8 +2040,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du är på väg mot Fleninge.\n\nPå vilken bild anger vägvisningen att\nnästa sidoväg leder till Fleninge?",
@@ -2212,8 +2055,7 @@ const PROVS = [
           "assets/prov3/FLEN.png",
           "assets/prov3/100px-1_9_2_5.svg.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vilket alternativ är exampel på\ndefensiv körning?",
@@ -2226,8 +2068,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Vad ska du göra när polisen ger det\nhar tecknet?",
@@ -2240,8 +2081,7 @@ const PROVS = [
         "images": [
           "assets/prov3/f19.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Du kör på en väg med omkörningsförbud och heldragen kantlinje.Du ser att föraren i bilen bakom vill köra om dig.\n\nHur ska du göra?",
@@ -2253,8 +2093,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vilken av bilderna vissar en anordning\nsom kan vara uppsatt vid en avfart?",
@@ -2270,8 +2109,7 @@ const PROVS = [
           "assets/prov3/pil.jpg",
           "assets/prov3/lin.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vilka regler gäller för last som\nskjuter ut                        1 meter\nframför fordonet?",
@@ -2283,8 +2121,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Måste du köra ut på vägrenen för\natt underlätta en omkörning?",
@@ -2296,8 +2133,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Han måste göra om enbart\nkörprov och kunskapsprov",
@@ -2310,8 +2146,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Är det tillåtet att köra om fordonet\nframför dig i den här situationen?",
@@ -2324,8 +2159,7 @@ const PROVS = [
         "images": [
           "assets/prov3/f26.jpg"
         ],
-        "correct": 3,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "När intradet körförbud för den här\nbilen om den inte har\nkontrolbesiktats i tid?",
@@ -2338,8 +2172,7 @@ const PROVS = [
         "images": [
           "assets/prov3/F27.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du upptäcker under körning att\nkontrollampan med den här\nsymbolen tänds.\n\nVad betyder det?",
@@ -2351,8 +2184,7 @@ const PROVS = [
         "images": [
           "assets/prov3/F28.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Du ska bogsera en annan bil\n\nHur stort får avståndet mellan\nfordonen högst vara om bogserlinan\nsaknar utmärkring?",
@@ -2365,8 +2197,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vilken typ av väg anger vägvisare\nmot Stockholm?",
@@ -2379,8 +2210,7 @@ const PROVS = [
           "assets/prov3/f30.jpg",
           "assets/prov3/115px-1_2_50.svg.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Får du i nårga av de här\nsituationerna överskrida den\nlängsgående heldragna linjen?",
@@ -2395,8 +2225,7 @@ const PROVS = [
           "assets/prov3/5_104.jpg",
           "assets/prov3/4_14.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du kör på landsväg. En ambulans\nnärmar sig bakifrån.\n\nNär ska du lämna fri väg?",
@@ -2409,8 +2238,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "På väg mot Nyköping upptäcker du\natt vägen är avstängd p.g.a.\nVägarbete.\n\nVilken vägvisare sätts upp för att\nvisa lämplig förbifart till Nyköping?",
@@ -2423,8 +2251,7 @@ const PROVS = [
         "images": [
           "assets/prov3/f33.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vad är det                       du kan göra\nsom bilförare för att risken för\nolyckor ska bli så liten som möjligt?",
@@ -2437,8 +2264,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Du ska svänga till höger i\nkorsningen. Du har några bilar\nbakom dig.\n\nVar bör du placera bilen?",
@@ -2450,8 +2276,7 @@ const PROVS = [
         "images": [
           "assets/prov3/f34.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Varför får man         köra i trafiken\nmed en bil som ser ut så här?",
@@ -2463,8 +2288,7 @@ const PROVS = [
         "images": [
           "assets/prov3/f36.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vilken typ av bilar placeras i\nmiljöklass",
@@ -2477,8 +2301,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Påverkar trafiksäkerheten av att\nvissa förare          respekterar\nhastighetsgränserna?",
@@ -2491,8 +2314,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Du kör i tunneln på bilden.\n\nPlötsligt blir det köbildning och\nlängre fram kan du se att en lastbil\nbrinnar under kraftig rökutveckling.\n\nVad bör du göra?",
@@ -2505,8 +2327,7 @@ const PROVS = [
         "images": [
           "assets/prov3/f39.jpg"
         ],
-        "correct": 3,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vad kan du göra för att\nbränsleförbrukningen             ska öka?",
@@ -2518,8 +2339,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Det är mörkt och du ska köra på\nlandsvägar.\n\nVilken bild visar var du ska ställa\nljusreglaget?",
@@ -2531,8 +2351,7 @@ const PROVS = [
         "images": [
           "assets/prov3/f41.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du upptäcker fåglarna vid vänster\nvägkant.\n\nHur bör du göra?",
@@ -2544,8 +2363,7 @@ const PROVS = [
         "images": [
           "assets/prov3/f42.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du ska förtsätta rakt fram\n\nhur ska du uppträda i korsningen\nsedan du har stannat vid\nstopplinjen?",
@@ -2558,8 +2376,7 @@ const PROVS = [
           "assets/prov3/f43.jpg",
           "assets/prov3/115px-1_2_50.svg.png"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vad innebar vägmärket bland annat?",
@@ -2572,8 +2389,7 @@ const PROVS = [
         "images": [
           "assets/prov3/100px-1_4_9.svg.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du ska svänga in på en huvudled där\nhögsta tillåtna hastighet är\n90 km/tim\n\nVad ska du            göra efter\nsvängen?",
@@ -2585,8 +2401,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Vilken är den vanligaste orsäken till\natt trafikolyckor inträffar?",
@@ -2599,8 +2414,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Tänk dig att situationerna på\nbilderna inträffs när du kör i\nmörker\n\nI vilken situation är det\natt fortsätta med helljus?",
@@ -2613,8 +2427,7 @@ const PROVS = [
         "images": [
           "assets/prov3/f47.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Längre fram på motorvägen finns\ntre körfält.\n\nVilket bör du normalt använda?",
@@ -2628,8 +2441,7 @@ const PROVS = [
           "assets/prov3/pil_1.jpg",
           "assets/prov3/pil2.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "I vilken av de här situationerna är\ndet                 att bedöma ett annat\nfordons hastighet?",
@@ -2642,8 +2454,7 @@ const PROVS = [
         "images": [
           "assets/prov3/f49.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "En mörknatt får du fel på bilen och\nblirtvingen att stanna på vägrenen.\n\nDu befinner dig på en väg där\nhastigheten är begränsad till\n70 km/tim.\n\nHur bör du göra för att varna andra\ntrafikanter?",
@@ -2655,8 +2466,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du kör på en enskild väg och  vägen\nsom anslutet är också enskild\n\nska högerregeln tillämpas i\nkorsningen?",
@@ -2669,8 +2479,7 @@ const PROVS = [
         "images": [
           "assets/prov3/f51.jpg"
         ],
-        "correct": 1,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Ett ekonomisk körsätt innebär att\nman utnyttjar bilens rörelseenergi\noch har lång planning.\n\nÖkar bränsleförbrukningen om du\nbromsar i onödan?",
@@ -2683,8 +2492,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Du parkerar på den här parkeringen\nen vardag klockan 09.15 och du ska\nuträtta ärenden som pågår till cirka\nklockan 11.00.\n\nVilket klockslag ska du ställa\nparkeringsskivan på?",
@@ -2699,8 +2507,7 @@ const PROVS = [
           "assets/prov3/100px-1_4_31.svg.png",
           "assets/prov3/p1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Öka farten och köra över\nspärrområdet för att komma\ntillbaka till körfältet rakt fram",
@@ -2713,8 +2520,7 @@ const PROVS = [
           "assets/prov3/8_15.jpg",
           "assets/prov3/7_1_5.png"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Hur många procent av alla bilresor är kortare än 5 kilometer?",
@@ -2726,8 +2532,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Du ska passera järnvägkorsningen\noch signalen visar vitt blinkande ljus.\n\nVad innbär signalen?",
@@ -2740,8 +2545,7 @@ const PROVS = [
         "images": [
           "assets/prov3/f56.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du måste meddela polisen om du\nkört på och skadat ett av de här djuren.\n\nVilket av dem?",
@@ -2754,8 +2558,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Det finns bilförare som struntar i att\nanvända bilbältet\n\nPåverkar det trafiksäkerheten?",
@@ -2767,8 +2570,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du kör fram längs vägen i cirka\n50 km/tim.\n\nVad är det bästa att göra i den här\nsituationen?",
@@ -2781,8 +2583,7 @@ const PROVS = [
         "images": [
           "assets/prov3/f59.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vad avgör hur hög fordonsskatten\nblir på en fabriksny bil?",
@@ -2794,8 +2595,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vad innebär begreppet\nvattenplaning?",
@@ -2807,8 +2607,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du har varit inblandad i en kollision\nmed ett annat fordon och med\nlindriga personskador som följd.\n\nVem bör lämpligen fylla i blanketten\npå bilden?",
@@ -2821,8 +2620,7 @@ const PROVS = [
         "images": [
           "assets/prov3/f62.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Du ska köra en sträcka på 60 mil,\nhuvudsaldigen på motorväg\n\nbör du som oerfaren förare planera\nin några pauser?",
@@ -2834,8 +2632,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 1,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Du ska passera bussen som är\nungefär 18 meter lång. När du\nbefiner dig vid bussens bakanda\nspringer ett barn ut framför bussen.\n\nVilken är den högsta hastighet du\nkan ha om du ska ha möjlighet att\nstanna?",
@@ -2848,8 +2645,7 @@ const PROVS = [
         "images": [
           "assets/prov3/26.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Bilen du kör har krockkudden\ninkopplad på passagerarplats\nfram.\n\nVilket är det säkraste sättet att\nplacera en bilbarnstol?",
@@ -2862,8 +2658,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Hur kan däcken påverka\nbränsleförbrukningen i bilen?",
@@ -2876,8 +2671,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Vad gäller i den här situationen?",
@@ -2889,8 +2683,7 @@ const PROVS = [
         "images": [
           "assets/prov3/f67.jpg"
         ],
-        "correct": 1,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Varför hamnar oerfarna förare ofta\ni farliga situationer än erfarna\nförare?xxxxx",
@@ -2902,8 +2695,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vad gäller när en militärplois ger\nstopptecken?",
@@ -2915,8 +2707,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "När är risken för fartblindhet stort?",
@@ -2929,8 +2720,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 3
       }
     ]
   },
@@ -2949,8 +2739,7 @@ const PROVS = [
         "images": [
           "assets/prov4/1.jpg"
         ],
-        "correct": 1,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Du möter en bil när du kör på en\nländsväg.\nDet är mörkt och vägen saknar\nbelysning\n\nvart ska du rikta blicken för att inte\nbli bländad och för att göra mötet\nsäkrare?",
@@ -2963,8 +2752,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vad påverkar mest hur stort våldet\nblir mot kroppen vid en kollision?",
@@ -2977,8 +2765,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Får du vid en omkörning överskrida\nmittlinjen med vänster hjulpar\nsamtidigt som du har mötande\ntrafik?",
@@ -2990,8 +2777,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 1,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Vad bör                          avgöra hur\nfort du kör när du passerar\njärnvägskorsningen på bilden?",
@@ -3004,8 +2790,7 @@ const PROVS = [
           "assets/prov4/5.jpg",
           "assets/prov4/80px-1_1_34_1.svg_1.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vad är fördelen med att använda\nbiobränslen som drivmedel i bilen?",
@@ -3017,8 +2802,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Nya bilar blir allt säkrare och\nutrustas med fler säkerhetssystem,\ntill exampel ABS-bromsar och\nantisladdsystem.\n\nKan detta på något sätt vara\nnegativt för säkerheten?",
@@ -3031,8 +2815,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 3,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Du kör i 80 km/ tim och ska fortsätta\nvägen rakt fram.\n\nHur ska du uppträda med tänke på\nden stillästående bilen?",
@@ -3045,8 +2828,7 @@ const PROVS = [
         "images": [
           "assets/prov4/8.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "En förare har kört i tre timmar och\nhar ungefär två timmar kvar till\nfärdmålet.\n\nTröttheten kommer smygande.\nPlötsligtnickar han till och förstår att\nhan kanske är på väg att somna.\n\nVad är det                han då kan göra?",
@@ -3059,8 +2841,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "En vän ber dig skjutsa en fem årig\nflicka en längre sträcka. Flickan är\n130 cm lång.\n\nDu har ingen bilbarnstol, bältesstol\neller kudde.\n\nFår du skjutsa flickan?",
@@ -3073,8 +2854,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Kamratarna till en ung man visar\ntydligt att de inte accepterar att han\nkör bil när han är onykter.\n\nDen unge mannen påverkas av\nderas åsikter och kör därför aldrig\nmer bil när han är berusad.\n\nVad kallas detta?",
@@ -3087,8 +2867,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Vad gäller för att ett\nutryckningsfordon ska på kalla fri\nväg?",
@@ -3101,8 +2880,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Vad anger varningsmärket?",
@@ -3116,8 +2894,7 @@ const PROVS = [
           "assets/prov4/13.jpg",
           "assets/prov4/100px-A9_1.svg.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Varningslampan för ABS-systemet\ntänds under färd.\n\nViket följd kan detta få för din\nförsätta körning?",
@@ -3130,8 +2907,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du ska köra mot Tågeborg.\n\nMåste du ge tecken med\nkörriktningsvisare vid något tillfälle?",
@@ -3144,8 +2920,7 @@ const PROVS = [
           "assets/prov4/15.jpg",
           "assets/prov4/T.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Ja, men endast om det bildats\nkö bakom mig",
@@ -3158,8 +2933,7 @@ const PROVS = [
         "images": [
           "assets/prov4/16.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Kan samåkning i personbil innebär\natt antalet olyckor minskar?",
@@ -3171,8 +2945,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Vilket av följande påståenden är riktigt?",
@@ -3185,8 +2958,7 @@ const PROVS = [
         "images": [
           "assets/prov4/S2_60.jpg"
         ],
-        "correct": 3,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Du kör bil med tillkopplad släpvägn\n\nVad kan för lågt kultryck innebära?",
@@ -3198,8 +2970,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Du ska koppla en släpvagn till din\npersonbil men är osäker på om det\när tillåtet.\n\nVar finns de uppgifter du behöver\nkontrollera?",
@@ -3212,8 +2983,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Får du i något fall köra om till höger\nstrax före en korsning?",
@@ -3225,8 +2995,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du har parkerat din bil i en kraftig\nnedförsbäcka intill en trottoarkan.\n\nVilken              säkerhetsåtgärd kan du\nvidtaga för att bilen           ska\nkomma i rullning?",
@@ -3238,8 +3007,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Vilken linje ska du följa i den här\nsituationen?",
@@ -3251,8 +3019,7 @@ const PROVS = [
         "images": [
           "assets/prov4/23.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Är det du eller den mötande som\nbör stanna vid mötesplatsen om\nutrymmet inte räcker för att mötas?",
@@ -3265,8 +3032,7 @@ const PROVS = [
           "assets/prov4/24.jpg",
           "assets/prov4/100px-1_4_29.svg.png"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vid en bromskontroll ska man\ntrampa hårt på bromspedalen.\n\nVad ska då hända med pedalen om\nfärdbromsen fungerar?",
@@ -3279,8 +3045,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Hur bör du köra för att körningen\nska bli så miljövänlig som möjligt när du kör på landsväg?",
@@ -3293,8 +3058,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Hur stor andel av bilförarna som\nomkommer i vägtrafiken är män",
@@ -3307,8 +3071,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du kommer tillen olycksplats. En\nperson blöder kraftigt från ett sår i\narmen.\n\nVad bör du försöka göra?",
@@ -3321,8 +3084,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vilken högsta tillåtna hastighet gäller\nför närmaste framförvarande fordon?",
@@ -3337,8 +3099,7 @@ const PROVS = [
           "assets/prov4/1_4_1.png",
           "assets/prov4/100px-1_2_654.svg.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du ska montera dubbade vinterdäck\npå din personbil. Två av däckenär\nhelt nya och två har du använt ett\nper säsonger.\n\nVar bör du placera de bästa däcken\nför att minska risken för sladd?",
@@ -3351,8 +3112,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Du kommer till en vägkorsning där\ndet här vägmärket finns uppsatt.\n\nVad betyder vägmärket?",
@@ -3365,8 +3125,7 @@ const PROVS = [
         "images": [
           "assets/prov4/31.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "På vilket sätt kan du            minska din\nnegativa påverkan på miljön?",
@@ -3379,8 +3138,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Är du                 att ge bussen\nmölighet att lämna hållpatsen och\nköra före dig i någon av\nsituationerna?",
@@ -3396,8 +3154,7 @@ const PROVS = [
           "assets/prov4/100px-1_2_653.svg.png",
           "assets/prov4/100px-1_4_5.svg.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du ska köra hem en släkting som\nbor där dettavägmärke finns\nuppsatt.\n\nFår du köra in på gatan?",
@@ -3409,8 +3166,7 @@ const PROVS = [
         "images": [
           "assets/prov4/1_4_12.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Tresukundersregeln handlar om det\nminsta avstånd man bör ha till\nfordonet framför.\n\nPå vilket väglag gäller det?",
@@ -3422,8 +3178,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Hur gör du för att visa de\nbakomvarande din avsikter när du\ntänker stanna?",
@@ -3436,8 +3191,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Det är augusti månad ( bild A )\n\nVilket påstående är riktigt om när du\nfår stanna och parkera på en gata\ndär vägmärket på bild B är uppsatt?",
@@ -3450,8 +3204,7 @@ const PROVS = [
         "images": [
           "assets/prov4/37_1.jpg"
         ],
-        "correct": 1,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Vilken av de här förarna är exampel\npå en mogen förare?",
@@ -3463,8 +3216,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Du har stannat för att låta en\ngående passera gatan.\n\nPå vilket sätt kan du undvika\nmissförstånd med den gående?",
@@ -3477,8 +3229,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vilken av dessa uppgifter finns på en\npersonbils registreringsbevis?",
@@ -3491,8 +3242,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 3,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Värför måste du ha rörlig blick när\ndu kör bil?",
@@ -3504,8 +3254,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vad kan följden bli om du ständigt\nkör med dimbakljuset tänt?",
@@ -3517,8 +3266,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vad innebär polisens tecken?",
@@ -3531,8 +3279,7 @@ const PROVS = [
         "images": [
           "assets/prov4/44.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Du närmar dig en lastbil som\nhar kört av vägen och håller på att\nbärgas.\n\nVad bör du göra när du passerar\nplatsen?",
@@ -3545,8 +3292,7 @@ const PROVS = [
         "images": [
           "assets/prov4/44-1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "I båda situationerna ska du fortsätta\nrakt fram i den första korsingen\n\nGäller högerregeln i någon av dem?",
@@ -3560,8 +3306,7 @@ const PROVS = [
           "assets/prov4/45a.jpg",
           "assets/prov4/45b.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Du har lastat brädor på takräcket på\ndin bil och dessa skjuter ut 50 cm\n            bilen\n\nBehöver du märka ut lasten när du\nkör i dagsljus?",
@@ -3574,8 +3319,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Du kör i 70 km/tim. Hjulen på bilens\nhögra sida hamnat utanför\nasfalkanten.\n\nHur bör du göra?",
@@ -3588,8 +3332,7 @@ const PROVS = [
         "images": [
           "assets/prov4/47.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "I vilken av situationerna är det\nstörst risk att du kan drabbas av\nfartblindhet?",
@@ -3601,8 +3344,7 @@ const PROVS = [
         "images": [
           "assets/prov4/48.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Är det tillåtet att använda\nregummerade däck(begagnade däck\nförsedda med ny slitbana) på\npersonbilar,lätta lastbilar och lätta\nsläpvagnar?",
@@ -3615,8 +3357,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 1,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vilken är den vanligaste påföljden för\nden som kör bil och har något\nnarkotiskt ämne i blodet?",
@@ -3629,8 +3370,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "En del personer söker efter äventyr\noch spänning i livet.\n\nHur brukar sådana personer bete\nsig när de kör bil?",
@@ -3643,8 +3383,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vad innebär vägmärket?",
@@ -3656,8 +3395,7 @@ const PROVS = [
         "images": [
           "assets/prov4/SKARP.png"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du ska tända enbart\nparkeringsljuset.\n\nVilken bild visar var du ska ställa\nljusreglaget?",
@@ -3669,8 +3407,7 @@ const PROVS = [
         "images": [
           "assets/prov4/53.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Att det inte är tillåtet med\ncykeltrafik efter vägmärket",
@@ -3682,8 +3419,7 @@ const PROVS = [
           "assets/prov4/54.jpg",
           "assets/prov4/100px-1_1_44.svg.png"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Vilken bild visar en utrustning som\ndu är skyldig att ha med i bilen vid\nkörning?",
@@ -3696,8 +3432,7 @@ const PROVS = [
         "images": [
           "assets/prov4/55-1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vilkenär den högsta tillåtna\nhastigheten                tättbebyggt\nområde, om inget annat anges?",
@@ -3710,8 +3445,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Katalysatorer renar avgaserna från\nflera giftiga ämnen.\nMen ett ämne som bl.a. Bidrar till\nväxthuseffekten, renas avgaserna\n         från.\n\nVilket ämne är det?",
@@ -3724,8 +3458,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 1,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Hur långt måste det              vara\nmellan din bil och vägkorsning\nför att det ska vara tillåtet att parkera?",
@@ -3738,8 +3471,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 1,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Vilken olyckstyp leder till flest\ndödsolyckor?",
@@ -3752,8 +3484,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Det finns olika fordonsvikter.\n\nVad innebär begreppet \"bruttovikt\"?",
@@ -3765,8 +3496,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vad innebär linjen mitt på vägen?",
@@ -3779,8 +3509,7 @@ const PROVS = [
         "images": [
           "assets/prov4/61.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Vilket av dessa drivmedel är\nförnybart?",
@@ -3792,8 +3521,7 @@ const PROVS = [
         "images": [
           "assets/prov4/62.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Du har som förare blivit inblandad i\nen trafikolycka.\n\nMåste du uppge namn och adress,\nom någon annan inblandad i samma\nolycka frågar efter det?",
@@ -3805,8 +3533,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Du ska svänga till höger i\nkorsningen.\n\nHur ska du göra?",
@@ -3819,8 +3546,7 @@ const PROVS = [
           "assets/prov4/64.jpg",
           "assets/prov4/100px-1_2_53_2.svg.png"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Vilken information ger skyltarna vid\nträden?",
@@ -3834,8 +3560,7 @@ const PROVS = [
           "assets/prov4/65.jpg",
           "assets/prov4/35px-Markeringssk_C3_A4rm_sidohinder_2C_h_C3_B6ger.svg.png"
         ],
-        "correct": 0,
-        "estimatedCorrect": true
+        "correct": 0
       },
       {
         "text": "Jag kontrollerar att hjulen\nlåser sig när jag bromsar hårt",
@@ -3848,8 +3573,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 1
       },
       {
         "text": "Du kör på vägen på bilden.\n\nVid vilken temperatur har du\nförmodligen              väggrepp?",
@@ -3861,8 +3585,7 @@ const PROVS = [
         "images": [
           "assets/prov4/67.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "Reaktionstiden är avgörande i en\nkritisk situation.\n\nVilken av dessa orsaker kan göra att\nreaktionstiden förlängs betydligt?",
@@ -3875,8 +3598,7 @@ const PROVS = [
         "images": [
           "assets/prov4/01_1.jpg"
         ],
-        "correct": 3,
-        "estimatedCorrect": true
+        "correct": 3
       },
       {
         "text": "Älgen på bilden är cirka 60 meter\nframför dig när du upptäcker den.\nDu kör i 90 km/tim och bromsar hårt\nför att undvika en kollision.\n\nVilken fart har din bil när du är\nframme vid älgen?",
@@ -3889,8 +3611,7 @@ const PROVS = [
         "images": [
           "assets/prov4/69.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       },
       {
         "text": "På vilken av bilderna används\nbilbältet bäst för att skydda vid en\ntrafikolycka?",
@@ -3902,9 +3623,10 @@ const PROVS = [
         "images": [
           "assets/prov4/70.jpg"
         ],
-        "correct": 2,
-        "estimatedCorrect": true
+        "correct": 2
       }
     ]
   }
 ];
+
+window.PROVS = PROVS;
