@@ -2,18 +2,16 @@ const PROVS = [
   {
     "id": 1,
     "title": "Svenska Prov 1",
-    "questions": [
-      {
-        "text": "Du har kommet till den här situationen.\n\nvilket fordon har du väjningsplikt\nmot?",
         "options": [
-          "Enbart fordon från höger",
-          "Fordon från vänster och höger,\nmen inte mötande",
-          "Enbart mötande fordon",
-          "Fordon från vänster och höger,\nsamt mötande"
+          "Förbjudet att stanna fordon på dag med jämnt datum",
+          "Alltid förbjudet att stanna fordon",
+          "Förbjudet att stanna fordon på dag med udda datum",
+          "Förbjudet att parkera fordon"
         ],
         "images": [
+        "images": [
           "assets/prov1/1_1.jpg",
-          "assets/prov1/100px-1_1_23.svg.png"
+        "correct": 3
         ],
         "correct": 3
       },
@@ -960,7 +958,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 2
+        "correct": 1
       },
       {
         "text": "Du ska svängatill vänster möt\nHullsjö.\n\nVilken är den storsta riskeni den här\nsituationen?",
@@ -973,7 +971,7 @@ const PROVS = [
         "images": [
           "assets/prov2/5.jpg"
         ],
-        "correct": 2
+        "correct": 0
       },
       {
         "text": "Du kör under de siktförhållande som bilden visar.\n\nVilken av de här belysningarna är\nlämpigast att använda framtill på\nbilen?",
@@ -998,7 +996,7 @@ const PROVS = [
         "images": [
           "assets/prov2/7.jpg"
         ],
-        "correct": 2
+        "correct": 1
       },
       {
         "text": "Hur påverkas körningen om man\nprata i mobiltelefon när man kör bil?",
@@ -1024,7 +1022,7 @@ const PROVS = [
         "images": [
           "assets/prov2/2_58.jpg"
         ],
-        "correct": 0
+        "correct": 2
       },
       {
         "text": "Vad införmerar vägmärket om?",
@@ -1047,11 +1045,13 @@ const PROVS = [
           "Alltid förbjudet att stanna\nfordon",
           "Förbjudet att stanna fordon på\ndag med udda datum",
           "Förbjudet att parkera fordon på\ndag med jämnt datum"
+          "Alltid förbjudet att parkera fordon"
+          "Förbjudet att parkera fordon på dag med udda datum"
         ],
         "images": [
           "assets/prov2/100px-Dateparking1.svg.png"
         ],
-        "correct": 0
+        "correct": 5
       },
       {
         "text": "Du ska köra rakt fram i\nvägkorsningen. Trafiksignalen är ur\nfunktion.\n\nHar du väjningsplikt mot någon\ntrafik i korsningen?",
