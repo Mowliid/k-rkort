@@ -1,6 +1,88 @@
-<!DOCTYPE html><html lang="sv"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Svenska Prov 1-4</title><link rel="stylesheet" href="style.css"></head><body>
-<section id="startPage" class="start-page"><h1>Svenska Final</h1><div class="start-menu"><button class="start-row" onclick="startPractice()"><span class="dot"></span><div><h2>Övningsfrågor</h2><p>Här kan Du öva på två frågor.<br>Det Du gör här påverkar inte ditt prov, varken resultatet eller den tid Du har på dig.</p></div><span class="speaker">🔊</span></button><button class="start-row" onclick="showProvChoice()"><span class="dot"></span><div><h2><b>Starta provet</b></h2><p>Här startar Du provet.<br>Välj prov 1, 2, 3 eller 4.</p></div><span class="speaker">🔊</span></button></div></section>
-<section id="choicePage" class="hidden choice-page"><h1>Välj prov</h1><div id="provButtons" class="prov-buttons"></div><button class="back" onclick="goStart()">Tillbaka</button></section>
-<section id="examPage" class="hidden"><div class="topbar"><select><option>Svenska</option></select><button onclick="showOverview()">Till översikt frågor &gt;&gt;</button><button onclick="showOverview()">Till avsluta prov &gt;&gt;</button><button onclick="goStartConfirm()">Till första sidan</button><button class="answerBtn" onclick="showAnswer()">Se svar</button></div><main class="exam-layout"><aside class="left-panel"><button id="markBtn" onclick="toggleMark()">⚑ Markera frågan</button><h2 id="questionText"></h2><div id="options"></div><div class="nav"><button class="prevBtn" onclick="prevQuestion()">◀ Föregående</button><span id="counter"></span><button onclick="nextQuestion()">Nästa ▶</button></div></aside><section class="image-area"><span class="side-sound">🔊</span><div id="qImages" class="q-images"></div></section></main></section>
-<section id="overviewPage" class="hidden overview"><button class="overviewBack" onclick="goBackFromOverview()">◀ Föregående</button><h1>Översikt över dina frågor.</h1><div class="overview-wrap"><div id="grid" class="grid"></div><div class="legend"><p><span class="box answered"></span>Besvarad Fråga</p><p><span class="box answered markedFlag"></span>Markerad,<br>Besvarad fråga</p><p><span class="box"></span>Obesvarad Fråga</p><p><span class="box markedFlag"></span>Markerad,<br>Obesvarad fråga</p><p><span class="box wrong"></span>Fel svar</p></div></div><p class="hint">Du kan gå direkt till en fråga genom att trycka på den blå fyrkanten.</p><button class="finish" onclick="finishExam()">✓ Avsluta provet</button></section>
-<script src="data.js"></script><script src="script.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Svenska Prov 1-4</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <section id="home" class="screen home-screen">
+    <div class="phone-card">
+      <h1>Svenska Prov</h1>
+      <p class="lead">Välj prov, starta och träna 70 frågor.</p>
+      <label class="select-label" for="provSelect">Välj prov</label>
+      <select id="provSelect" class="top-select"></select>
+      <button id="startBtn" class="main-btn" onclick="startSelectedProv()">Starta provet</button>
+      <div class="home-row">
+        <span>Godkänd: 52 rätt</span>
+        <span>70 frågor</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="quiz" class="screen hidden">
+    <header class="topbar">
+      <button class="back-btn" onclick="goHome()">←</button>
+      <div class="top-info">
+        <strong id="activeProvName">Svenska Prov</strong>
+        <span id="counter">Fråga 1 av 70</span>
+      </div>
+      <button class="sound-btn" onclick="readCurrentQuestion()">🔊</button>
+    </header>
+
+    <main class="quiz-wrap">
+      <div class="quiz-tools">
+        <select id="chapterSelect" onchange="jumpToChapter(this.value)"></select>
+        <button class="tool-btn" onclick="showOverview()">Översikt</button>
+      </div>
+
+      <div class="score-line">
+        <b id="progressText">Fråga 1 av 70</b>
+        <b><span id="liveRight">0</span> rätt</b>
+      </div>
+      <div class="progress-track"><div id="progressFill"></div></div>
+
+      <article class="question-card">
+        <div id="imageBox" class="image-box"></div>
+        <p id="chapterName" class="chapter-name">Kapitel</p>
+        <h2 id="questionText" class="q-title"></h2>
+        <button class="listen-wide" onclick="readCurrentQuestion()">🔊 Lyssna fråga och alternativ</button>
+        <div id="answers" class="answers"></div>
+        <p id="feedback" class="feedback hidden"></p>
+      </article>
+
+      <div class="nav-row">
+        <button class="nav-btn" onclick="prevQuestion()">← Föregående</button>
+        <button class="nav-btn primary" onclick="nextQuestion()">Nästa →</button>
+      </div>
+      <button class="finish-btn" onclick="finishExam()">Avsluta och visa resultat</button>
+    </main>
+  </section>
+
+  <section id="overview" class="screen hidden overview-screen">
+    <header class="topbar">
+      <button class="back-btn" onclick="backToQuiz()">←</button>
+      <div class="top-info"><strong>Översikt</strong><span>Klicka på fråga</span></div>
+    </header>
+    <main class="overview-card">
+      <div id="overviewGrid" class="overview-grid"></div>
+      <div class="legend"><span><i class="dot blue"></i>Besvarad</span><span><i class="dot red"></i>Fel</span><span><i class="dot grey"></i>Obesvarad</span></div>
+      <button class="main-btn" onclick="finishExam()">Avsluta provet</button>
+    </main>
+  </section>
+
+  <section id="result" class="screen hidden result-screen">
+    <div class="result-card">
+      <h1 id="statusText">Resultat</h1>
+      <p id="scoreText" class="big-score"></p>
+      <p id="resultInfo"></p>
+      <button class="main-btn" onclick="restartSame()">Gör om samma prov</button>
+      <button class="secondary-btn" onclick="goHome()">Till startsidan</button>
+    </div>
+  </section>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,176 +1,140 @@
-let currentProv = null;
+let provIndex = 0;
 let questions = [];
 let current = 0;
 let answers = [];
-let marked = [];
 let revealed = [];
-let practice = false;
 
-const $ = id => document.getElementById(id);
+const $ = (id)=>document.getElementById(id);
+const letters = ['A','B','C','D'];
+const screens = ['home','quiz','overview','result'];
 
-function show(id){
-  ["startPage","choicePage","examPage","overviewPage"].forEach(x => $(x).classList.add("hidden"));
-  $(id).classList.remove("hidden");
+function show(id){ screens.forEach(s=>$(s).classList.add('hidden')); $(id).classList.remove('hidden'); }
+
+function init(){
+  const sel = $('provSelect');
+  sel.innerHTML = PROVS.slice(0,4).map((p,i)=>`<option value="${i}">${p.title}</option>`).join('');
 }
 
-function resetExamState(){
-  currentProv = null;
-  questions = [];
-  current = 0;
-  answers = [];
-  marked = [];
-  revealed = [];
-  practice = false;
-}
-
-function goStart(){
-  resetExamState();
-  show("startPage");
-}
-
-function goStartConfirm(){
-  goStart();
-}
-
-function showProvChoice(){
-  renderProvButtons();
-  show("choicePage");
-}
-
-function startPractice(){
-  currentProv = PROVS[0];
-  questions = currentProv.questions.slice(0,2);
-  practice = true;
-  begin();
-}
-
-function renderProvButtons(){
-  let html = "";
-  PROVS.forEach((p,i)=>{
-    html += `<button onclick="selectProv(${i})">${p.title}</button>`;
-  });
-  $("provButtons").innerHTML = html;
-}
-
-function selectProv(i){
-  currentProv = PROVS[i];
-  questions = currentProv.questions;
-  practice = false;
-  begin();
-}
-
-function begin(){
+function startSelectedProv(){
+  provIndex = Number($('provSelect').value || 0);
+  questions = PROVS[provIndex].questions || [];
   current = 0;
   answers = Array(questions.length).fill(null);
-  marked = Array(questions.length).fill(false);
   revealed = Array(questions.length).fill(false);
-  show("examPage");
-  renderQuestion();
+  buildChapters();
+  show('quiz');
+  render();
 }
 
-function getShownCorrectIndex(q){
-  const value = q.correct ?? q.answer ?? q.correctAnswer ?? q.ratt ?? q.rätt;
-  if (typeof value === "number") return value;
-  if (typeof value === "string") {
-    const t = value.trim().toUpperCase();
-    if (["A","B","C","D"].includes(t)) return t.charCodeAt(0)-65;
-    const n = Number(t);
-    if (!Number.isNaN(n)) return n;
+function buildChapters(){
+  let html = '<option value="0">Alla kapitel</option>';
+  for(let s=0;s<questions.length;s+=10){
+    const e = Math.min(s+10,questions.length);
+    html += `<option value="${s}">Kapitel ${Math.floor(s/10)+1}: fråga ${s+1}-${e}</option>`;
+  }
+  $('chapterSelect').innerHTML = html;
+}
+
+function jumpToChapter(v){ current = Number(v); render(); window.scrollTo(0,0); }
+function goHome(){ if(speechSynthesis) speechSynthesis.cancel(); show('home'); }
+function backToQuiz(){ show('quiz'); render(); }
+
+function correctIndex(q){
+  const v = q.correct ?? q.answer ?? q.correctAnswer ?? q.ratt ?? q['rätt'];
+  if(typeof v === 'number' && v >= 0) return v;
+  if(typeof v === 'string'){
+    const t = v.trim().toUpperCase();
+    if(letters.includes(t)) return letters.indexOf(t);
+    const n = Number(t); if(!Number.isNaN(n)) return n;
   }
   return null;
 }
 
-function renderQuestion(){
-  let q = questions[current];
-  $("questionText").textContent = q.text;
-  $("counter").textContent = (current+1)+"/"+questions.length;
-  $("markBtn").textContent = marked[current] ? "⚑ Avmarkera frågan" : "⚑ Markera frågan";
-
-  const correctIndex = revealed[current] ? getShownCorrectIndex(q) : null;
-  let html = "";
-  q.options.forEach((o,i)=>{
-    let cls = "option";
-    if (answers[current] === i) cls += " selected";
-    if (revealed[current] && correctIndex !== null && i === correctIndex) cls += " correctShown";
-    if (revealed[current] && correctIndex !== null && answers[current] !== null && answers[current] !== correctIndex && i === answers[current]) cls += " wrongShown";
-    html += `<label class="${cls}"><input type="radio" name="ans" ${answers[current]===i?"checked":""} onchange="selectAnswer(${i})"><span class="letter">${String.fromCharCode(65+i)}</span><span>${o}</span></label>`;
-  });
-  $("options").innerHTML = html;
-
-  let imgs = (q.images||[]).map(src => `<img src="${src}" class="${src.includes('100px')||src.includes('115px')?'small':''}">`).join("");
-  $("qImages").innerHTML = imgs || "<p>Ingen bild</p>";
+function countRight(){
+  let r = 0;
+  questions.forEach((q,i)=>{ const c = correctIndex(q); if(c !== null && answers[i] === c) r++; });
+  return r;
 }
 
-function selectAnswer(i){
+function render(){
+  if(!questions.length) return goHome();
+  const q = questions[current];
+  $('activeProvName').textContent = PROVS[provIndex].title;
+  $('counter').textContent = `Fråga ${current+1} av ${questions.length}`;
+  $('progressText').textContent = `Fråga ${current+1} av ${questions.length}`;
+  $('liveRight').textContent = countRight();
+  $('progressFill').style.width = `${((current+1)/questions.length)*100}%`;
+  $('chapterName').innerHTML = `<b>Kapitel:</b> ${q.chapter || ('Kapitel ' + (Math.floor(current/10)+1))}`;
+  $('questionText').textContent = q.text || '';
+  $('imageBox').innerHTML = (q.images||[]).map(src=>`<img src="${src}" alt="Bild till frågan">`).join('');
+
+  const c = correctIndex(q);
+  $('answers').innerHTML = (q.options||[]).map((opt,i)=>{
+    let cls = 'answer';
+    if(answers[current] === i) cls += ' selected';
+    if(revealed[current] && c !== null && i === c) cls += ' correct';
+    if(revealed[current] && c !== null && answers[current] === i && i !== c) cls += ' wrong';
+    return `<div class="${cls}" onclick="choose(${i})"><span class="letter">${letters[i]})</span><span>${opt}</span><button onclick="event.stopPropagation(); readText('${escapeText(letters[i]+'. '+opt)}')">🔊</button></div>`;
+  }).join('');
+
+  const fb = $('feedback');
+  fb.className = 'feedback hidden';
+  fb.textContent = '';
+  if(revealed[current]){
+    fb.classList.remove('hidden');
+    if(c === null){ fb.textContent = 'Rätt svar saknas i frågedatan.'; fb.classList.add('bad'); }
+    else if(answers[current] === c){ fb.textContent = 'Rätt svar!'; fb.classList.add('ok'); }
+    else { fb.textContent = `Fel svar. Rätt svar är ${letters[c]}.`; fb.classList.add('bad'); }
+  }
+}
+
+function choose(i){
   answers[current] = i;
-  // När man ändrar svar efter Se svar, behåll ringen och uppdatera direkt.
-  renderQuestion();
-}
-
-function toggleMark(){
-  marked[current] = !marked[current];
-  renderQuestion();
+  revealed[current] = true;
+  render();
 }
 
 function nextQuestion(){
-  if(current < questions.length-1){
-    current++;
-    renderQuestion();
-  } else {
-    showOverview();
-  }
+  if(current < questions.length-1){ current++; render(); window.scrollTo(0,0); }
+  else finishExam();
 }
-
-function prevQuestion(){
-  if(current > 0){
-    current--;
-    renderQuestion();
-  } else {
-    // På fråga 1 går Föregående tillbaka till startsidan.
-    goStart();
-  }
-}
+function prevQuestion(){ if(current>0){ current--; render(); window.scrollTo(0,0); } }
 
 function showOverview(){
-  show("overviewPage");
-  renderGrid();
+  $('overviewGrid').innerHTML = questions.map((q,i)=>{
+    const c = correctIndex(q);
+    let cls='qbtn';
+    if(answers[i] !== null) cls += ' answered';
+    if(revealed[i] && c !== null && answers[i] !== null && answers[i] !== c) cls += ' wrong';
+    return `<button class="${cls}" onclick="goQuestion(${i})">${i+1}</button>`;
+  }).join('');
+  show('overview');
 }
-
-function renderGrid(){
-  let html = "";
-  for(let r=0;r<10;r++){
-    for(let c=0;c<7;c++){
-      let i = c*10+r;
-      if(i >= questions.length) continue;
-      let cls = answers[i] !== null ? "answered" : "";
-      if(marked[i]) cls += " marked";
-      const q = questions[i];
-      const correct = (typeof q.correct === "number") ? q.correct : null;
-      if(revealed[i] && correct !== null && answers[i] !== null && answers[i] !== correct) cls += " wrong";
-      html += `<div class="qcell"><span>${i+1}</span><button class="${cls}" onclick="goQuestion(${i})"></button></div>`;
-    }
-  }
-  $("grid").innerHTML = html;
-}
-
-function goQuestion(i){
-  current = i;
-  show("examPage");
-  renderQuestion();
-}
-
-function showAnswer(){
-  revealed[current] = true;
-  renderQuestion();
-}
-
-function goBackFromOverview(){
-  show("examPage");
-  renderQuestion();
-}
+function goQuestion(i){ current=i; show('quiz'); render(); window.scrollTo(0,0); }
 
 function finishExam(){
-  goStart();
+  const right = countRight();
+  const pass = right >= 52;
+  $('statusText').textContent = pass ? 'Godkänd' : 'Icke godkänd';
+  $('statusText').className = pass ? 'pass' : 'fail';
+  $('scoreText').textContent = `${right} / ${questions.length} rätt`;
+  $('resultInfo').textContent = pass ? 'Bra jobbat! Du klarade provet.' : 'Du behöver minst 52 rätt för godkänt.';
+  show('result');
 }
+function restartSame(){ $('provSelect').value = provIndex; startSelectedProv(); }
 
-renderProvButtons();
+function readCurrentQuestion(){
+  const q = questions[current];
+  const text = `Fråga ${current+1}. ${q.text}. ` + (q.options||[]).map((o,i)=>`${letters[i]}. ${o}`).join('. ');
+  readText(text);
+}
+function readText(text){
+  if(!('speechSynthesis' in window)){ alert('Din webbläsare stödjer inte uppläsning.'); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(String(text).replace(/\s+/g,' '));
+  u.lang='sv-SE'; u.rate=.9;
+  speechSynthesis.speak(u);
+}
+function escapeText(s){ return String(s).replace(/'/g,'’').replace(/\n/g,' '); }
+
+init();
