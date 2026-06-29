@@ -2,16 +2,18 @@ const PROVS = [
   {
     "id": 1,
     "title": "Svenska Prov 1",
+    "questions": [
+      {
+        "text": "Du har kommet till den här situationen.\n\nvilket fordon har du väjningsplikt\nmot?",
         "options": [
-          "Förbjudet att stanna fordon på dag med jämnt datum",
-          "Alltid förbjudet att stanna fordon",
-          "Förbjudet att stanna fordon på dag med udda datum",
-          "Förbjudet att parkera fordon"
+          "Enbart fordon från höger",
+          "Fordon från vänster och höger,\nmen inte mötande",
+          "Enbart mötande fordon",
+          "Fordon från vänster och höger,\nsamt mötande"
         ],
         "images": [
-        "images": [
           "assets/prov1/1_1.jpg",
-        "correct": 3
+          "assets/prov1/100px-1_1_23.svg.png"
         ],
         "correct": 3
       },
@@ -1044,14 +1046,12 @@ const PROVS = [
           "Förbjudet att stanna fordon på\ndag med jämnt datum",
           "Alltid förbjudet att stanna\nfordon",
           "Förbjudet att stanna fordon på\ndag med udda datum",
-          "Förbjudet att parkera fordon på\ndag med jämnt datum"
-          "Alltid förbjudet att parkera fordon"
-          "Förbjudet att parkera fordon på dag med udda datum"
+          "Förbjudet att parkera fordon på\ndag med udda datum"
         ],
         "images": [
           "assets/prov2/100px-Dateparking1.svg.png"
         ],
-        "correct": 5
+        "correct": 3
       },
       {
         "text": "Du ska köra rakt fram i\nvägkorsningen. Trafiksignalen är ur\nfunktion.\n\nHar du väjningsplikt mot någon\ntrafik i korsningen?",
@@ -1065,7 +1065,7 @@ const PROVS = [
           "assets/prov2/12.jpg",
           "assets/prov2/100px-1_1_23.svg.png"
         ],
-        "correct": 3
+        "correct": 0
       },
       {
         "text": "Vilka linjer ska du följa i den här\nsituationen?",
@@ -1091,7 +1091,7 @@ const PROVS = [
           "assets/prov2/14.jpg",
           "assets/prov2/115px-1_2_50.svg.png"
         ],
-        "correct": 0
+        "correct": 2
       },
       {
         "text": "Vad gäller i korsningen?",
@@ -1103,7 +1103,7 @@ const PROVS = [
         "images": [
           "assets/prov2/7_74.jpg"
         ],
-        "correct": 2
+        "correct": 0
       },
       {
         "text": "Värför bygger man så kallade\nspanska svängar( se bilden)?",
@@ -1181,7 +1181,7 @@ const PROVS = [
         "images": [
           "assets/prov2/1_1_52.png"
         ],
-        "correct": 2
+        "correct": 3
       },
       {
         "text": "Du kör i 70 km/tim på en landsväg.\nHjulen på bilens högre sida har\nhamnat utanför asfältkanten.\n\nHur bör du göra?",
@@ -1207,7 +1207,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 0
+        "correct": 1
       },
       {
         "text": "Vilken av dessa åtgärder är den\nbästa om du vill minska utsläppen av koldioxid från din bil?",
@@ -1245,7 +1245,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 0
+        "correct": 1
       },
       {
         "text": "Hur ska du göra efter detta vägmärke?",
@@ -1283,7 +1283,7 @@ const PROVS = [
         "images": [
           "assets/prov2/29.jpg"
         ],
-        "correct": 0
+        "correct": 2
       },
       {
         "text": "Du kör personbil med en tillkopplad\nlastad släpvagn.\n\nVad bör du göra efter att ha\npasserat detta vägmärke?",
@@ -1404,7 +1404,7 @@ const PROVS = [
           "assets/prov2/64.jpg",
           "assets/prov2/100px-1_2_53_2.svg.png"
         ],
-        "correct": 3
+        "correct": 2
       },
       {
         "text": "Varför blir vana förare i 50-årsåldern\nmer sällan inblandade i olyckor än\nunga förare?",
@@ -1456,7 +1456,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 3
+        "correct": 0
       },
       {
         "text": "Vilken av följande utrustningar i bilen\när viktigast för att minska risken att\ndu blir skadad om du blir påkörd\nbakifrån?",
@@ -1483,7 +1483,7 @@ const PROVS = [
           "assets/prov2/44.jpg",
           "assets/prov2/100px-1_4_12.svg.png"
         ],
-        "correct": 0
+        "correct": 3
       },
       {
         "text": "Vilket påstående stämmer med hur\nunga förare i allmänhet uppfattar sin egen körförmåga?",
@@ -1519,7 +1519,7 @@ const PROVS = [
         "images": [
           "assets/prov2/47.jpg"
         ],
-        "correct": 2
+        "correct": 1
       },
       {
         "text": "Vad innebär polismannens tecken?",
@@ -1532,7 +1532,7 @@ const PROVS = [
         "images": [
           "assets/prov2/2_6.jpg"
         ],
-        "correct": 0
+        "correct": 1
       },
       {
         "text": "Du ska förtsätta köra rakt fram.\n\nHur ska du köra i den här\nsituationen för att släppa ut så lite\navgaser som möjligt?",
@@ -1572,7 +1572,7 @@ const PROVS = [
           "assets/prov2/51a.jpg",
           "assets/prov2/HOGER.png"
         ],
-        "correct": 3
+        "correct": 0
       },
       {
         "text": "I vilken situation är olycksrisken\nstörst för unga förare?",
@@ -1658,7 +1658,7 @@ const PROVS = [
         "images": [
           "assets/prov2/01_1.jpg"
         ],
-        "correct": 0
+        "correct": 3
       },
       {
         "text": "Vilket alternativ är exempel på\ndefensiv körning?",
@@ -1685,7 +1685,7 @@ const PROVS = [
           "assets/prov2/60a.jpg",
           "assets/prov2/60b.jpg"
         ],
-        "correct": 3
+        "correct": 0
       },
       {
         "text": "Hur kan du veta att bilens ABS-\nbromsar fungerar som de ska när du gör en kraftig provbromsning?",
