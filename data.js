@@ -1829,7 +1829,7 @@ const PROVS = [
           "assets/prov3/f1.jpg",
           "assets/prov3/100px-1_4_21.svg.png"
         ],
-        "correct": 2
+        "correct": 1
       },
       {
         "text": "Många unga förare omkommer i\ntrafiken på helgnätter under\nsommaren.\n\nVilken är den vanligaste orsaken?",
@@ -1905,7 +1905,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2
+        "correct": 0
       },
       {
         "text": "Vad varnar vägmärket för?",
@@ -1919,7 +1919,7 @@ const PROVS = [
           "assets/prov3/f8.jpg",
           "assets/prov3/100px-1_1_1_3.svg.png"
         ],
-        "correct": 2
+        "correct": 3
       },
       {
         "text": "Vilken av de här förarna visar\nexempel för säkert samspel i\ntrafiken?",
@@ -1931,7 +1931,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2
+        "correct": 0
       },
       {
         "text": "Får du svänga till vänster vid\ntrafiksignalen?",
@@ -1944,7 +1944,7 @@ const PROVS = [
           "assets/prov3/f10.jpg",
           "assets/prov3/100px-1_2_62.svg.png"
         ],
-        "correct": 2
+        "correct": 1
       },
       {
         "text": "Vilket är det lämpligaste sättet att\nvända i korningen på bilden?",
@@ -1957,7 +1957,7 @@ const PROVS = [
         "images": [
           "assets/prov3/f11.jpg"
         ],
-        "correct": 0
+        "correct": 3
       },
       {
         "text": "Vilka veckodagar är högsta tillåtna\nhastighet 30 km/tim efter vägmärket\npå bilden?",
@@ -1989,7 +1989,7 @@ const PROVS = [
         "text": "Vad innebär vägmärket för dig?",
         "options": [
           "Jag har väjningsplikt mot all\nbusstrafik efter vägmärket",
-          "Jag får             forsätta rakt fram",
+          "Jag får   inte          forsätta rakt fram",
           "Jag får fortsätta rakt fram bara\nom jag tänker parkera",
           "Högsta hastighet efter\nvägmärket är 30 km/tim"
         ],
@@ -1997,7 +1997,7 @@ const PROVS = [
           "assets/prov3/f14.jpg",
           "assets/prov3/100px-1_3_11.svg.png"
         ],
-        "correct": 0
+        "correct": 1
       },
       {
         "text": "Är omkörning tillåten i någon av\nsituationen på bilderna?",
@@ -2012,7 +2012,7 @@ const PROVS = [
           "assets/prov3/100px-1_1_31.svg.png",
           "assets/prov3/100px-1_4_28.svg.png"
         ],
-        "correct": 2
+        "correct": 3
       },
       {
         "text": "Vilken information om vägsträckan\nfår du av vägmärkerna?",
@@ -2028,7 +2028,7 @@ const PROVS = [
           "assets/prov3/11_20.png",
           "assets/prov3/11_21.png"
         ],
-        "correct": 2
+        "correct": 3
       },
       {
         "text": "Det är septemper månad\n\ndet börjar snöa kraftigt och det är\nminusgrader så snön ligger kvar på\nvägen.\n\nFår du ha dubbdäck på bilen när du kör?",
@@ -2055,7 +2055,7 @@ const PROVS = [
           "assets/prov3/FLEN.png",
           "assets/prov3/100px-1_9_2_5.svg.png"
         ],
-        "correct": 2
+        "correct": 1
       },
       {
         "text": "Vilket alternativ är exampel på\ndefensiv körning?",
@@ -2109,7 +2109,7 @@ const PROVS = [
           "assets/prov3/pil.jpg",
           "assets/prov3/lin.jpg"
         ],
-        "correct": 2
+        "correct": 0
       },
       {
         "text": "Vilka regler gäller för last som\nskjuter ut                        1 meter\nframför fordonet?",
@@ -2146,7 +2146,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2
+        "correct": 3
       },
       {
         "text": "Är det tillåtet att köra om fordonet\nframför dig i den här situationen?",
@@ -2172,7 +2172,7 @@ const PROVS = [
         "images": [
           "assets/prov3/F27.jpg"
         ],
-        "correct": 2
+        "correct": 3
       },
       {
         "text": "Du upptäcker under körning att\nkontrollampan med den här\nsymbolen tänds.\n\nVad betyder det?",
@@ -2197,7 +2197,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2
+        "correct": 0
       },
       {
         "text": "Vilken typ av väg anger vägvisare\nmot Stockholm?",
@@ -2210,7 +2210,7 @@ const PROVS = [
           "assets/prov3/f30.jpg",
           "assets/prov3/115px-1_2_50.svg.png"
         ],
-        "correct": 2
+        "correct": 1
       },
       {
         "text": "Får du i nårga av de här\nsituationerna överskrida den\nlängsgående heldragna linjen?",
@@ -2276,7 +2276,7 @@ const PROVS = [
         "images": [
           "assets/prov3/f34.jpg"
         ],
-        "correct": 1
+        "correct": 2
       },
       {
         "text": "Varför får man         köra i trafiken\nmed en bil som ser ut så här?",
@@ -2301,7 +2301,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 0
+        "correct": 2
       },
       {
         "text": "Påverkar trafiksäkerheten av att\nvissa förare          respekterar\nhastighetsgränserna?",
@@ -2351,7 +2351,7 @@ const PROVS = [
         "images": [
           "assets/prov3/f41.jpg"
         ],
-        "correct": 2
+        "correct": 1
       },
       {
         "text": "Du upptäcker fåglarna vid vänster\nvägkant.\n\nHur bör du göra?",
@@ -2376,7 +2376,7 @@ const PROVS = [
           "assets/prov3/f43.jpg",
           "assets/prov3/115px-1_2_50.svg.png"
         ],
-        "correct": 0
+        "correct": 1
       },
       {
         "text": "Vad innebar vägmärket bland annat?",
@@ -2389,7 +2389,7 @@ const PROVS = [
         "images": [
           "assets/prov3/100px-1_4_9.svg.png"
         ],
-        "correct": 2
+        "correct": 1
       },
       {
         "text": "Du ska svänga in på en huvudled där\nhögsta tillåtna hastighet är\n90 km/tim\n\nVad ska du            göra efter\nsvängen?",
@@ -2454,7 +2454,7 @@ const PROVS = [
         "images": [
           "assets/prov3/f49.jpg"
         ],
-        "correct": 2
+        "correct": 1
       },
       {
         "text": "En mörknatt får du fel på bilen och\nblirtvingen att stanna på vägrenen.\n\nDu befinner dig på en väg där\nhastigheten är begränsad till\n70 km/tim.\n\nHur bör du göra för att varna andra\ntrafikanter?",
@@ -2466,7 +2466,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2
+        "correct": 0
       },
       {
         "text": "Du kör på en enskild väg och  vägen\nsom anslutet är också enskild\n\nska högerregeln tillämpas i\nkorsningen?",
@@ -2479,7 +2479,7 @@ const PROVS = [
         "images": [
           "assets/prov3/f51.jpg"
         ],
-        "correct": 2
+        "correct": 0
       },
       {
         "text": "Ett ekonomisk körsätt innebär att\nman utnyttjar bilens rörelseenergi\noch har lång planning.\n\nÖkar bränsleförbrukningen om du\nbromsar i onödan?",
@@ -2507,7 +2507,7 @@ const PROVS = [
           "assets/prov3/100px-1_4_31.svg.png",
           "assets/prov3/p1.jpg"
         ],
-        "correct": 2
+        "correct": 1
       },
       {
         "text": "Öka farten och köra över\nspärrområdet för att komma\ntillbaka till körfältet rakt fram",
@@ -2532,7 +2532,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 1
+        "correct": 2
       },
       {
         "text": "Du ska passera järnvägkorsningen\noch signalen visar vitt blinkande ljus.\n\nVad innbär signalen?",
@@ -2595,7 +2595,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 2
+        "correct": 0
       },
       {
         "text": "Vad innebär begreppet\nvattenplaning?",
@@ -2613,14 +2613,14 @@ const PROVS = [
         "text": "Du har varit inblandad i en kollision\nmed ett annat fordon och med\nlindriga personskador som följd.\n\nVem bör lämpligen fylla i blanketten\npå bilden?",
         "options": [
           "Föraren som vållade olyckan",
-          "Försäkringsbolaget",
+          "De både inblandade förarna",
           "De personer som blev skadade\nvid olyckan",
           "Polisen"
         ],
         "images": [
           "assets/prov3/f62.jpg"
         ],
-        "correct": 0
+        "correct": 1
       },
       {
         "text": "Du ska köra en sträcka på 60 mil,\nhuvudsaldigen på motorväg\n\nbör du som oerfaren förare planera\nin några pauser?",
@@ -2632,7 +2632,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 1
+        "correct": 2
       },
       {
         "text": "Du ska passera bussen som är\nungefär 18 meter lång. När du\nbefiner dig vid bussens bakanda\nspringer ett barn ut framför bussen.\n\nVilken är den högsta hastighet du\nkan ha om du ska ha möjlighet att\nstanna?",
@@ -2683,7 +2683,7 @@ const PROVS = [
         "images": [
           "assets/prov3/f67.jpg"
         ],
-        "correct": 1
+        "correct": 0
       },
       {
         "text": "Varför hamnar oerfarna förare ofta\ni farliga situationer än erfarna\nförare?xxxxx",
@@ -2695,7 +2695,7 @@ const PROVS = [
         "images": [
           "assets/prov3/01_1.jpg"
         ],
-        "correct": 0
+        "correct": 2
       },
       {
         "text": "Vad gäller när en militärplois ger\nstopptecken?",
