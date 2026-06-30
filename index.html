@@ -3,82 +3,99 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Svenska Prov 1-4</title>
+  <title>Körkort App</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <section id="home" class="screen home-screen">
-    <div class="phone-card">
-      <h1>Svenska Prov</h1>
-      <p class="lead">Välj prov, starta och träna 70 frågor.</p>
-      <label class="select-label" for="provSelect">Välj prov</label>
-      <select id="provSelect" class="top-select"></select>
-      <button id="startBtn" class="main-btn" onclick="startSelectedProv()">Starta provet</button>
-      <div class="home-row">
-        <span>Godkänd: 52 rätt</span>
-        <span>70 frågor</span>
+  <section id="home" class="screen app-bg">
+    <div class="app-shell home-shell">
+      <header class="app-head">
+        <div><p class="eyebrow">Körkort</p><h1>Hem</h1></div>
+        <button class="round" onclick="openMenu()">☰</button>
+      </header>
+      <div class="home-grid">
+        <button class="home-card green" onclick="showTheory()"><span class="card-icon">⌘</span><b>Plugga</b></button>
+        <button class="home-card orange" onclick="showTheory()"><span class="card-icon">📖</span><b>Teoribok</b></button>
+        <button class="home-card purple" onclick="showProvList()"><span class="card-icon">☑</span><b>Prov</b></button>
+        <button class="home-card peach disabled"><span class="card-icon">◇</span><b>Skyltar</b><small>kommer</small></button>
+        <button class="home-card teal" onclick="showTheory()"><span class="card-icon">👂</span><b>Ljudbok</b></button>
+        <button class="home-card yellow disabled"><span class="card-icon">▷</span><b>Video</b><small>kommer</small></button>
       </div>
     </div>
   </section>
 
-  <section id="quiz" class="screen hidden">
-    <header class="topbar">
-      <button class="back-btn" onclick="goHome()">←</button>
-      <div class="top-info">
-        <strong id="activeProvName">Svenska Prov</strong>
-        <span id="counter">Fråga 1 av 70</span>
-      </div>
-      <button class="sound-btn" onclick="readCurrentQuestion()">🔊</button>
+  <section id="provList" class="screen app-bg hidden">
+    <div class="app-shell">
+      <header class="page-head"><button class="back" onclick="showHome()">‹ Hem</button><h1>Prov</h1><button class="round" onclick="openMenu()">☰</button></header>
+      <p class="lead">Välj ett prov. Varje prov har 70 frågor. Godkänd: 52 rätt.</p>
+      <div id="provCards" class="prov-grid"></div>
+    </div>
+  </section>
+
+  <section id="quiz" class="screen hidden quiz-bg">
+    <header class="quiz-top">
+      <button class="back" onclick="showProvList()">‹ Prov</button>
+      <div><b id="activeProvName">Prov</b><span id="counter">Fråga 1 av 70</span></div>
+      <button class="round" onclick="readCurrentQuestion()">🔊</button>
     </header>
-
     <main class="quiz-wrap">
-      <div class="quiz-tools">
-        <select id="chapterSelect" onchange="jumpToChapter(this.value)"></select>
-        <button class="tool-btn" onclick="showOverview()">Översikt</button>
-      </div>
-
-      <div class="score-line">
-        <b id="progressText">Fråga 1 av 70</b>
-        <b><span id="liveRight">0</span> rätt</b>
-      </div>
+      <div class="score-line"><b id="progressText">Fråga 1 av 70</b><b><span id="liveRight">0</span> rätt</b></div>
       <div class="progress-track"><div id="progressFill"></div></div>
-
       <article class="question-card">
         <div id="imageBox" class="image-box"></div>
-        <p id="chapterName" class="chapter-name">Kapitel</p>
+        <p id="chapterName" class="chapter-name"></p>
         <h2 id="questionText" class="q-title"></h2>
         <button class="listen-wide" onclick="readCurrentQuestion()">🔊 Lyssna fråga och alternativ</button>
         <div id="answers" class="answers"></div>
         <p id="feedback" class="feedback hidden"></p>
       </article>
-
-      <div class="nav-row">
-        <button class="nav-btn" onclick="prevQuestion()">← Föregående</button>
-        <button class="nav-btn primary" onclick="nextQuestion()">Nästa →</button>
-      </div>
-      <button class="finish-btn" onclick="finishExam()">Avsluta och visa resultat</button>
+      <div class="nav-row"><button class="nav-btn" onclick="prevQuestion()">← Föregående</button><button class="nav-btn primary" onclick="nextQuestion()">Nästa →</button></div>
+      <div class="nav-row"><button class="nav-btn" onclick="showOverview()">Översikt</button><button class="finish-btn" onclick="finishExam()">Visa resultat</button></div>
     </main>
   </section>
 
-  <section id="overview" class="screen hidden overview-screen">
-    <header class="topbar">
-      <button class="back-btn" onclick="backToQuiz()">←</button>
-      <div class="top-info"><strong>Översikt</strong><span>Klicka på fråga</span></div>
-    </header>
-    <main class="overview-card">
+  <section id="overview" class="screen hidden app-bg">
+    <div class="app-shell">
+      <header class="page-head"><button class="back" onclick="backToQuiz()">‹ Tillbaka</button><h1>Översikt</h1><button class="round" onclick="finishExam()">✓</button></header>
       <div id="overviewGrid" class="overview-grid"></div>
-      <div class="legend"><span><i class="dot blue"></i>Besvarad</span><span><i class="dot red"></i>Fel</span><span><i class="dot grey"></i>Obesvarad</span></div>
       <button class="main-btn" onclick="finishExam()">Avsluta provet</button>
-    </main>
+    </div>
   </section>
 
-  <section id="result" class="screen hidden result-screen">
+  <section id="result" class="screen hidden app-bg">
     <div class="result-card">
       <h1 id="statusText">Resultat</h1>
       <p id="scoreText" class="big-score"></p>
       <p id="resultInfo"></p>
       <button class="main-btn" onclick="restartSame()">Gör om samma prov</button>
-      <button class="secondary-btn" onclick="goHome()">Till startsidan</button>
+      <button class="secondary-btn" onclick="showHome()">Till startsidan</button>
+    </div>
+  </section>
+
+  <section id="theory" class="screen hidden theory-bg">
+    <div class="app-shell">
+      <header class="page-head"><button class="back" onclick="showHome()">‹ Hem</button><h1>Teoribok</h1><button class="round" onclick="openMenu()">☰</button></header>
+      <nav class="theory-tabs"><button class="active" onclick="showTheoryTab('book')">Teoribok</button><button onclick="showTheoryTab('saved')">Sparat</button><button onclick="showTheoryTab('keys')">Nyckelord</button></nav>
+      <div id="theoryContent"></div>
+    </div>
+  </section>
+
+  <section id="chapter" class="screen hidden theory-bg">
+    <div class="app-shell chapter-shell">
+      <header class="page-head"><button class="back" onclick="showTheory()">‹ Teoribok</button><h1 id="chapterTitle">Kapitel</h1><button class="round" onclick="readChapterIntro()">🔊</button></header>
+      <div class="chapter-card">
+        <div class="chapter-info"><span id="chapterCategory"></span><strong id="chapterPagesLabel"></strong></div>
+        <h2 id="chapterHeading"></h2>
+        <p class="muted">Här visas bokens originalinnehåll sida för sida. Använd pilarna för att läsa hela kapitlet.</p>
+        <div class="chapter-nav"><button class="nav-btn" onclick="prevBookPage()">← Föregående sida</button><button class="nav-btn primary" onclick="nextBookPage()">Nästa sida →</button></div>
+        <div id="bookViewer" class="book-viewer"></div>
+        <div class="chapter-nav"><button class="nav-btn" onclick="prevBookPage()">← Föregående sida</button><button class="nav-btn primary" onclick="nextBookPage()">Nästa sida →</button></div>
+        <section class="test-section">
+          <h3>Kapiteltest – 10 frågor</h3>
+          <p class="muted">Testet hör till kapitlet. Frågorna är egna övningsfrågor och rätt svar varierar.</p>
+          <div id="chapterTest" class="mini-test"></div>
+        </section>
+      </div>
     </div>
   </section>
 
