@@ -1,181 +1,86 @@
-let provIndex = 0;
-let questions = [];
-let current = 0;
-let answers = [];
-let revealed = [];
-let activeChapter = null;
-let activePage = 1;
-let miniAnswers = {};
+const pages=window.BOOK_PAGES||[],titles=window.BOOK_TITLES||[],count=window.PAGE_COUNT||pages.length,book=document.getElementById('bookPages'),pageInput=document.getElementById('pageInput');document.getElementById('pageTotal').textContent=`/ ${count}`;let currentPage=1,currentReadIndex=0,readingAll=false;function escapeHtml(s){return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}function makePage(n){const card=document.createElement('article');card.className='pageCard';card.id=`page-${n}`;card.innerHTML=`<div class="pageHeader"><div><strong>Sida ${n}</strong><span class="muted"> — ${escapeHtml(titles[n-1]||'')}</span></div><div class="pageActions"><button data-read="${n}">Lyssna</button><button data-quiz="${n}">Testa kapitlet</button></div></div><img class="pageImg" loading="lazy" src="pages/page-${String(n).padStart(3,'0')}.jpg" alt="Sida ${n}"><div class="pageText collapsed" id="text-${n}">${escapeHtml(pages[n-1]||'')}</div>`;card.querySelector('[data-read]').onclick=()=>speakPage(n,false);card.querySelector('[data-quiz]').onclick=()=>startChapterTestByPage(n);card.querySelector('.pageText').onclick=e=>e.currentTarget.classList.toggle('collapsed');return card}function renderAll(){for(let i=1;i<=count;i++)book.appendChild(makePage(i))}function go(n){n=Math.max(1,Math.min(count,Number(n)||1));currentPage=n;pageInput.value=n;const el=document.getElementById(`page-${n}`);el?.scrollIntoView({behavior:'smooth',block:'start'});document.querySelectorAll('.highlight').forEach(x=>x.classList.remove('highlight'));el?.classList.add('highlight');setTimeout(()=>el?.classList.remove('highlight'),1200)}document.getElementById('prevBtn').onclick=()=>go(currentPage-1);document.getElementById('nextBtn').onclick=()=>go(currentPage+1);pageInput.onchange=()=>go(pageInput.value);document.getElementById('toTop').onclick=()=>go(1);const chapterList=document.getElementById('chapterList');(window.CHAPTERS||[]).forEach(([name,p])=>{const wrap=document.createElement('div');wrap.className='chapterItem';const a=document.createElement('a');a.href=`#page-${p}`;a.textContent=`${name} — sida ${p}`;a.onclick=e=>{e.preventDefault();go(p)};const b=document.createElement('button');b.className='miniQuiz';b.textContent='10 frågor';b.onclick=()=>startChapterTest(name,p);wrap.appendChild(a);wrap.appendChild(b);chapterList.appendChild(wrap)});const search=document.getElementById('search'),results=document.getElementById('searchResults');search.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();results.innerHTML='';if(q.length<2)return;let found=0;pages.forEach((t,i)=>{if(found>=20)return;const idx=t.toLowerCase().indexOf(q);if(idx>=0){found++;const r=document.createElement('button');r.className='result';r.textContent=`Sida ${i+1}: ${t.slice(Math.max(0,idx-35),idx+90).replace(/\s+/g,' ')}...`;r.onclick=()=>go(i+1);results.appendChild(r)}});if(!found)results.textContent='Inga träffar.'});function speakPage(n,continueAfter){currentReadIndex=n;go(n);const text=pages[n-1]||`Sida ${n}`,chunks=text.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[text];let k=0;speechSynthesis.cancel();function next(){if(k<chunks.length){const u=new SpeechSynthesisUtterance(chunks[k++]);u.lang='sv-SE';u.rate=Number(document.getElementById('rate').value)||0.95;u.onend=next;speechSynthesis.speak(u)}else if(continueAfter&&readingAll&&currentReadIndex<count){speakPage(currentReadIndex+1,true)}}next()}document.getElementById('readPage').onclick=()=>{readingAll=false;speakPage(Number(pageInput.value)||currentPage,false)};document.getElementById('readFromHere').onclick=()=>{readingAll=true;speakPage(Number(pageInput.value)||currentPage,true)};document.getElementById('stopRead').onclick=()=>{readingAll=false;speechSynthesis.cancel()};let observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const n=Number(e.target.id.replace('page-',''));if(n){currentPage=n;pageInput.value=n}}})},{threshold:.45});renderAll();document.querySelectorAll('.pageCard').forEach(p=>observer.observe(p));
 
-const letters = ['A','B','C','D'];
-const screens = ['home','provList','quiz','overview','result','theory','chapter'];
-const $ = id => document.getElementById(id);
-
-const BOOK_CHAPTERS = [
-  {cat:'Trafikregler', title:'Inledning', start:6, end:12},
-  {cat:'Trafikregler', title:'Körfält', start:14, end:20},
-  {cat:'Trafikregler', title:'Väjningsregler', start:22, end:44},
-  {cat:'Trafikregler', title:'Passager', start:46, end:56},
-  {cat:'Trafikregler', title:'Cirkulationsplats', start:58, end:66},
-  {cat:'Trafikregler', title:'Stanna & parkera', start:68, end:76},
-  {cat:'Trafikregler', title:'Landsväg', start:78, end:88},
-  {cat:'Trafikregler', title:'Motorväg & motortrafikled', start:90, end:96},
-  {cat:'Trafikregler', title:'Omkörningar', start:98, end:106},
-  {cat:'Trafikregler', title:'Järnvägskorsningar', start:108, end:114},
-  {cat:'Trafikregler', title:'Speciella gator', start:116, end:122},
-  {cat:'Trafikregler', title:'Vinter', start:124, end:130},
-  {cat:'Människan', title:'Inlärning & mognad', start:132, end:138},
-  {cat:'Människan', title:'Alkohol', start:140, end:146},
-  {cat:'Människan', title:'Trötthet', start:148, end:152},
-  {cat:'Människan', title:'Synen', start:154, end:160},
-  {cat:'Människan', title:'Nedsatt förmåga', start:162, end:166},
-  {cat:'Människan', title:'Barn', start:168, end:172},
-  {cat:'Människan', title:'Trafikolyckor', start:174, end:186},
-  {cat:'Fordon', title:'Indelning av fordon', start:188, end:194},
-  {cat:'Fordon', title:'Sträckor', start:196, end:202},
-  {cat:'Fordon', title:'Däck', start:204, end:212},
-  {cat:'Fordon', title:'Styrning', start:214, end:222},
-  {cat:'Fordon', title:'Bromsar', start:224, end:230},
-  {cat:'Fordon', title:'Krocksäkerhet', start:232, end:236},
-  {cat:'Fordon', title:'Bilbarnstolar', start:238, end:242},
-  {cat:'Fordon', title:'Längd & bredd', start:244, end:250},
-  {cat:'Fordon', title:'Last', start:252, end:260},
-  {cat:'Fordon', title:'Belysning', start:262, end:270},
-  {cat:'Fordon', title:'Säkerhetskontroller', start:272, end:276},
-  {cat:'Fordon', title:'Besiktning', start:278, end:282},
-  {cat:'Fordon', title:'Service', start:284, end:288},
-  {cat:'Fordon', title:'Registreringsbevis', start:290, end:296},
-  {cat:'Fordon', title:'Försäkring', start:298, end:302},
-  {cat:'Miljö', title:'Miljö', start:304, end:310},
-  {cat:'Miljö', title:'Sparsam körning', start:312, end:316},
-  {cat:'Miljö', title:'Drivmedel', start:318, end:322},
-  {cat:'Vägmärken', title:'Vägmärken', start:324, end:360},
-  {cat:'Rättsfall', title:'Hur domstolar har dömt i olika trafikmål', start:362, end:367}
+// Kapiteltest: 10 svårare frågor per kapitel med varierande rätt alternativ.
+const QUIZ_DISTRACTORS = [
+  'Att alltid köra så snabbt som hastighetsgränsen tillåter.',
+  'Att bara följa bilen framför utan egen bedömning.',
+  'Att vänta tills situationen blir farlig och sedan bromsa hårt.',
+  'Att lita på att andra trafikanter alltid gör rätt.',
+  'Att använda signalhorn för att få andra att flytta sig.',
+  'Att välja det alternativ som sparar mest tid även om marginalerna blir små.',
+  'Att titta mest på mobilen eller instrumentpanelen.',
+  'Att öka farten när du känner dig osäker.',
+  'Att parkera där det är närmast även om sikten försämras.',
+  'Att bromsa plötsligt utan anledning.'
 ];
-
-function show(id){ screens.forEach(s=>$(s)?.classList.add('hidden')); $(id)?.classList.remove('hidden'); window.scrollTo(0,0); }
-function showHome(){ stopSpeech(); show('home'); }
-function openMenu(){ alert('Meny kommer senare. Använd Hem, Prov och Teoribok.'); }
-function init(){ buildProvCards(); show('home'); }
-
-function buildProvCards(){
-  const wrap=$('provCards'); if(!wrap) return;
-  wrap.innerHTML=(PROVS||[]).slice(0,4).map((p,i)=>`<button class="prov-card" onclick="startProv(${i})"><h2>${p.title}</h2><p>70 frågor • Godkänd 52 rätt</p></button>`).join('');
+const FACTS = {
+ 'Inledning':['Defensiv körning innebär att du tänker framåt, håller säkerhetsmarginaler och är beredd på att andra kan göra fel.','Trafikens grundregler kräver omsorg, varsamhet och hänsyn mot andra trafikanter.','Barn, äldre och personer med funktionsnedsättning kräver extra uppmärksamhet.','Du ska inte störa eller hindra andra i onödan.','Polisens tecken gäller före trafiksignal, vägmärke och vanlig trafikregel.','Du ska kunna stanna framför förutsägbara hinder.','Säkerhetsavstånd minskar risken vid plötsliga händelser.','Ögonkontakt kan minska missförstånd med gående och andra förare.','Anpassad hastighet betyder att ta hänsyn till väder, väglag, trafik och sikt.','Vid otydliga regler ska du göra en trafiksäker bedömning med god marginal.'],
+ 'Körfält':['Grundregeln är att köra i körfältet längst till höger när inget annat motiverar annat val.','Vid körfältsbyte ska du kontrollera speglar, döda vinkeln och ge tecken.','Du får inte köra över en heldragen linje på din sida.','Vid vänstersväng placerar du bilen nära vänsterkanten av ditt körfält utan att hindra mötande.','På enkelriktad väg placerar du dig nära vänsterkanten av körbanan vid vänstersväng.','I kollektivkörfält får bara tillåtna fordon köra, om inte tilläggstavla säger annat.','Cykel och moped klass II får använda kollektivkörfält till höger i färdriktningen.','Körfält kan finnas även utan markering om körbanan är tillräckligt bred.','Slalomkörning mellan köande bilar är inte tillåten.','En liten fartökning kan vara lämplig vid körfältsbyte om fordon finns nära bakom i nya körfältet.'],
+ 'Väjningsregler':['Högerregeln gäller när ingen annan regel, signal eller skylt styr situationen.','Väjningsplikt innebär att du tydligt ska visa att du tänker släppa fram andra.','Stopplikt kräver att du stannar helt, även om du tycker att vägen är fri.','På huvudled ska trafiken från anslutande vägar lämna företräde.','Trafiksignal gäller före vägmärke om de ger olika budskap.','Utfartsregeln gäller när du lämnar exempelvis parkeringsplats eller bensinstation.','Svängningsregeln innebär att du inte får hindra mötande trafik när du svänger.','Blockeringsregeln betyder att du inte får köra in i en korsning och bli stående.','Flervägsstopp löses säkrast genom att den som stannade först kör först.','Du har väjningsplikt mot hela vägen du kör in på, även mot fordon som kör om.'],
+ 'Passager':['Vid obevakat övergångsställe har du väjningsplikt mot gående som är ute eller just ska gå ut.','Vid cykelöverfart ska du lämna cyklister och mopedister företräde.','Vid cykelpassage ska du anpassa hastigheten och vara beredd att stanna.','Skymd sikt vid passage kräver låg fart och extra uppmärksamhet.','Ögonkontakt med gående minskar risken för missförstånd.','Du får inte köra om strax före eller på ett obevakat övergångsställe.','Gående med vit käpp kan plötsligt börja gå över gatan.','Barn vid passage kan göra oväntade rörelser.','Du ska inte vinka fram någon om det kan bli farligt i andra körfält.','Refug kan dela upp passagen men du måste fortfarande visa hänsyn.'],
+ 'Cirkulationsplats':['Du har väjningsplikt mot fordon som redan är i cirkulationsplatsen.','Du ska blinka när du lämnar cirkulationsplatsen.','Låg fart i rondell ger tid att upptäcka cyklister och gående.','Placeringen ska hjälpa andra att förstå vart du tänker köra.','Du ska inte byta körfält i rondellen utan att kontrollera speglar och döda vinkeln.','Vid utfart ur rondell ska du vara uppmärksam på övergångsställe och cykelpassage.','Väjningspliktsmärket före rondellen gäller infarten.','Du får köra flera varv om du behöver välja rätt utfart säkert.','Stora fordon kan behöva mer plats i cirkulationsplatsen.','Du ska inte tränga dig in framför fordon som redan kör i rondellen.'],
+ 'Stanna & parkera':['Du får inte stanna eller parkera så att fara eller hinder uppstår.','10 meter-regeln gäller före korsning och övergångsställe.','Parkering innebär normalt stillastående som inte bara är av- eller påstigning/lastning.','Du får inte parkera på huvudled om inget annat anges.','Tilläggstavlor kan ändra tider, avgifter och fordonsslag.','Du får inte stanna i en tunnel annat än vid nödsituation.','På motorväg får du bara stanna vid nödfall.','Parkeringsskiva ska ställas på närmast följande halvtimme.','Udda datum-parkering och jämnt datum-parkering beror på datumet efter midnatt.','Vid parkering i backe kan hjulen vridas mot kantstenen för att minska risk att bilen rullar.'],
+ 'Landsväg':['På landsväg måste du titta långt fram eftersom hastigheten ofta är hög.','Vid backkrön och kurvor med skymd sikt ska du sänka farten och hålla till höger.','Vilt kan komma plötsligt, särskilt i gryning och skymning.','Traktorer och långsamma fordon kan skapa köer och omkörningsrisk.','Du ska hålla extra sidomarginal till cyklister och gående.','Vägrenen får användas kort för att underlätta om det kan ske säkert.','Mötande fordon på smal väg kräver låg fart och beredskap.','Fartblindhet kan komma efter lång körning i hög hastighet.','Halt väglag på landsväg ger längre bromssträcka och större sladdrisk.','Du ska aldrig chansa med omkörning när sikten är begränsad.'],
+ 'Motorväg & motortrafikled':['På motorväg får du inte backa, vända eller stanna utan nödsituation.','Accelerationsfältet används för att anpassa hastigheten till trafiken.','Håll längst till höger när du inte kör om.','Avståndet måste vara stort eftersom farten är hög.','Vid motorstopp ska du om möjligt stanna på vägrenen och sätta ut varningstriangel.','Du får inte plocka upp liftare på motorväg.','Motortrafikled kan ha mötande trafik på samma körbana.','Påfart kräver samspel och anpassning av fart.','Vid tät trafik ska du undvika onödiga körfältsbyten.','Avfart kräver att du bromsar först när du kommit in i avfartsfältet om möjligt.'],
+ 'Omkörningar':['Du får bara köra om när du har fri sikt och kan återgå säkert.','Mötande fordons hastighet är ofta svårast att bedöma vid omkörning.','Du får normalt inte köra om strax före backkrön med skymd sikt.','Den som blir omkörd ska underlätta och inte öka hastigheten.','God sidomarginal krävs vid omkörning av cyklist.','Avbryt omkörningen om situationen förändras.','Omkörning till höger kan vara tillåten när fordon framför ska svänga vänster.','Du får inte överskrida spärrlinje på din sida.','Tung lastbil kräver längre omkörningssträcka än personbil.','Vid mörker måste du hantera helljus så att du inte bländar.'],
+ 'Järnvägskorsningar':['Du ska aldrig köra in på järnvägskorsning om du riskerar att bli stående.','Rött blinkande ljus betyder stopp vid järnvägskorsning.','Vitt blinkande ljus betyder inte att du kan sluta kontrollera tågen.','Vid stopplikt före järnväg måste du stanna helt.','Sänk farten om sikten är dålig vid järnvägskorsning.','Bommar kan vara på väg ner även om du inte ser tåget.','Kryssmärke visar var järnvägen korsar vägen.','Flera spår innebär större risk eftersom tåg kan komma från olika håll.','Du ska inte växla eller stanna på spåret.','Om bilen fastnar på spåret ska du lämna bilen och varna.'],
+ 'Speciella gator':['Gågata kräver gångfart och väjningsplikt mot gående.','Gångfartsområde betyder att du kör i gångfart och lämnar gående företräde.','Cykelgata kräver särskild hänsyn till cyklister.','På enkelriktad gata kan cykel ibland tillåtas i motsatt riktning med skylt.','Bussgata får normalt bara användas av tillåten trafik.','Miljözon kan begränsa vilka fordon som får köra där.','Tättbebyggda områden kräver låg fart och beredskap.','Barn och gående kan korsa oväntat på bostadsgator.','Vägmärken vid infarten avgör vilka regler som gäller.','Du ska inte använda specialgator som genväg om fordonstrafik är förbjuden.'],
+ 'Vinter':['Vinterdäck krävs 1 december–31 mars när vinterväglag råder.','Dubbdäck får normalt användas 1 oktober–15 april eller vid vinterväglag.','Bromssträckan kan bli mycket längre på is och snö.','Bästa däcken ska sitta bak för att minska sladdrisk.','Svartis syns dåligt och är vanlig vid broar och skuggiga partier.','Tak och rutor ska rengöras från snö innan färd.','Motorbroms och mjuka rörelser minskar risken för sladd.','Hög växel kan underlätta start på halt underlag.','Salt fungerar sämre vid mycket låga temperaturer.','Vid sladd ska du styra åt det håll du vill att bilen ska gå.'],
+ 'Inlärning & mognad':['Unga förare överskattar ofta sin körförmåga.','Erfarenhet hjälper föraren att upptäcka risker tidigare.','Grupptryck kan få förare att ta större risker.','Självinsikt är viktigt för att välja rätt hastighet och marginal.','Riskmedvetande är viktigare än att kunna manövrera bilen snabbt.','Stress försämrar planering och beslutsfattande.','Mogen körning innebär ansvar och hänsyn.','Oerfarna förare hamnar oftare i farliga situationer.','Man lär sig bäst genom att analysera misstag.','Passagerare kan påverka förarens risknivå.'],
+ 'Alkohol':['Alkohol försämrar omdöme, reaktionstid och syn.','Gränsen för rattfylleri är 0,2 promille alkohol i blodet.','Gränsen för grovt rattfylleri är 1,0 promille.','Alkohol kan påverka körförmågan även dagen efter.','Förbränningen av alkohol går inte att skynda på med kaffe eller dusch.','Alkohol gör att synfältet blir smalare.','Risken ökar kraftigt även vid små mängder alkohol.','Du ansvarar själv för att inte köra påverkad.','Droger i blodet kan ge böter, fängelse och återkallat körkort.','Trötthet och alkohol kan förstärka varandras negativa effekter.'],
+ 'Trötthet':['Trötthet kan vara lika farligt som alkoholpåverkan.','Det bästa vid sömnighet är att stanna och sova en kort stund.','Risken att somna är ofta störst nära slutet av resan.','Monoton väg med lite trafik ökar sömnrisken.','Öppet fönster och hög musik ersätter inte sömn.','Mikrosömn kan komma utan att du hinner reagera.','Planerade pauser minskar risken vid lång körning.','Nattarbete före körning ökar risken kraftigt.','Trötthet försämrar uppmärksamhet och reaktionstid.','Byt förare om en utvilad person med körkort finns.'],
+ 'Synen':['Rörlig blick gör att du upptäcker faror tidigare.','Endast en liten del av synfältet ger skarp detaljsyn.','Tunnelseende kan uppstå vid stress, alkohol eller hög fart.','Bländning i mörker kan försämra synen tillfälligt.','Titta mot höger vägkant vid möte i mörker för att minska bländning.','Mörkerseendet försämras med ålder.','Speglar räcker inte – döda vinkeln måste kontrolleras med huvudvridning.','Smutsiga rutor kan öka bländning.','Fart kan vara svår att bedöma hos små fordon som moped.','Lång blick ger bättre planering och mjukare körning.'],
+ 'Nedsatt förmåga':['Läkemedel kan påverka körförmågan även om de är lagliga.','Du ansvarar själv för att bedöma om du kan köra med medicin.','Sjukdom, stress och starka känslor kan försämra körningen.','Mobiltelefon försämrar uppmärksamheten även med handsfree.','Distraktion kan förlänga reaktionstiden.','Om du känner dig påverkad ska du avstå från att köra.','Vissa läkemedel har varningstriangel eller information i bipacksedeln.','Alkohol och medicin tillsammans kan ge starkare påverkan.','Föraren måste kunna fatta säkra beslut hela tiden.','Nedsatt förmåga handlar både om kropp och koncentration.'],
+ 'Barn':['Barn är impulsiva och kan göra oväntade saker i trafiken.','Barn under 135 cm ska använda särskild skyddsanordning.','Bakåtvänd bilbarnstol är säkrast för små barn.','Barnstol får inte placeras framför aktiv krockkudde.','Vid skolor och lekplatser ska du sänka farten extra.','Barn har svårt att bedöma hastighet och avstånd.','Bussar kan skymma barn som springer ut.','Barn ska sitta fastspända under hela färden.','Föraren ansvarar för att barn under 15 år använder bälte.','Kort sträcka är ingen ursäkt för att hoppa över bilbarnskydd.'],
+ 'Trafikolyckor':['Vid olycka ska du stanna och hjälpa skadade.','Larma 112 vid personskada eller farlig situation.','Varna andra trafikanter så att inte fler olyckor sker.','Flytta inte svårt skadade om det inte är nödvändigt på grund av fara.','Kraftig blödning stoppas med tryck mot såret.','Du måste uppge namn och adress om någon inblandad frågar.','Viltolycka med vissa djur ska anmälas till polisen.','Sätt ut varningstriangel på lämpligt avstånd vid stopp.','Vid tunnelbrand bör du lämna bilen med nyckeln kvar och ta dig ut.','Att smita från olycksplats kan leda till återkallat körkort.'],
+ 'Sträckor':['Reaktionssträckan påverkas av hastighet och reaktionstid.','Bromssträckan ökar med kvadraten på hastigheten.','Stoppsträckan är reaktionssträcka plus bromssträcka.','Om hastigheten dubblas blir bromssträckan ungefär fyra gånger längre.','Om hastigheten tredubblas blir bromssträckan ungefär nio gånger längre.','Vått eller halt väglag ger längre bromssträcka.','Trötthet och alkohol förlänger reaktionstiden.','Last och dåliga däck kan öka stoppsträckan.','30 km/h motsvarar ungefär 9 meter reaktionssträcka vid 1 sekund.','Planerad körning minskar behovet av hårda inbromsningar.'],
+ 'Däck':['Minsta mönsterdjup på sommardäck är 1,6 mm.','Minsta mönsterdjup på vinterdäck vid vinterväglag är 3 mm.','Bästa däcken ska sitta bak för att minska risken för sladd.','Fel lufttryck ger sämre väggrepp och högre bränsleförbrukning.','Vattenplaning innebär att däcken tappar kontakt med vägen.','Dubbdäck på bilen kräver dubbdäck på släpvagn vid vinterväglag.','Däckens skick påverkar bromssträckan.','Regummerade däck är tillåtna på personbil.','Ojämnt slitage kan tyda på fel hjulinställning.','Kontrollera däck regelbundet, även reservhjul om det finns.'],
+ 'Bromsar':['ABS hindrar hjulen från att låsa sig vid hård bromsning.','Pulserande bromspedal vid ABS-bromsning är normalt.','Hydrauliska bromsar överför kraft med bromsvätska.','Våta bromsar kan ge sämre bromsverkan tillfälligt.','Parkeringsbromsen ska kunna hålla bilen stilla.','Ojämn bromsverkan kan göra att bilen drar åt sidan.','Bromssträckan påverkas av väglag, däck och hastighet.','Varningslampa för bromssystem betyder att du inte ska köra vidare om felet är allvarligt.','Testbromsning ska göras säkert utan att störa andra.','Låg bromsvätskenivå kan vara ett allvarligt fel.'],
+ 'Miljö':['Koldioxid bidrar till växthuseffekten.','Katalysatorn renar inte bort koldioxid.','Kall motor ger höga utsläpp per kilometer.','Korta bilresor är ofta dåliga för miljön.','Rätt däcktryck minskar bränsleförbrukningen.','Onödiga accelerationer ökar utsläppen.','Buller och partiklar är också miljöproblem.','Motorvärmare kan minska kallstartsutsläpp vid låg temperatur.','Samåkning kan minska antalet bilar på vägen.','Cykel eller gång är bäst för korta sträckor.'],
+ 'Sparsam körning':['Planera körningen långt fram för att undvika stopp.','Motorbromsa i god tid istället för att bromsa hårt sent.','Växla upp tidigt och använd hög växel när motorn klarar det.','Jämn fart minskar bränsleförbrukningen.','Takbox och onödig last ökar förbrukningen.','Luftkonditionering kan öka bränsleförbrukningen.','Håll avstånd så slipper du onödiga accelerationer.','Rätt däcktryck sparar bränsle.','Starta motorn först när du ska köra iväg.','Ekonomisk körning är ofta även säker körning.'],
+ 'Drivmedel':['Bensin och diesel är fossila bränslen.','Biogas och etanol kan vara förnybara drivmedel.','Elbilens miljöpåverkan beror bland annat på hur elen produceras.','Naturgas är fossilt och bidrar till växthuseffekten.','Förnybara drivmedel kan minska nettoutsläpp av koldioxid.','Diesel kan ge partiklar och kväveoxider.','Bränsleförbrukning påverkas mer av körsätt än många tror.','Korta körningar med kall motor ger höga utsläpp.','Miljöklassning säger något om utsläppskraven.','Val av drivmedel och antal resor påverkar miljön tillsammans.'],
+ 'Vägmärken':['Varningsmärken är oftast triangelformade med röd kant.','Förbudsmärken är ofta runda med röd kant.','Påbudsmärken är oftast blå och runda.','Huvudledsmärket är en gul romb med vit kant.','Tilläggstavlor ger extra villkor till vägmärket.','Vägmärken gäller normalt från platsen där de sitter.','Tidsangivelser på tilläggstavlor måste läsas noga.','Väjningspliktsmärken talar om vem som ska lämna företräde.','Tillfälliga orange markeringar går före vanliga markeringar vid vägarbete.','Polismans tecken gäller före vägmärken.'],
+ 'Rättsfall':['Otydliga trafikregler bedöms utifrån hela situationen.','Domstolen kan väga in sikt, hastighet och avstånd.','Att köra defensivt minskar risken att hamna i gränsfall.','Vid övergångsställe kan bedömningen handla om gående just skulle gå ut.','Föraren ansvarar för att göra en rimlig och säker bedömning.','Regler är inte alltid exakta meter eller sekunder.','Hänsyn och varsamhet väger tungt vid bedömning.','Ett lagligt beteende kan ändå vara olämpligt om situationen är farlig.','Bevisning kan vara vittnen, bilder eller teknisk information.','Säkerhetsmarginaler gör rättsliga bedömningar mindre riskabla.']
+};
+function factsForChapter(name){
+  if(FACTS[name]) return FACTS[name];
+  for(const k in FACTS){ if(name.includes(k)||k.includes(name)) return FACTS[k]; }
+  return ['Du ska alltid anpassa hastighet och avstånd efter situationen.','Du ska visa hänsyn och skapa säkerhetsmarginaler.','Du ska läsa vägmärken och tilläggstavlor noggrant.','Du ska planera tidigt och undvika plötsliga beslut.','Du ska vara extra försiktig vid skymd sikt.','Du ska kontrollera speglar och döda vinkeln innan sidoförflyttning.','Du ska inte hindra eller störa andra i onödan.','Du ska kunna stanna framför förutsägbara hinder.','Du ska välja ett körsätt som minskar risken för olycka.','Du ska vara beredd på att andra kan göra fel.'];
 }
-function showProvList(){ stopSpeech(); show('provList'); }
-function startProv(i){
-  provIndex=i; questions=PROVS[i].questions||[]; current=0; answers=Array(questions.length).fill(null); revealed=Array(questions.length).fill(false); show('quiz'); render();
-}
-function correctIndex(q){
-  const v=q.correct ?? q.answer ?? q.correctAnswer;
-  if(typeof v==='number') return v;
-  if(typeof v==='string'){ const t=v.trim().toUpperCase(); if(letters.includes(t)) return letters.indexOf(t); const n=Number(t); if(!Number.isNaN(n)) return n; }
-  return null;
-}
-function countRight(){ let r=0; questions.forEach((q,i)=>{ if(answers[i]===correctIndex(q)) r++; }); return r; }
-function render(){
-  if(!questions.length) return showProvList();
-  const q=questions[current], c=correctIndex(q);
-  $('activeProvName').textContent=PROVS[provIndex].title;
-  $('counter').textContent=`Fråga ${current+1} av ${questions.length}`;
-  $('progressText').textContent=`Fråga ${current+1} av ${questions.length}`;
-  $('liveRight').textContent=countRight();
-  $('progressFill').style.width=`${((current+1)/questions.length)*100}%`;
-  $('chapterName').innerHTML=`Kapitel: ${q.chapter || 'Blandade frågor'}`;
-  $('questionText').textContent=q.text||'';
-  $('imageBox').innerHTML=(q.images||[]).map(src=>`<img src="${src}" alt="Bild till frågan" onerror="this.style.display='none'">`).join('');
-  $('answers').innerHTML=(q.options||[]).map((opt,i)=>{
-    let cls='answer';
-    if(answers[current]===i) cls+=' selected';
-    if(revealed[current] && i===c) cls+=' correct';
-    if(revealed[current] && answers[current]===i && i!==c) cls+=' wrong';
-    return `<div class="${cls}" onclick="choose(${i})"><span>${letters[i]})</span><span>${opt}</span><button onclick="event.stopPropagation(); readText('${escapeText(letters[i]+'. '+opt)}')">🔊</button></div>`;
-  }).join('');
-  const fb=$('feedback'); fb.className='feedback hidden'; fb.textContent='';
-  if(revealed[current]){ fb.classList.remove('hidden'); if(answers[current]===c){ fb.textContent='Rätt svar!'; fb.classList.add('ok'); } else { fb.textContent=`Fel svar. Rätt svar är ${letters[c]}.`; fb.classList.add('bad'); } }
-}
-function choose(i){ answers[current]=i; revealed[current]=true; render(); }
-function nextQuestion(){ if(current<questions.length-1){ current++; render(); window.scrollTo(0,0); } else finishExam(); }
-function prevQuestion(){ if(current>0){ current--; render(); window.scrollTo(0,0); } }
-function showOverview(){
-  $('overviewGrid').innerHTML=questions.map((q,i)=>{ let cls='qbtn'; if(answers[i]!==null) cls+=' answered'; if(revealed[i] && answers[i]!==correctIndex(q)) cls+=' wrong'; return `<button class="${cls}" onclick="goQuestion(${i})">${i+1}</button>`; }).join(''); show('overview');
-}
-function goQuestion(i){ current=i; show('quiz'); render(); }
-function backToQuiz(){ show('quiz'); render(); }
-function finishExam(){ const right=countRight(), pass=right>=52; $('statusText').textContent=pass?'Godkänd':'Icke godkänd'; $('statusText').className=pass?'pass':'fail'; $('scoreText').textContent=`${right} / ${questions.length} rätt`; $('resultInfo').textContent=pass?'Bra jobbat! Du klarade provet.':'Du behöver minst 52 rätt för godkänt.'; show('result'); }
-function restartSame(){ startProv(provIndex); }
-
-function showTheory(){ stopSpeech(); buildTheoryList(); show('theory'); }
-function showTheoryTab(tab){
-  const tabs=document.querySelectorAll('.theory-tabs button'); tabs.forEach(b=>b.classList.remove('active'));
-  if(tab==='book'){ tabs[0].classList.add('active'); buildTheoryList(); }
-  if(tab==='saved'){ tabs[1].classList.add('active'); $('theoryContent').innerHTML='<div class="empty-card">Du har inte sparat något ännu.</div>'; }
-  if(tab==='keys'){ tabs[2].classList.add('active'); buildKeywords(); }
-}
-function buildTheoryList(){
-  const wrap=$('theoryContent'); if(!wrap) return;
-  let html='';
-  const cats=[...new Set(BOOK_CHAPTERS.map(c=>c.cat))];
-  cats.forEach(cat=>{
-    html += `<h2 class="cat-title">${cat}</h2><div class="chapter-list">`;
-    BOOK_CHAPTERS.filter(c=>c.cat===cat).forEach((c)=>{
-      const idx=BOOK_CHAPTERS.indexOf(c);
-      html += `<button class="chapter-item" onclick="openChapter(${idx})"><div><small>${c.cat} • sida ${c.start}</small><b>${c.title}</b><span>${c.end-c.start+1} sidor</span></div><strong>›</strong></button>`;
-    });
-    html += '</div>';
+function chapterByPage(p){let ch=(window.CHAPTERS||[])[0]||['Kapitel',1];for(const c of (window.CHAPTERS||[])){if(p>=c[1])ch=c;else break}return ch;}
+function startChapterTestByPage(p){const [name,start]=chapterByPage(p);startChapterTest(name,start)}
+function startChapterTest(name,start){
+  speechSynthesis.cancel();
+  const facts=factsForChapter(name).slice(0,10);
+  const qs=facts.map((fact,i)=>{
+    const wrongs=[...QUIZ_DISTRACTORS].sort(()=>0.5-Math.random()).slice(0,3);
+    let opts=[fact,...wrongs];
+    const ci=i%4;
+    const correctText=opts[0]; opts[0]=opts[ci]; opts[ci]=correctText;
+    return {q:`${i+1}. Vilket alternativ är mest trafiksäkert och stämmer bäst för kapitlet ”${name}”?`,opts,correct:ci,explain:fact};
   });
-  wrap.innerHTML=html;
+  let idx=0,score=0,locked=false;
+  function render(){
+    const q=qs[idx];
+    const ov=document.createElement('div');ov.className='quizOverlay';
+    ov.innerHTML=`<div class="quizCard"><div class="quizTop"><button class="closeQuiz">×</button><div><b>${escapeHtml(name)}</b><span>Fråga ${idx+1} av 10 • ${score} rätt</span></div></div><div class="quizBar"><i style="width:${(idx/10)*100}%"></i></div><h2>${escapeHtml(q.q)}</h2><div class="quizAnswers">${q.opts.map((o,j)=>`<button class="quizAnswer" data-a="${j}"><b>${'ABCD'[j]})</b> ${escapeHtml(o)}</button>`).join('')}</div><p class="quizExplain"></p></div>`;
+    document.body.appendChild(ov);
+    ov.querySelector('.closeQuiz').onclick=()=>ov.remove();
+    ov.querySelectorAll('.quizAnswer').forEach(btn=>btn.onclick=()=>{
+      if(locked)return; locked=true;
+      const chosen=Number(btn.dataset.a);
+      ov.querySelectorAll('.quizAnswer').forEach((b,j)=>{b.disabled=true;if(j===q.correct)b.classList.add('right');if(j===chosen&&j!==q.correct)b.classList.add('bad')});
+      if(chosen===q.correct)score++;
+      ov.querySelector('.quizExplain').innerHTML=`<b>Förklaring:</b> ${escapeHtml(q.explain)}`;
+      setTimeout(()=>{ov.remove();idx++;locked=false;if(idx<qs.length)render();else finishQuiz(name,score,start)},1600);
+    });
+  }
+  render();
 }
-function buildKeywords(){
-  const keys=['högerregeln','huvudled','väjningsplikt','övergångsställe','cirkulationsplats','parkering','motorväg','omkörning','vinterdäck','alkohol','trötthet','bromssträcka','däck','belysning','miljö'];
-  $('theoryContent').innerHTML=`<div class="keyword-grid">${keys.map(k=>`<button onclick="searchKeyword('${k}')">${k}</button>`).join('')}</div>`;
+function finishQuiz(name,score,start){
+  const ov=document.createElement('div');ov.className='quizOverlay';
+  ov.innerHTML=`<div class="quizCard resultQuiz"><h1>${score>=8?'Godkänt':'Försök igen'}</h1><div class="quizScore">${score}/10</div><p>${score>=8?'Bra jobbat! Du kan kapitlet.':'Läs kapitlet igen och gör testet en gång till.'}</p><button class="closeQuiz primaryClose">Tillbaka</button><button class="restartQuiz">Gör om testet</button></div>`;
+  document.body.appendChild(ov);
+  ov.querySelector('.closeQuiz').onclick=()=>ov.remove();
+  ov.querySelector('.restartQuiz').onclick=()=>{ov.remove();startChapterTest(name,start)};
 }
-function searchKeyword(k){ alert('Sök i PDF: använd webbläsarens sökfunktion Ctrl+F och sök: '+k); }
-function openChapter(i){
-  activeChapter=BOOK_CHAPTERS[i]; activePage=activeChapter.start; miniAnswers={};
-  $('chapterTitle').textContent=activeChapter.title;
-  $('chapterHeading').textContent=activeChapter.title;
-  $('chapterCategory').textContent=activeChapter.cat;
-  renderBookPage(); buildChapterTest(); show('chapter');
-}
-function renderBookPage(){
-  if(!activeChapter) return;
-  $('chapterPagesLabel').textContent=`sida ${activePage} av ${activeChapter.end}`;
-  const pdfUrl=`teoribok.pdf#page=${activePage}&zoom=page-width`;
-  $('bookViewer').innerHTML=`<iframe title="Teoribok sida ${activePage}" src="${pdfUrl}"></iframe><p class="pdf-help">Om sidan inte syns på mobil: tryck <a href="${pdfUrl}" target="_blank">öppna sidan i ny flik</a>.</p>`;
-}
-function nextBookPage(){ if(activeChapter && activePage<activeChapter.end){ activePage++; renderBookPage(); document.querySelector('.chapter-card').scrollIntoView({behavior:'smooth'}); } }
-function prevBookPage(){ if(activeChapter && activePage>activeChapter.start){ activePage--; renderBookPage(); document.querySelector('.chapter-card').scrollIntoView({behavior:'smooth'}); } }
-function readChapterIntro(){ if(activeChapter) readText(`${activeChapter.category || activeChapter.cat}. ${activeChapter.title}. Läs sidorna ${activeChapter.start} till ${activeChapter.end}.`); }
-
-function makeTest(ch){
-  const templates = [
-    [`Vilken huvudregel är viktigast i kapitlet ${ch.title}?`, ['Att köra fortare än andra','Att anpassa körningen efter situationen','Att alltid ligga nära bilen framför','Att alltid välja vänster körfält'], 1],
-    [`Vad ska du göra när du är osäker i en situation som hör till ${ch.title}?`, ['Chansa snabbt','Tuta och fortsätta','Sänka farten och skapa marginal','Stanna mitt i körfältet utan anledning'], 2],
-    [`Vad betyder defensiv körning i praktiken?`, ['Ta onödiga risker','Ha god uppsikt och marginal','Köra över till vänster','Alltid köra långsamt'], 1],
-    [`Vad är bäst för säkerheten?`, ['Stressa igenom situationen','Hålla blicken stilla','Planera i god tid','Köra nära andra'], 2],
-    [`När ska du använda extra försiktighet?`, ['När sikten är begränsad','Endast på motorväg','Bara vid soligt väder','Aldrig i tätort'], 0],
-    [`Vad ska du tänka på kring regler och vägmärken?`, ['Polisens tecken gäller först','Högerregeln gäller alltid först','Skyltar gäller aldrig','Trafiksignaler gäller aldrig'], 0],
-    [`Vilket beteende är farligast?`, ['Att hålla säkerhetsavstånd','Att läsa trafiken långt fram','Att ta större risker för att bilen har säkerhetssystem','Att anpassa hastigheten'], 2],
-    [`Vad ska ett kapiteltest hjälpa dig med?`, ['Memorera bara bilder','Förstå reglerna i riktiga situationer','Hoppa över teorin','Gissa snabbare'], 1],
-    [`Vad är bäst om du missar något i kapitlet?`, ['Gå tillbaka och läsa sidan igen','Fortsätta utan att förstå','Bara trycka nästa','Gissa på provet'], 0],
-    [`Vad är målet med ${ch.title}?`, ['Att förstå hur du kör säkert och lagligt','Att bara klara en fråga','Att ignorera andra trafikanter','Att alltid köra snabbast'], 0]
-  ];
-  return templates;
-}
-function buildChapterTest(){
-  const qs=makeTest(activeChapter);
-  $('chapterTest').innerHTML=qs.map((q,qi)=>`<div class="mini-q" id="mini-${qi}"><h4>${qi+1}. ${q[0]}</h4>${q[1].map((o,oi)=>`<button onclick="answerMini(${qi},${oi})">${letters[oi]}) ${o}</button>`).join('')}<p></p></div>`).join('');
-}
-function answerMini(qi,oi){
-  const qs=makeTest(activeChapter); const correct=qs[qi][2]; const box=$(`mini-${qi}`); const buttons=box.querySelectorAll('button');
-  buttons.forEach((b,i)=>{ b.classList.remove('right','bad'); if(i===correct) b.classList.add('right'); if(i===oi && i!==correct) b.classList.add('bad'); });
-  box.querySelector('p').textContent = oi===correct ? 'Rätt!' : `Fel. Rätt svar är ${letters[correct]}.`;
-}
-
-function readCurrentQuestion(){ const q=questions[current]; if(!q) return; readText(`Fråga ${current+1}. ${q.text}. ` + (q.options||[]).map((o,i)=>`${letters[i]}. ${o}`).join('. ')); }
-function readText(text){ if(!('speechSynthesis' in window)){ alert('Din webbläsare stödjer inte uppläsning.'); return; } speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(String(text).replace(/\s+/g,' ')); u.lang='sv-SE'; u.rate=.9; speechSynthesis.speak(u); }
-function stopSpeech(){ if('speechSynthesis' in window) speechSynthesis.cancel(); }
-function escapeText(s){ return String(s).replace(/'/g,'’').replace(/\n/g,' '); }
-
-window.addEventListener('load', init);
