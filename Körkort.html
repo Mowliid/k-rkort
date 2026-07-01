@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teoribok 2026 - Kodversion</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar"><div class="brand"><span class="logo">🚗</span><div><strong>Teoribok 2026</strong><small>B-körkort • kodversion</small></div></div><div class="controls"><button id="prevBtn">← Föregående</button><input id="pageInput" type="number" min="1" value="1" /><span id="pageTotal"></span><button id="nextBtn">Nästa →</button></div></header>
+  <aside class="sidebar"><h2>Kapitel</h2><input id="search" placeholder="Sök i hela boken..." /><div id="searchResults"></div><nav id="chapterList"></nav></aside>
+  <main class="reader"><section class="hero"><h1>Teoribok som hemsida</h1><p>Alla sidor är konverterade från PDF till webbsidor. Du kan bläddra, söka och lyssna på texten.</p><div class="audioPanel"><button id="readPage">🔊 Läs sidan</button><button id="readFromHere">▶ Läs från sidan</button><button id="stopRead">■ Stoppa</button><label>Hastighet <input id="rate" type="range" min="0.6" max="1.4" value="0.95" step="0.05"></label></div></section><section id="bookPages" class="bookPages"></section></main>
+  <button id="toTop" title="Till toppen">↑</button><script src="pages.js"></script><script src="chapters.js"></script><script src="script.js"></script>
+</body></html>
