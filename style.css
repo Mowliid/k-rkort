@@ -315,13 +315,9 @@
   .voice-panel select{font-size:13px}
 }
 
-.test-voice-btn{
-  border:0;
-  border-radius:12px;
-  padding:10px 12px;
-  background:#fff;
-  color:#0b7774;
-  font-weight:700;
-  cursor:pointer;
+.offline-btn{
+  border:0;border-radius:14px;padding:11px 14px;background:#fff;color:#0b7774;
+  font-weight:800;cursor:pointer;box-shadow:0 8px 22px #00000018;margin-top:12px;
 }
-@media(max-width:850px){.test-voice-btn{width:100%;}}
+.offline-btn:disabled{opacity:.6;cursor:not-allowed}
+@media(max-width:850px){.offline-btn{width:100%;}}

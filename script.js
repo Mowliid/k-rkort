@@ -23,29 +23,45 @@ function audioUrls(s,v){
   const file = `${pad3(s)}${pad3(v)}.mp3`;
   return audioFolders.map(f => `https://everyayah.com/data/${f}/${file}`);
 }
-function svAudioUrl(s, v){
-  return `audio/sv/${pad3(s)}${pad3(v)}_sv.mp3`;
+const OFFLINE_DB_NAME = "quran-audio-offline-v1";
+const OFFLINE_STORE = "ayahAudio";
+
+function openOfflineDb(){
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(OFFLINE_DB_NAME, 1);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if(!db.objectStoreNames.contains(OFFLINE_STORE)) db.createObjectStore(OFFLINE_STORE);
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
 }
 
-async function localFileExists(url){
-  try{
-    const r = await fetch(url, { method: "HEAD", cache: "no-store" });
-    return r.ok;
-  }catch(e){
-    return false;
-  }
+async function getAudioBlob(key){
+  const db = await openOfflineDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(OFFLINE_STORE, "readonly");
+    const req = tx.objectStore(OFFLINE_STORE).get(key);
+    req.onsuccess = () => resolve(req.result || null);
+    req.onerror = () => reject(req.error);
+  });
 }
 
-function playLocalMp3(url){
+async function saveAudioBlob(key, blob){
+  const db = await openOfflineDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(OFFLINE_STORE, "readwrite");
+    tx.objectStore(OFFLINE_STORE).put(blob, key);
+    tx.oncomplete = () => resolve(true);
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+function playSingleAudioUrl(url){
   return new Promise(resolve => {
-    audio.pause();
-    audio.removeAttribute("src");
-    audio.load();
-    audio.src = url;
-    audio.preload = "auto";
-
     let done = false;
-    const finish = (ok) => {
+    const finish = ok => {
       if(done) return;
       done = true;
       audio.onended = null;
@@ -53,32 +69,79 @@ function playLocalMp3(url){
       audio.oncanplay = null;
       resolve(ok);
     };
-
+    audio.pause();
+    audio.removeAttribute("src");
+    audio.load();
+    audio.src = url;
+    audio.preload = "auto";
     audio.onended = () => finish(true);
     audio.onerror = () => finish(false);
     audio.oncanplay = () => {
       const p = audio.play();
-      if(p && typeof p.catch === "function"){
-        p.catch(() => finish(false));
-      }
+      if(p && typeof p.catch === "function") p.catch(() => finish(false));
     };
-
     audio.load();
   });
 }
 
-async function playSwedishTranslation(v){
-  const mp3 = svAudioUrl(v.sura, v.verse);
-
-  if(await localFileExists(mp3)){
-    $("playerStatus").textContent = "Spelar svensk Piper-röst...";
-    return await playLocalMp3(mp3);
+async function fetchAndCacheAyahAudio(sura, verse){
+  const key = `${pad3(sura)}${pad3(verse)}`;
+  const cached = await getAudioBlob(key);
+  if(cached) return cached;
+  for(const url of audioUrls(sura, verse)){
+    try{
+      const res = await fetch(url, {mode:"cors", cache:"force-cache"});
+      if(res.ok){
+        const blob = await res.blob();
+        if(blob.size > 1000){
+          await saveAudioBlob(key, blob);
+          return blob;
+        }
+      }
+    }catch(e){}
   }
-
-  $("playerStatus").textContent = "Svensk Piper-MP3 saknas — använder webbläsarröst tills MP3-filer skapas.";
-  await speakSwedish(v.swedish);
-  return true;
+  return null;
 }
+
+async function playCachedOrOnlineAyah(sura, verse){
+  const key = `${pad3(sura)}${pad3(verse)}`;
+  const cached = await getAudioBlob(key);
+  if(cached){
+    const url = URL.createObjectURL(cached);
+    const ok = await playSingleAudioUrl(url);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    return ok;
+  }
+  if(!navigator.onLine){
+    $("playerStatus").textContent = "Ljudet är inte nedladdat offline.";
+    return false;
+  }
+  const blob = await fetchAndCacheAyahAudio(sura, verse);
+  if(blob){
+    const url = URL.createObjectURL(blob);
+    const ok = await playSingleAudioUrl(url);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    return ok;
+  }
+  return await playAudioWithFallback(audioUrls(sura, verse));
+}
+
+async function downloadCurrentSurahOffline(){
+  const btn = document.getElementById("downloadSurahBtn");
+  if(btn) btn.disabled = true;
+  let ok = 0;
+  for(let i=0; i<currentVerses.length; i++){
+    const v = currentVerses[i];
+    $("playerTitle").textContent = "Laddar ner offline";
+    $("playerStatus").textContent = `${i+1}/${currentVerses.length} verser...`;
+    const blob = await fetchAndCacheAyahAudio(v.sura, v.verse);
+    if(blob) ok++;
+  }
+  $("playerTitle").textContent = "Offline klar";
+  $("playerStatus").textContent = `${ok}/${currentVerses.length} versljud sparade.`;
+  if(btn) btn.disabled = false;
+}
+
 
 function loadVoices(){
   voices = speechSynthesis.getVoices();
@@ -384,7 +447,7 @@ async function playOne(idx){
   $("playerStatus").textContent = "Startar Abdullah Matrood...";
   highlight(idx, "ar");
 
-  const ok = await playAudioWithFallback(audioUrls(v.sura, v.verse));
+  const ok = await playCachedOrOnlineAyah(v.sura, v.verse);
 
   if(!playing) return;
 
@@ -401,7 +464,7 @@ async function playOne(idx){
 
   $("playerStatus").textContent = "Nu läses svensk översättning...";
   highlight(idx, "sv");
-  await playSwedishTranslation(v);
+  await speakSwedish(v.swedish);
 }
 
 async function playFrom(idx){
@@ -436,15 +499,3 @@ $("playAll").onclick = () => playing ? stop() : playFrom(currentIndex || 0);
 $("stopBtn").onclick = () => stop();
 
 selectSurah(1);
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  const btn = document.getElementById("testVoiceBtn");
-  if(btn){
-    btn.onclick = async () => {
-      $("playerTitle").textContent = "Testar svensk röst";
-      $("playerStatus").textContent = "Om du hör detta fungerar webbläsarrösten.";
-      await speakSwedish("Detta är ett test av den svenska rösten.");
-    };
-  }
-});
