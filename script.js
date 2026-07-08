@@ -6,6 +6,8 @@ let playing = false;
 let voices = [];
 let selectedSwedishVoice = null;
 let swedishRate = 0.80;
+let mobileSpeechUnlocked = false;
+let lastSpeechError = "";
 const audio = document.getElementById("ayahAudio");
 const $ = (id) => document.getElementById(id);
 
@@ -337,7 +339,7 @@ function renderVerses(){
     const arabicText = escapeHtml(v.arabic || "Laddar arabisk text...");
     const ayahMarker = makeAyahMarker(v.verse);
     card.innerHTML = `<div class="verse-head"><button class="verse-play">▶</button></div><div class="arabic"><span class="ayah-marker" aria-label="Vers ${v.verse}">${ayahMarker}</span><span class="ayah-text">${arabicText}</span></div><div class="swedish">${escapeHtml(v.swedish)}</div>`;
-    card.querySelector(".verse-play").onclick = () => playFrom(idx);
+    card.querySelector(".verse-play").onclick = () => startPlaybackFromUserClick(idx);
     $("verses").appendChild(card);
   });
 }
@@ -437,17 +439,58 @@ function cleanTextForReading(text){
 
 async function ensureSwedishVoices(){
   if(!window.speechSynthesis) return null;
-  for(let i=0; i<12; i++){
+  for(let i=0; i<18; i++){
     voices = speechSynthesis.getVoices();
-    const voice = selectedSwedishVoice || getBestSwedishVoice() || getVoice("sv");
+
+    // På mobil kan ett gammalt voice-objekt sluta fungera efter reload.
+    // Därför hämtar vi alltid en färsk röst från nuvarande röstlista.
+    const savedUri = localStorage.getItem("quranSwedishVoiceURI") || "";
+    const savedName = localStorage.getItem("quranSwedishVoiceName") || "";
+    const freshSelected = voices.find(v => (v.voiceURI || "") === savedUri)
+      || voices.find(v => v.name === savedName)
+      || null;
+
+    const voice = freshSelected || getBestSwedishVoice() || getVoice("sv");
     if(voice){
       selectedSwedishVoice = voice;
       setupVoiceSelect();
       return voice;
     }
-    await new Promise(r => setTimeout(r, 200));
+    await new Promise(r => setTimeout(r, 250));
   }
   return null;
+}
+
+function isMobileBrowser(){
+  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || "");
+}
+
+function unlockSwedishSpeechFromUserClick(){
+  if(!window.speechSynthesis || mobileSpeechUnlocked) return;
+  try{
+    loadVoices();
+    if(window.speechSynthesis) speechSynthesis.cancel();
+    speechSynthesis.resume();
+
+    // Viktigt för iPhone/Android: Web Speech måste startas direkt av knapptrycket.
+    // Den här mycket tysta korta rösten låser upp svensk uppläsning för resten av spelningen.
+    const u = new SpeechSynthesisUtterance(".");
+    u.lang = "sv-SE";
+    u.volume = 0.01;
+    u.rate = 1;
+    const v = selectedSwedishVoice || getBestSwedishVoice() || getVoice("sv");
+    if(v) u.voice = v;
+    u.onstart = () => { mobileSpeechUnlocked = true; };
+    u.onend = () => { mobileSpeechUnlocked = true; };
+    u.onerror = (e) => { lastSpeechError = e.error || "speech error"; };
+    speechSynthesis.speak(u);
+    setTimeout(() => {
+      try{ if(window.speechSynthesis) speechSynthesis.cancel(); speechSynthesis.resume(); }catch(e){}
+      mobileSpeechUnlocked = true;
+    }, 120);
+  }catch(e){
+    lastSpeechError = e.message || String(e);
+  }
 }
 
 function splitSwedishText(text, maxLen=180){
@@ -471,36 +514,77 @@ function splitSwedishText(text, maxLen=180){
 }
 
 async function speakSwedish(text){
-  if(!window.speechSynthesis) return;
+  if(!window.speechSynthesis){
+    $("playerStatus").textContent = "Din webbläsare stödjer inte svensk uppläsning.";
+    return;
+  }
   const chunks = splitSwedishText(text);
   if(!chunks.length) return;
 
   const voice = await ensureSwedishVoices();
-  speechSynthesis.cancel();
+  if(!voice){
+    $("playerStatus").textContent = "Ingen svensk röst hittades. Ladda ner svensk röst i mobilens inställningar.";
+    return;
+  }
+
+  if(window.speechSynthesis) speechSynthesis.cancel();
   speechSynthesis.resume();
-  await new Promise(r => setTimeout(r, 180));
+  await new Promise(r => setTimeout(r, isMobileBrowser() ? 650 : 180));
 
   for(const chunk of chunks){
     if(!playing) return;
     await new Promise(resolve => {
-      const u = new SpeechSynthesisUtterance(chunk);
-      u.lang = "sv-SE";
-      u.rate = swedishRate;
-      u.pitch = 0.95;
-      u.volume = 1;
-      if(voice) u.voice = voice;
-
       let done = false;
-      const finish = () => { if(!done){ done = true; resolve(); } };
-      u.onend = finish;
-      u.onerror = finish;
+      let started = false;
+      let attempts = 0;
+      let timer = null;
 
-      // iPhone/Android kan pausa speechSynthesis efter ljuduppspelning.
-      speechSynthesis.resume();
-      speechSynthesis.speak(u);
-      setTimeout(() => { if(speechSynthesis.paused) speechSynthesis.resume(); }, 120);
-      setTimeout(() => { if(speechSynthesis.paused) speechSynthesis.resume(); }, 600);
-      setTimeout(finish, Math.max(12000, chunk.length * 180));
+      const finish = () => {
+        if(done) return;
+        done = true;
+        if(timer) clearTimeout(timer);
+        resolve();
+      };
+
+      const speakNow = (useChosenVoice=true) => {
+        attempts++;
+        try{ if(window.speechSynthesis) speechSynthesis.cancel(); speechSynthesis.resume(); }catch(e){}
+        const u = new SpeechSynthesisUtterance(chunk);
+        u.lang = "sv-SE";
+        u.rate = swedishRate;
+        u.pitch = 0.95;
+        u.volume = 1;
+        if(useChosenVoice && voice) u.voice = voice;
+
+        u.onstart = () => {
+          started = true;
+          $("playerStatus").textContent = `Svensk röst läser${voice ? " • " + voice.name : ""}...`;
+        };
+        u.onend = finish;
+        u.onerror = (e) => {
+          lastSpeechError = e.error || "speech error";
+          // Vissa mobiler vägrar vald röst. Försök då med systemets standard-svenska.
+          if(attempts === 1 && !done){
+            setTimeout(() => speakNow(false), 250);
+          }else{
+            finish();
+          }
+        };
+
+        speechSynthesis.speak(u);
+        setTimeout(() => { try{ if(speechSynthesis.paused) speechSynthesis.resume(); }catch(e){} }, 120);
+        setTimeout(() => { try{ if(speechSynthesis.paused) speechSynthesis.resume(); }catch(e){} }, 700);
+
+        // Om mobilen inte ens startar rösten efter arabiska ljudet: försök igen en gång.
+        setTimeout(() => {
+          if(!started && attempts === 1 && !done){
+            speakNow(false);
+          }
+        }, 1600);
+      };
+
+      speakNow(true);
+      timer = setTimeout(finish, Math.max(15000, chunk.length * 220));
     });
   }
 }
@@ -510,7 +594,7 @@ async function playOne(idx){
   if(!v || !playing) return;
 
   // Stoppa svensk röst från förra versen innan Matrood börjar.
-  speechSynthesis.cancel();
+  if(window.speechSynthesis) speechSynthesis.cancel();
 
   currentIndex = idx;
   $("playerTitle").textContent = `Abdullah Matrood • Sura ${v.sura}:${v.verse}`;
@@ -538,7 +622,6 @@ async function playOne(idx){
 }
 
 async function playFrom(idx){
-  stop(false);
   playing = true;
   $("playAll").textContent = "Ⅱ";
   for(let i=idx; i<currentVerses.length && playing; i++){
@@ -555,7 +638,7 @@ async function playFrom(idx){
 function stop(reset=true){
   playing = false;
   audio.pause(); audio.removeAttribute("src"); audio.load();
-  speechSynthesis.cancel();
+  if(window.speechSynthesis) speechSynthesis.cancel();
   $("playAll").textContent = "▶";
   if(reset){
     $("playerTitle").textContent = "Stoppad";
@@ -565,8 +648,29 @@ function stop(reset=true){
 }
 
 $("search").addEventListener("input", e => renderSurahs(e.target.value));
-$("playAll").onclick = () => playing ? stop() : playFrom(currentIndex || 0);
+function startPlaybackFromUserClick(idx){
+  if(playing){ stop(); return; }
+  stop(false);
+  unlockSwedishSpeechFromUserClick();
+  playFrom(idx);
+}
+
+$("playAll").onclick = () => startPlaybackFromUserClick(currentIndex || 0);
 $("stopBtn").onclick = () => stop();
+
+const testVoiceBtn = document.getElementById("testVoiceBtn");
+if(testVoiceBtn){
+  testVoiceBtn.onclick = async () => {
+    stop(false);
+    playing = true;
+    unlockSwedishSpeechFromUserClick();
+    $("playerTitle").textContent = "Testar svensk röst";
+    $("playerStatus").textContent = "Om du hör detta fungerar svensk mobilröst.";
+    await speakSwedish("Detta är ett test av svensk röst på mobilen.");
+    playing = false;
+    $("playAll").textContent = "▶";
+  };
+}
 
 selectSurah(1);
 
