@@ -27,6 +27,71 @@ function audioUrls(s,v){
 }
 const OFFLINE_DB_NAME = "quran-audio-offline-v1";
 const OFFLINE_STORE = "ayahAudio";
+const OFFLINE_AUDIO_CACHE = "quran-audio-cache-v2";
+
+// Mobil-fix: service worker + Cache API.
+// Vanlig fetch som blob kan blockeras av CORS på mobil, men Cache API kan spara
+// ljudförfrågningar så <audio> kan spela dem offline senare.
+if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(err => {
+      console.warn("Service worker kunde inte registreras", err);
+    });
+  });
+}
+
+async function saveAudioUrlToCache(url){
+  if (!("caches" in window)) return false;
+  try {
+    const cache = await caches.open(OFFLINE_AUDIO_CACHE);
+    const req = new Request(url, { mode: "no-cors" });
+    const res = await fetch(req);
+    // no-cors ger ofta opaque response. Den är OK att cacha och spela via <audio>.
+    if (res && (res.ok || res.type === "opaque")) {
+      await cache.put(req, res.clone());
+      return true;
+    }
+  } catch(e) {
+    console.warn("Cache-sparning misslyckades", url, e);
+  }
+  return false;
+}
+
+async function isAudioUrlCached(url){
+  if (!("caches" in window)) return false;
+  try {
+    const cache = await caches.open(OFFLINE_AUDIO_CACHE);
+    let hit = await cache.match(new Request(url, { mode: "no-cors" }));
+    if(!hit) hit = await cache.match(url);
+    return !!hit;
+  } catch(e) { return false; }
+}
+
+async function cacheAyahAudioUrls(sura, verse){
+  // Först försök blob/IndexedDB. Om CORS stoppar, använd Cache API.
+  try {
+    const blob = await fetchAndCacheAyahAudio(sura, verse);
+    if (blob) return true;
+  } catch(e) {}
+
+  for (const url of audioUrls(sura, verse)) {
+    const ok = await saveAudioUrlToCache(url);
+    if (ok) return true;
+  }
+  return false;
+}
+
+async function hasAyahOffline(sura, verse){
+  const key = `${pad3(sura)}${pad3(verse)}`;
+  try {
+    const cachedBlob = await getAudioBlob(key);
+    if (cachedBlob) return true;
+  } catch(e) {}
+  for (const url of audioUrls(sura, verse)) {
+    if (await isAudioUrlCached(url)) return true;
+  }
+  return false;
+}
 
 function openOfflineDb(){
   return new Promise((resolve, reject) => {
@@ -107,40 +172,65 @@ async function fetchAndCacheAyahAudio(sura, verse){
 
 async function playCachedOrOnlineAyah(sura, verse){
   const key = `${pad3(sura)}${pad3(verse)}`;
-  const cached = await getAudioBlob(key);
+  const cached = await getAudioBlob(key).catch(() => null);
   if(cached){
     const url = URL.createObjectURL(cached);
     const ok = await playSingleAudioUrl(url);
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     return ok;
   }
+
+  // Om ljudet sparades med Service Worker/Cache API spelar vi samma webbadress.
+  // Service worker returnerar då filen från mobilen även utan internet.
+  for (const url of audioUrls(sura, verse)) {
+    if (await isAudioUrlCached(url)) {
+      return await playSingleAudioUrl(url);
+    }
+  }
+
   if(!navigator.onLine){
-    $("playerStatus").textContent = "Ljudet är inte nedladdat offline.";
+    $("playerStatus").textContent = "Ljudet är inte nedladdat offline på denna mobil.";
     return false;
   }
-  const blob = await fetchAndCacheAyahAudio(sura, verse);
-  if(blob){
-    const url = URL.createObjectURL(blob);
-    const ok = await playSingleAudioUrl(url);
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-    return ok;
+
+  const saved = await cacheAyahAudioUrls(sura, verse);
+  if(saved){
+    return await playCachedOrOnlineAyah(sura, verse);
   }
+
   return await playAudioWithFallback(audioUrls(sura, verse));
 }
 
 async function downloadCurrentSurahOffline(){
   const btn = document.getElementById("downloadSurahBtn");
   if(btn) btn.disabled = true;
+
+  if (location.protocol === "file:") {
+    $("playerTitle").textContent = "Offline funkar inte från fil";
+    $("playerStatus").textContent = "Lägg sidan på GitHub Pages/https eller kör med lokal server. Mobilen kan inte spara offline från file://.";
+    if(btn) btn.disabled = false;
+    return;
+  }
+
   let ok = 0;
+  let already = 0;
   for(let i=0; i<currentVerses.length; i++){
     const v = currentVerses[i];
     $("playerTitle").textContent = "Laddar ner offline";
-    $("playerStatus").textContent = `${i+1}/${currentVerses.length} verser...`;
-    const blob = await fetchAndCacheAyahAudio(v.sura, v.verse);
-    if(blob) ok++;
+    $("playerStatus").textContent = `${i+1}/${currentVerses.length} verser sparas...`;
+
+    if(await hasAyahOffline(v.sura, v.verse)){
+      already++;
+      ok++;
+      continue;
+    }
+
+    const saved = await cacheAyahAudioUrls(v.sura, v.verse);
+    if(saved) ok++;
   }
-  $("playerTitle").textContent = "Offline klar";
-  $("playerStatus").textContent = `${ok}/${currentVerses.length} versljud sparade.`;
+
+  $("playerTitle").textContent = ok === currentVerses.length ? "Offline klar" : "Offline delvis klar";
+  $("playerStatus").textContent = `${ok}/${currentVerses.length} versljud sparade på denna mobil${already ? ` (${already} fanns redan)` : ""}. Testa flygplansläge efteråt.`;
   if(btn) btn.disabled = false;
 }
 
@@ -657,6 +747,10 @@ function startPlaybackFromUserClick(idx){
 
 $("playAll").onclick = () => startPlaybackFromUserClick(currentIndex || 0);
 $("stopBtn").onclick = () => stop();
+const downloadSurahBtn = document.getElementById("downloadSurahBtn");
+if(downloadSurahBtn){
+  downloadSurahBtn.onclick = () => downloadCurrentSurahOffline();
+}
 
 const testVoiceBtn = document.getElementById("testVoiceBtn");
 if(testVoiceBtn){
