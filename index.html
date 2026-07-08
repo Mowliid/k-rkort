@@ -58,6 +58,36 @@
     </main>
   </div>
 
+  <button id="aiChatOpen" class="ai-chat-open">Lokal AI</button>
+
+  <section id="aiChatPanel" class="ai-chat-panel" aria-hidden="true">
+    <div class="ai-chat-header">
+      <div>
+        <strong>AI för svåra svenska ord</strong>
+        <span>Förklara om ord från översättningen</span>
+      </div>
+      <button id="aiChatClose">×</button>
+    </div>
+
+    <div id="aiMessages" class="ai-messages">
+      <div class="ai-msg bot">
+        Skriv ett svårt svenskt ord, till exempel <b>gudsfruktan</b>, <b>fördärv</b> eller <b>vägledning</b>.
+      </div>
+    </div>
+
+    <div class="quick-words">
+      <button data-word="gudsfruktan">gudsfruktan</button>
+      <button data-word="fördärv">fördärv</button>
+      <button data-word="vägledning">vägledning</button>
+      <button data-word="barmhärtighet">barmhärtighet</button>
+    </div>
+
+    <form id="aiChatForm" class="ai-chat-form">
+      <input id="aiInput" placeholder="Skriv ordet här..." autocomplete="off" />
+      <button>Förklara</button>
+    </form>
+  </section>
+
   <script src="data.js"></script>
   <script src="script.js"></script>
 </body>

@@ -499,3 +499,200 @@ $("playAll").onclick = () => playing ? stop() : playFrom(currentIndex || 0);
 $("stopBtn").onclick = () => stop();
 
 selectSurah(1);
+
+
+// ===== RIKTIG AI-CHATT =====
+document.addEventListener("DOMContentLoaded", () => {
+  const openBtn = document.getElementById("aiChatOpen");
+  const panel = document.getElementById("aiChatPanel");
+  const closeBtn = document.getElementById("aiChatClose");
+  const form = document.getElementById("aiChatForm");
+  const input = document.getElementById("aiInput");
+  const messages = document.getElementById("aiMessages");
+  const verses = document.getElementById("verses");
+  const history = [];
+
+  if (!openBtn || !panel || !form || !input || !messages) {
+    console.error("AI-chatten kunde inte starta: HTML-element saknas.");
+    return;
+  }
+
+  function openChat(word = "") {
+    panel.classList.add("open");
+    panel.setAttribute("aria-hidden", "false");
+    if (word) input.value = word;
+    setTimeout(() => input.focus(), 50);
+  }
+
+  function add(text, who) {
+    const d = document.createElement("div");
+    d.className = "ai-msg " + who;
+    d.textContent = text;
+    messages.appendChild(d);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  async function ask(text) {
+    text = String(text || "").trim();
+    if (!text) return;
+
+    add(text, "user");
+    input.value = "";
+
+    const wait = document.createElement("div");
+    wait.className = "ai-msg bot";
+    wait.textContent = "AI tänker...";
+    messages.appendChild(wait);
+    messages.scrollTop = messages.scrollHeight;
+
+    try {
+      const r = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text, history })
+      });
+
+      const data = await r.json();
+      if (!r.ok) throw new Error(data.error || "Serverfel");
+
+      wait.remove();
+      add(data.answer, "bot");
+      history.push({ role: "user", text }, { role: "assistant", text: data.answer });
+    } catch (e) {
+      wait.remove();
+      const msg = "Lokal AI kunde inte svara: " + e.message;
+      add(msg, "bot");
+      console.error(e);
+    }
+  }
+
+  openBtn.addEventListener("click", () => openChat());
+  if (closeBtn) closeBtn.addEventListener("click", () => {
+    panel.classList.remove("open");
+    panel.setAttribute("aria-hidden", "true");
+  });
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    ask(input.value);
+  });
+
+  document.querySelectorAll(".quick-words button").forEach((b) => {
+    b.addEventListener("click", () => ask(b.dataset.word || b.textContent));
+  });
+
+  if (verses) {
+    verses.addEventListener("dblclick", () => {
+      const s = window.getSelection().toString().trim();
+      if (s) {
+        openChat(s);
+        ask("Förklara detta enkelt: " + s);
+      }
+    });
+  }
+});
+
+
+// ===== ENKEL FÖRKLARING AV VARJE VERS =====
+document.addEventListener("DOMContentLoaded", () => {
+  const EASY_REPLACE = [
+    [/All lovprisning tillkommer Allah/gi, "All tack och beröm hör till Allah"],
+    [/den Nåderike/gi, "Allah som är mycket barmhärtig"],
+    [/den Benådande/gi, "Allah som förlåter och visar nåd"],
+    [/Domedagens Ägare/gi, "Allah bestämmer på Domedagen"],
+    [/Endast Dig dyrkar vi/gi, "Vi ber bara till Dig"],
+    [/endast Dig ber vi om hjälp/gi, "vi ber bara Dig om hjälp"],
+    [/Led oss på den raka vägen/gi, "Visa oss den rätta vägen"],
+    [/välsignat/gi, "gett mycket gott"],
+    [/vilsna/gi, "de som har gått fel väg"],
+    [/gudfruktiga/gi, "människor som tror på Allah och försöker göra rätt"],
+    [/det fördolda/gi, "saker vi inte kan se, till exempel änglar, paradiset och Domedagen"],
+    [/förrättar bönen/gi, "ber bönen på rätt sätt"],
+    [/försörjt dem med/gi, "gett dem"],
+    [/förnekar \[?sanningen\]?/gi, "vägrar tro på sanningen"],
+    [/förseglat deras hjärtan/gi, "gjort så att de inte tar emot sanningen"],
+    [/fördärv/gi, "skada och problem"],
+    [/hycklare/gi, "personer som säger att de tror men inte menar det i hjärtat"],
+    [/villfarelse/gi, "fel väg"],
+    [/vägledning/gi, "hjälp att hitta rätt väg"],
+    [/paradis/gi, "den bästa platsen efter livet"],
+    [/otrogna/gi, "de som inte tror"],
+    [/sanningen/gi, "det som är rätt och sant"],
+    [/Domedagen/gi, "dagen då Allah dömer människorna"],
+    [/underkastelse/gi, "att lyda Allah och följa Hans väg"],
+    [/barmhärtighet/gi, "nåd, snällhet och förlåtelse"],
+    [/skapelsen/gi, "allt Allah har skapat"],
+    [/Herre/gi, "den som äger, styr och tar hand om allt"]
+  ];
+
+  function cleanText(t) {
+    return String(t || "")
+      .replace(/Enkel förklaring/g, "")
+      .replace(/Lokal AI|AI Ord/g, "")
+      .replace(/▶|■|Spela|Paus|Stoppad|Tryck play igen/g, "")
+      .replace(/\([TBKÖ, ]+\)/g, "")
+      .replace(/[٠-٩١-٩۝۞]+/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function simpleExplain(text) {
+    let original = cleanText(text);
+    if (!original) return "Jag hittar ingen svensk text i den här versen.";
+
+    let easy = original;
+    for (const [a,b] of EASY_REPLACE) easy = easy.replace(a,b);
+
+    const lower = original.toLowerCase();
+    let note = "";
+    if (lower.includes("allahs namn")) note = "Versen lär oss att börja med Allahs namn och komma ihåg Hans nåd.";
+    else if (lower.includes("lovprisning")) note = "Versen lär oss att tacka Allah, eftersom Han skapat och tar hand om allt.";
+    else if (lower.includes("domedagen")) note = "Versen påminner om att Allah dömer rättvist på Domedagen.";
+    else if (lower.includes("dyrkar") || lower.includes("hjälp")) note = "Versen lär oss att bara dyrka Allah och be Honom om hjälp.";
+    else if (lower.includes("raka vägen")) note = "Versen är en bön om att Allah ska hjälpa oss leva rätt.";
+    else if (lower.includes("välsignat") || lower.includes("vilsna")) note = "Versen lär oss att följa de godas väg och undvika fel väg.";
+    else if (lower.includes("tvivel")) note = "Versen säger att Koranen är en säker vägledning för den som vill göra rätt.";
+    else if (lower.includes("bönen")) note = "Versen visar att tro också syns i handling, som bön och att hjälpa andra.";
+    else if (lower.includes("förnekar")) note = "Versen handlar om människor som vägrar ta emot sanningen.";
+    else if (lower.includes("hjärtan")) note = "Versen visar att hjärtat kan bli stängt när man länge vägrar sanningen.";
+    else if (lower.includes("paradis")) note = "Versen berättar om belöningen för tro och goda handlingar.";
+
+    return "Enkelt sagt: " + easy + (note ? "\n\nKort mening: " + note : "");
+  }
+
+  function addButtons() {
+    const root = document.getElementById("verses") || document.body;
+    const all = Array.from(root.querySelectorAll("article, .verse-card, .ayah-card, .verse, .ayah, .card, section > div"));
+    const cards = all.filter(el => {
+      const txt = el.innerText || "";
+      return txt.length > 40 && /[åäöÅÄÖ]/.test(txt) && !el.querySelector(".easy-verse-btn") && !el.closest(".ai-chat-panel");
+    });
+
+    cards.forEach(card => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "easy-verse-btn";
+      btn.textContent = "Enkel förklaring";
+
+      const box = document.createElement("div");
+      box.className = "easy-verse-box";
+      box.style.display = "none";
+
+      btn.addEventListener("click", () => {
+        box.textContent = simpleExplain(card.innerText);
+        box.style.display = box.style.display === "none" ? "block" : "none";
+      });
+
+      card.appendChild(btn);
+      card.appendChild(box);
+    });
+  }
+
+  addButtons();
+  const root = document.getElementById("verses") || document.body;
+  new MutationObserver(() => {
+    clearTimeout(window.__easyVerseTimer);
+    window.__easyVerseTimer = setTimeout(addButtons, 200);
+  }).observe(root, {childList:true, subtree:true});
+});
+

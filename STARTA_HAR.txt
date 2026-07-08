@@ -1,0 +1,20 @@
+STARTA GRATIS LOKAL AI
+
+Den här versionen behöver INTE OpenAI API-nyckel.
+Den behöver INTE npm install.
+Den kostar inget.
+
+Gör så här:
+
+1. Öppna mappen QuranWebApp_Matrood i Visual Studio Code.
+2. Öppna Terminal.
+3. Skriv:
+   node server.js
+4. Öppna Chrome:
+   http://localhost:3000
+
+Viktigt:
+- Kör inte Live Server.
+- Kör inte npm install.
+- Låt terminalen vara öppen.
+- AI:n använder orden och meningarna från svenska Koran-texten i appen.
