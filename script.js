@@ -144,60 +144,84 @@ async function downloadCurrentSurahOffline(){
 
 
 function loadVoices(){
-  voices = speechSynthesis.getVoices();
+  voices = window.speechSynthesis ? speechSynthesis.getVoices() : [];
   setupVoiceSelect();
 }
 
-speechSynthesis.onvoiceschanged = loadVoices;
-loadVoices();
+if(window.speechSynthesis){
+  speechSynthesis.onvoiceschanged = loadVoices;
+  loadVoices();
+  // Mobiltelefoner laddar ofta röstlistan sent.
+  setTimeout(loadVoices, 250);
+  setTimeout(loadVoices, 1000);
+  setTimeout(loadVoices, 2500);
+}
 
 function scoreSwedishVoice(v){
   const name = (v.name || "").toLowerCase();
   const lang = (v.lang || "").toLowerCase();
   let score = 0;
-
-  if(lang.startsWith("sv")) score += 100;
-  if(lang.includes("se")) score += 20;
-
-  // Dessa brukar låta mer naturliga i Edge/Chrome på Windows.
-  if(name.includes("natural")) score += 80;
-  if(name.includes("online")) score += 60;
-  if(name.includes("neural")) score += 60;
+  if(lang === "sv-se") score += 150;
+  else if(lang.startsWith("sv")) score += 120;
+  if(name.includes("natural")) score += 100;
+  if(name.includes("neural")) score += 90;
+  if(name.includes("enhanced")) score += 85;
+  if(name.includes("premium")) score += 80;
+  if(name.includes("alva")) score += 65;
+  if(name.includes("sofia")) score += 60;
+  if(name.includes("google")) score += 35;
   if(name.includes("microsoft")) score += 30;
-  if(name.includes("sofia")) score += 25;
-  if(name.includes("mattias")) score += 20;
-  if(name.includes("google")) score += 15;
-
+  // Oskar ska inte väljas automatiskt när en annan svensk röst finns.
+  if(name.includes("oskar")) score -= 100;
   return score;
 }
 
+function getSwedishVoices(){
+  return voices.filter(v => (v.lang || "").toLowerCase().startsWith("sv"));
+}
+
 function getBestSwedishVoice(){
-  const sv = voices.filter(v => (v.lang || "").toLowerCase().startsWith("sv"));
+  const sv = getSwedishVoices();
   if(!sv.length) return null;
-  return sv.sort((a,b) => scoreSwedishVoice(b) - scoreSwedishVoice(a))[0];
+  return [...sv].sort((a,b) => scoreSwedishVoice(b) - scoreSwedishVoice(a))[0];
 }
 
 function setupVoiceSelect(){
   const select = document.getElementById("voiceSelect");
   if(!select) return;
 
-  const svVoices = voices.filter(v => (v.lang || "").toLowerCase().startsWith("sv"));
+  const oldUri = localStorage.getItem("quranSwedishVoiceURI") || "";
+  const oldName = localStorage.getItem("quranSwedishVoiceName") || "";
+  const svVoices = [...getSwedishVoices()].sort((a,b) => scoreSwedishVoice(b) - scoreSwedishVoice(a));
   select.innerHTML = "";
 
-  svVoices
-    .sort((a,b) => scoreSwedishVoice(b) - scoreSwedishVoice(a))
-    .forEach((v, i) => {
-      const option = document.createElement("option");
-      option.value = v.name;
-      option.textContent = `${v.name} (${v.lang})${i === 0 ? " • rekommenderad" : ""}`;
-      select.appendChild(option);
-    });
+  if(!svVoices.length){
+    const option = document.createElement("option");
+    option.value = "";
+    option.textContent = "Ingen svensk röst hittades i mobilen";
+    select.appendChild(option);
+    selectedSwedishVoice = null;
+    return;
+  }
 
-  selectedSwedishVoice = svVoices.sort((a,b) => scoreSwedishVoice(b) - scoreSwedishVoice(a))[0] || null;
-  if(selectedSwedishVoice) select.value = selectedSwedishVoice.name;
+  svVoices.forEach((v, i) => {
+    const option = document.createElement("option");
+    option.value = v.voiceURI || v.name;
+    option.textContent = `${v.name} (${v.lang})${i === 0 ? " • rekommenderad" : ""}`;
+    select.appendChild(option);
+  });
+
+  selectedSwedishVoice = svVoices.find(v => (v.voiceURI || "") === oldUri)
+    || svVoices.find(v => v.name === oldName)
+    || getBestSwedishVoice();
+  if(selectedSwedishVoice) select.value = selectedSwedishVoice.voiceURI || selectedSwedishVoice.name;
 
   select.onchange = () => {
-    selectedSwedishVoice = voices.find(v => v.name === select.value) || getBestSwedishVoice();
+    selectedSwedishVoice = svVoices.find(v => (v.voiceURI || v.name) === select.value) || getBestSwedishVoice();
+    if(selectedSwedishVoice){
+      localStorage.setItem("quranSwedishVoiceURI", selectedSwedishVoice.voiceURI || "");
+      localStorage.setItem("quranSwedishVoiceName", selectedSwedishVoice.name || "");
+    }
   };
 
   const rate = document.getElementById("rateRange");
@@ -212,7 +236,7 @@ function setupVoiceSelect(){
 
 function getVoice(prefix){
   const p = prefix.toLowerCase();
-  return voices.find(v => v.lang.toLowerCase().startsWith(p)) || voices.find(v => v.lang.toLowerCase().includes(p)) || null;
+  return voices.find(v => (v.lang || "").toLowerCase().startsWith(p)) || null;
 }
 
 function escapeHtml(str){ return String(str ?? "").replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch])); }
@@ -411,28 +435,74 @@ function cleanTextForReading(text){
     .trim();
 }
 
-function speakSwedish(text){
-  return new Promise(resolve => {
-    const clean = cleanTextForReading(text);
-    if(!clean) return resolve();
-
-    const u = new SpeechSynthesisUtterance(clean);
-    u.lang = "sv-SE";
-
-    // Lite långsammare och mer naturligt.
-    u.rate = swedishRate;
-    u.pitch = 0.95;
-    u.volume = 1;
-
+async function ensureSwedishVoices(){
+  if(!window.speechSynthesis) return null;
+  for(let i=0; i<12; i++){
+    voices = speechSynthesis.getVoices();
     const voice = selectedSwedishVoice || getBestSwedishVoice() || getVoice("sv");
-    if(voice) u.voice = voice;
+    if(voice){
+      selectedSwedishVoice = voice;
+      setupVoiceSelect();
+      return voice;
+    }
+    await new Promise(r => setTimeout(r, 200));
+  }
+  return null;
+}
 
-    u.onend = resolve;
-    u.onerror = resolve;
+function splitSwedishText(text, maxLen=180){
+  const clean = cleanTextForReading(text);
+  if(!clean) return [];
+  const sentences = clean.match(/[^.!?;:]+[.!?;:]?|.+$/g) || [clean];
+  const chunks = [];
+  let current = "";
+  for(const sentence of sentences){
+    const part = sentence.trim();
+    if(!part) continue;
+    if((current + " " + part).trim().length <= maxLen){
+      current = (current + " " + part).trim();
+    }else{
+      if(current) chunks.push(current);
+      current = part;
+    }
+  }
+  if(current) chunks.push(current);
+  return chunks;
+}
 
-    speechSynthesis.cancel();
-    setTimeout(() => speechSynthesis.speak(u), 120);
-  });
+async function speakSwedish(text){
+  if(!window.speechSynthesis) return;
+  const chunks = splitSwedishText(text);
+  if(!chunks.length) return;
+
+  const voice = await ensureSwedishVoices();
+  speechSynthesis.cancel();
+  speechSynthesis.resume();
+  await new Promise(r => setTimeout(r, 180));
+
+  for(const chunk of chunks){
+    if(!playing) return;
+    await new Promise(resolve => {
+      const u = new SpeechSynthesisUtterance(chunk);
+      u.lang = "sv-SE";
+      u.rate = swedishRate;
+      u.pitch = 0.95;
+      u.volume = 1;
+      if(voice) u.voice = voice;
+
+      let done = false;
+      const finish = () => { if(!done){ done = true; resolve(); } };
+      u.onend = finish;
+      u.onerror = finish;
+
+      // iPhone/Android kan pausa speechSynthesis efter ljuduppspelning.
+      speechSynthesis.resume();
+      speechSynthesis.speak(u);
+      setTimeout(() => { if(speechSynthesis.paused) speechSynthesis.resume(); }, 120);
+      setTimeout(() => { if(speechSynthesis.paused) speechSynthesis.resume(); }, 600);
+      setTimeout(finish, Math.max(12000, chunk.length * 180));
+    });
+  }
 }
 
 async function playOne(idx){
