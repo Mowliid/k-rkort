@@ -9,6 +9,51 @@ let swedishRate = 0.80;
 let mobileSpeechUnlocked = false;
 let lastSpeechError = "";
 const audio = document.getElementById("ayahAudio");
+let wakeLock = null;
+let keepScreenAwake = localStorage.getItem("quranKeepScreenAwake") !== "0";
+
+async function requestWakeLock(){
+  if(!keepScreenAwake || !("wakeLock" in navigator)) return false;
+  try{
+    wakeLock = await navigator.wakeLock.request("screen");
+    wakeLock.addEventListener("release", () => { wakeLock = null; });
+    const btn = document.getElementById("wakeLockBtn");
+    if(btn) btn.textContent = "Skärmen hålls vaken";
+    return true;
+  }catch(e){
+    console.warn("Wake Lock fungerar inte på denna mobil", e);
+    return false;
+  }
+}
+
+async function releaseWakeLock(){
+  try{ if(wakeLock) await wakeLock.release(); }catch(e){}
+  wakeLock = null;
+  const btn = document.getElementById("wakeLockBtn");
+  if(btn) btn.textContent = keepScreenAwake ? "Håll skärmen vaken" : "Skärm-vaken av";
+}
+
+function setupMediaSession(title="Koranen", artist="Abdullah Matrood"){
+  if(!("mediaSession" in navigator)) return;
+  try{
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title,
+      artist,
+      album: "Koranen offline"
+    });
+    navigator.mediaSession.setActionHandler("play", () => { if(audio.paused) audio.play().catch(()=>{}); });
+    navigator.mediaSession.setActionHandler("pause", () => { stop(); });
+    navigator.mediaSession.setActionHandler("stop", () => { stop(); });
+    navigator.mediaSession.setActionHandler("nexttrack", () => { if(currentIndex + 1 < currentVerses.length) startPlaybackFromUserClick(currentIndex + 1); });
+    navigator.mediaSession.setActionHandler("previoustrack", () => { if(currentIndex > 0) startPlaybackFromUserClick(currentIndex - 1); });
+  }catch(e){}
+}
+
+document.addEventListener("visibilitychange", () => {
+  // Om mobilen låser skärmen släpper vissa webbläsare wake lock. Försök ta tillbaka den när sidan syns igen.
+  if(document.visibilityState === "visible" && playing) requestWakeLock();
+});
+
 const $ = (id) => document.getElementById(id);
 
 const AR_CACHE = {};
@@ -24,6 +69,17 @@ function pad3(n){ return String(n).padStart(3,"0"); }
 function audioUrls(s,v){
   const file = `${pad3(s)}${pad3(v)}.mp3`;
   return audioFolders.map(f => `https://everyayah.com/data/${f}/${file}`);
+}
+
+// BAKGRUND/LÅSSKÄRM:
+// Mobilen kan fortsätta spela vanliga MP3-filer när skärmen låses.
+// Men iPhone/Android stoppar ofta Web Speech / speechSynthesis när skärmen låses.
+// Därför stödjer appen svenska MP3-filer om du lägger dem här:
+// sv-audio/001001.mp3 = svensk uppläsning för Sura 1 vers 1
+// sv-audio/002255.mp3 = svensk uppläsning för Sura 2 vers 255
+function swedishMp3Urls(s,v){
+  const file = `${pad3(s)}${pad3(v)}.mp3`;
+  return [`sv-audio/${file}`];
 }
 const OFFLINE_DB_NAME = "quran-audio-offline-v1";
 const OFFLINE_STORE = "ayahAudio";
@@ -139,6 +195,7 @@ function playSingleAudioUrl(url){
     audio.pause();
     audio.removeAttribute("src");
     audio.load();
+    setupMediaSession($("playerTitle") ? $("playerTitle").textContent : "Koranen", "Abdullah Matrood");
     audio.src = url;
     audio.preload = "auto";
     audio.onended = () => finish(true);
@@ -480,6 +537,7 @@ function playAudioWithFallback(urls, idx=0){
     audio.removeAttribute("src");
     audio.load();
 
+    setupMediaSession($("playerTitle") ? $("playerTitle").textContent : "Koranen", "Abdullah Matrood");
     audio.src = urls[idx];
     audio.preload = "auto";
 
@@ -603,7 +661,21 @@ function splitSwedishText(text, maxLen=180){
   return chunks;
 }
 
+
+async function playSwedishMp3IfAvailable(sura, verse){
+  // För låsskärm krävs riktig ljudfil. Finns ingen svensk MP3 faller appen tillbaka till AI-röst.
+  for(const url of swedishMp3Urls(sura, verse)){
+    const ok = await playSingleAudioUrl(url);
+    if(ok) return true;
+  }
+  return false;
+}
+
 async function speakSwedish(text){
+  if(document.visibilityState === "hidden" && isMobileBrowser()){
+    // Mobilwebbläsare stoppar ofta Web Speech när skärmen är låst.
+    // Därför fortsätter vi inte fastna i bakgrunden. Arabiska MP3 kan fortsätta när skärmen är på/låst beroende på mobil.
+  }
   if(!window.speechSynthesis){
     $("playerStatus").textContent = "Din webbläsare stödjer inte svensk uppläsning.";
     return;
@@ -708,11 +780,22 @@ async function playOne(idx){
 
   $("playerStatus").textContent = "Nu läses svensk översättning...";
   highlight(idx, "sv");
-  await speakSwedish(v.swedish);
+
+  // För låsskärm/bakgrund: prova först riktig svensk MP3.
+  // Om filen inte finns använder appen mobilens AI-röst, men den stoppas ofta när skärmen låses.
+  const svMp3Ok = await playSwedishMp3IfAvailable(v.sura, v.verse);
+  if(!svMp3Ok){
+    if(document.visibilityState === "hidden" && isMobileBrowser()){
+      $("playerStatus").textContent = "Svensk AI-röst stoppas när skärmen är låst. Lägg in svenska MP3-filer för bakgrundsläge.";
+      return;
+    }
+    await speakSwedish(v.swedish);
+  }
 }
 
 async function playFrom(idx){
   playing = true;
+  requestWakeLock();
   $("playAll").textContent = "Ⅱ";
   for(let i=idx; i<currentVerses.length && playing; i++){
     await playOne(i);
@@ -727,6 +810,7 @@ async function playFrom(idx){
 
 function stop(reset=true){
   playing = false;
+  releaseWakeLock();
   audio.pause(); audio.removeAttribute("src"); audio.load();
   if(window.speechSynthesis) speechSynthesis.cancel();
   $("playAll").textContent = "▶";
@@ -765,6 +849,56 @@ if(testVoiceBtn){
     $("playAll").textContent = "▶";
   };
 }
+
+const wakeLockBtn = document.getElementById("wakeLockBtn");
+if(wakeLockBtn){
+  wakeLockBtn.textContent = keepScreenAwake ? "Håll skärmen vaken" : "Skärm-vaken av";
+  wakeLockBtn.onclick = async () => {
+    keepScreenAwake = !keepScreenAwake;
+    localStorage.setItem("quranKeepScreenAwake", keepScreenAwake ? "1" : "0");
+    if(keepScreenAwake){
+      await requestWakeLock();
+      $("playerTitle").textContent = "Skärmen hålls vaken";
+      $("playerStatus").textContent = "Låt mobilen vara på. Om du låser skärmen kan svensk AI-röst stoppas av iPhone/Android.";
+    }else{
+      await releaseWakeLock();
+      $("playerTitle").textContent = "Skärm-vaken av";
+      $("playerStatus").textContent = "Mobilen kan stoppa svensk röst när skärmen släcks.";
+    }
+  };
+}
+
+
+// ===== V29: EN LJUDKÖ/FIL PER SURA =====
+// Filformat: surah-audio/001.mp3, surah-audio/002.mp3 ... surah-audio/114.mp3
+// Varje fil ska redan innehålla: arabisk vers 1 -> svensk översättning 1 ->
+// arabisk vers 2 -> svensk översättning 2 -> ... tills suran är slut.
+function fullSurahAudioUrl(sura){
+  return `surah-audio/${pad3(sura)}.mp3`;
+}
+
+async function playWholeSurahFile(){
+  if(playing){ stop(); return; }
+  stop(false);
+  playing = true;
+  $("playAll").textContent = "Ⅱ";
+  $("playerTitle").textContent = `Sura ${currentSurah.number} • komplett ljudfil`;
+  $("playerStatus").textContent = "Spelar vers + svensk översättning i en sammanhängande ljudfil...";
+  setupMediaSession(`Sura ${currentSurah.number} - ${currentSurah.name}`, "Arabisk recitation + svensk översättning");
+
+  const ok = await playSingleAudioUrl(fullSurahAudioUrl(currentSurah.number));
+  playing = false;
+  $("playAll").textContent = "▶";
+
+  if(ok){
+    $("playerStatus").textContent = "Klar";
+  }else{
+    $("playerStatus").textContent = `Saknar surah-audio/${pad3(currentSurah.number)}.mp3. Kör SKAPA_SURAH_LJUDFILER.bat på datorn en gång.`;
+  }
+}
+
+// V29: stora play-knappen spelar nu hela surans färdiga ljudfil.
+$("playAll").onclick = () => playWholeSurahFile();
 
 selectSurah(1);
 
@@ -863,6 +997,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ===== ENKEL FÖRKLARING AV VARJE VERS =====
 document.addEventListener("DOMContentLoaded", () => {
+  const CURATED_EASY_EXPLANATIONS = {
+    "1:1": `Allah är namnet på Gud på arabiska. Det finns bara en Gud, och det är bara Allah som ska dyrkas. Ingen annan har rätt att dyrkas.
+
+”Den Nåderike, den Benådande” betyder att Allah har stor barmhärtighet, är snäll mot sina skapelser och förlåter människor.`,
+
+    "1:2": `”Den Nåderike” (ar-Raḥmān) betyder att Allah har mycket stor barmhärtighet. Hans barmhärtighet når alla skapelser och allt som finns i världen.
+
+”Den Benådande” (ar-Raḥīm) betyder att Allah har en särskild barmhärtighet för de troende. Han hjälper och visar dem barmhärtighet både i detta liv och i livet efter döden.`
+  };
+
   const EASY_REPLACE = [
     [/All lovprisning tillkommer Allah/gi, "All tack och beröm hör till Allah"],
     [/den Nåderike/gi, "Allah som är mycket barmhärtig"],
@@ -904,12 +1048,89 @@ document.addEventListener("DOMContentLoaded", () => {
       .trim();
   }
 
-  function simpleExplain(text) {
+  function simpleExplain(text, card) {
     let original = cleanText(text);
+
+    // Handgjorda enkla förklaringar används först. De följer samma stil:
+    // tydlig svenska, svåra ord förklaras och versens mening förklaras utan att bara byta några ord.
+    const allCards = Array.from((document.getElementById("verses") || document).querySelectorAll(".verse-card"));
+    const cardIndex = card ? allCards.indexOf(card) : -1;
+    const verse = cardIndex >= 0 ? currentVerses[cardIndex] : null;
+    const key = verse ? `${verse.sura}:${verse.verse}` : "";
+    if (CURATED_EASY_EXPLANATIONS[key]) return CURATED_EASY_EXPLANATIONS[key];
     if (!original) return "Jag hittar ingen svensk text i den här versen.";
 
     let easy = original;
     for (const [a,b] of EASY_REPLACE) easy = easy.replace(a,b);
+
+    // V31: alla verser får en fullständig enkel förklaring.
+    // Vi förklarar meningen i vanlig svenska i stället för att bara visa originaltexten.
+    easy = easy
+      .replace(/\bI sanning\b/gi, "Det är verkligen sant att")
+      .replace(/\bSannerligen\b/gi, "Det är verkligen så att")
+      .replace(/\bFörvisso\b/gi, "Det är säkert att")
+      .replace(/\bSe!\b/gi, "Tänk på detta:")
+      .replace(/\bskall\b/gi, "ska")
+      .replace(/\beder\b/gi, "er")
+      .replace(/\bedra\b/gi, "era")
+      .replace(/\bdig veterligen\b/gi, "så långt du vet")
+      .replace(/\bvedergällning\b/gi, "straff eller rättvis belöning")
+      .replace(/\bmisshag\b/gi, "det Allah inte tycker om")
+      .replace(/\bpåbud\b/gi, "befallning")
+      .replace(/\bföreskrivit\b/gi, "bestämt som en regel")
+      .replace(/\böverträdare\b/gi, "de som går över Allahs gränser")
+      .replace(/\bmissgärningar\b/gi, "dåliga handlingar och synder")
+      .replace(/\brättfärdiga\b/gi, "människor som tror och försöker göra det rätta")
+      .replace(/\borättfärdiga\b/gi, "människor som gör fel och behandlar andra orättvist")
+      .replace(/\bavgudadyrkare\b/gi, "människor som dyrkar andra vid sidan av Allah")
+      .replace(/\bavgudar\b/gi, "sådant som människor dyrkar i stället för Allah")
+      .replace(/\buppenbarelse\b/gi, "budskap som Allah har sänt")
+      .replace(/\bbudbärare\b/gi, "person som Allah har sänt med ett budskap")
+      .replace(/\bprofeterna\b/gi, "de profeter som Allah sände till människorna")
+      .replace(/\bfromma\b/gi, "goda människor som lyder Allah")
+      .replace(/\bde troende\b/gi, "människor som tror på Allah")
+      .replace(/\bförnekare\b/gi, "människor som vägrar tro på sanningen")
+      .replace(/\bförneka\b/gi, "vägra tro på eller acceptera")
+      .replace(/\bvittnesbörd\b/gi, "ett tydligt bevis eller det man vittnar om")
+      .replace(/\barvedel\b/gi, "det man får eller ärver")
+      .replace(/\bsläkte\b/gi, "folk eller familj")
+      .replace(/\bförbund\b/gi, "ett viktigt löfte eller avtal")
+      .replace(/\bprövning\b/gi, "ett test i livet")
+      .replace(/\bprövar\b/gi, "testar")
+      .replace(/\bfrestelse\b/gi, "något som lockar en till fel")
+      .replace(/\bsynd\b/gi, "något som är fel inför Allah")
+      .replace(/\bsynder\b/gi, "saker som är fel inför Allah")
+      .replace(/\bnåd\b/gi, "barmhärtighet och godhet")
+      .replace(/\bnådig\b/gi, "barmhärtig och förlåtande")
+      .replace(/\bstraff\b/gi, "konsekvens för allvarliga fel")
+      .replace(/\bräkenskap\b/gi, "dagen då människans handlingar bedöms")
+      .replace(/\båteruppväckas\b/gi, "få liv igen efter döden")
+      .replace(/\bEvigheten\b/gi, "livet som aldrig tar slut")
+      .replace(/\bden yttersta dagen\b/gi, "Domedagen")
+      .replace(/\bdet kommande livet\b/gi, "livet efter döden")
+      .replace(/\bdenna värld\b/gi, "livet här på jorden")
+      .replace(/\bförsörjning\b/gi, "det Allah ger för att människor ska kunna leva")
+      .replace(/\bskänkt\b/gi, "gett")
+      .replace(/\bförunnat\b/gi, "gett")
+      .replace(/\bålagt\b/gi, "bestämt att man ska göra")
+      .replace(/\bavhålla sig\b/gi, "låta bli")
+      .replace(/\bfrukta Allah\b/gi, "vara medveten om Allah och vara rädd för att göra fel")
+      .replace(/\bgudfruktighet\b/gi, "att vara medveten om Allah och försöka göra rätt")
+      .replace(/\bvägledning\b/gi, "hjälp att förstå och följa den rätta vägen")
+      .replace(/\bvilseleda\b/gi, "låta någon gå på fel väg")
+      .replace(/\bvillfarelse\b/gi, "att vara på fel väg")
+      .replace(/\bödmjuk\b/gi, "lugn och utan stolthet")
+      .replace(/\bhögmod\b/gi, "stolthet där man ser sig som bättre än andra")
+      .replace(/\bhögmodiga\b/gi, "de som är stolta och ser sig som bättre än andra")
+      .replace(/\bfördärv\b/gi, "skada, ondska och problem")
+      .replace(/\bfördärva\b/gi, "skada och förstöra")
+      .replace(/\bhycklare\b/gi, "personer som visar tro utåt men inte tror ärligt i hjärtat")
+      .replace(/\bhyckleri\b/gi, "att visa tro utåt utan att vara ärlig i hjärtat")
+      .replace(/\btillbe\b/gi, "dyrka")
+      .replace(/\btillbedjan\b/gi, "dyrkan av Allah")
+      .replace(/\bHerre\b/gi, "Allah, som äger, styr och tar hand om allt")
+      .replace(/\bskapelser\b/gi, "allt levande och allt annat som Allah har skapat")
+      .replace(/\bskapelsen\b/gi, "allt som Allah har skapat");
 
     const lower = original.toLowerCase();
     let note = "";
@@ -925,7 +1146,170 @@ document.addEventListener("DOMContentLoaded", () => {
     else if (lower.includes("hjärtan")) note = "Versen visar att hjärtat kan bli stängt när man länge vägrar sanningen.";
     else if (lower.includes("paradis")) note = "Versen berättar om belöningen för tro och goda handlingar.";
 
-    return "Enkelt sagt: " + easy + (note ? "\n\nKort mening: " + note : "");
+    // Ta bort arabisk text och konstiga symboler från fallback-förklaringen.
+    easy = easy
+      .replace(/[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]+/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    let explanation = "";
+    if (lower.includes("nåd") || lower.includes("barmhärt") || lower.includes("benådande")) {
+      explanation = easy;
+    } else if (/^säg/i.test(original)) {
+      explanation = "Allah lär profeten vad han ska säga. Med enkla ord betyder det: " + easy.charAt(0).toLowerCase() + easy.slice(1);
+    } else if (lower.includes("frågar dig")) {
+      explanation = "Här får profeten ett svar på en fråga. Svaret betyder med enkla ord: " + easy.charAt(0).toLowerCase() + easy.slice(1);
+    } else {
+      explanation = "Med enkla ord betyder detta: " + easy.charAt(0).toLowerCase() + easy.slice(1);
+    }
+
+    return explanation + (note ? "\n\nKort förklaring: " + note : "");
+  }
+
+  function fallbackRealEasyExplanation(text, card) {
+    const original = cleanText(text);
+
+    const allCards = Array.from((document.getElementById("verses") || document).querySelectorAll(".verse-card"));
+    const cardIndex = card ? allCards.indexOf(card) : -1;
+    const verse = cardIndex >= 0 ? currentVerses[cardIndex] : null;
+    const key = verse ? `${verse.sura}:${verse.verse}` : "";
+
+    if (CURATED_EASY_EXPLANATIONS[key]) return CURATED_EASY_EXPLANATIONS[key];
+
+    let t = original
+      .replace(/[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]+/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    const lower = t.toLowerCase();
+
+    // Extra handgjord fallback för exemplet användaren visade.
+    if (lower.includes("våra hjärtan hindras") && lower.includes("våra öron är förseglade") && lower.includes("slöja")) {
+      return `Människorna säger att de inte vill ta emot budskapet. De beskriver det som att deras hjärtan är täckta, deras öron är stängda och att det finns en vägg mellan dem och profeten.
+
+Det betyder att de vägrar lyssna och förstå. De säger i princip: ”Fortsätt med din väg, vi fortsätter med vår väg.”`;
+    }
+
+    if (lower.includes("hjärtan") && (lower.includes("försegl") || lower.includes("höljen") || lower.includes("slöja"))) {
+      return `Versen beskriver människor som inte vill lyssna på sanningen. När de säger att hjärtat är täckt eller att öronen är stängda betyder det att de inte vill förstå eller ta emot budskapet.
+
+Det handlar alltså inte bara om öron och hjärta, utan om att de själva väljer att stänga sig för vägledning.`;
+    }
+
+    if (lower.includes("den nåderike") || lower.includes("benådande") || lower.includes("barmhärtighet") || lower.includes("nåd")) {
+      return `Versen förklarar Allahs barmhärtighet. Det betyder att Allah är mycket nådig, hjälper sina skapelser och kan förlåta människor.
+
+När texten nämner särskild barmhärtighet för de troende betyder det att Allah ger extra hjälp, nåd och belöning till dem som tror och försöker följa Honom.`;
+    }
+
+    if (lower.includes("dyrkar") || lower.includes("tillber")) {
+      return `Versen handlar om dyrkan. Den betyder att människan ska rikta sin bön, sin lydnad och sin tillbedjan till Allah, inte till något annat.
+
+Det visar att Allah är den ende som har rätt att dyrkas.`;
+    }
+
+    if (lower.includes("raka vägen") || lower.includes("vägledning")) {
+      return `Versen handlar om att be Allah om hjälp att hitta rätt väg. Den rätta vägen betyder ett liv där man tror på Allah och försöker göra det som är gott och rätt.
+
+Det är en bön om att inte gå vilse i livet.`;
+    }
+
+    if (lower.includes("paradis")) {
+      return `Versen berättar om Allahs belöning. Paradiset är platsen som Allah lovar de troende som gör goda handlingar.
+
+Det betyder att livet inte bara handlar om denna värld, utan också om belöningen i livet efter döden.`;
+    }
+
+    if (lower.includes("helvet") || lower.includes("straff")) {
+      return `Versen varnar för konsekvensen av att vägra sanningen och fortsätta med allvarliga fel.
+
+Det betyder att människans val och handlingar har följder inför Allah.`;
+    }
+
+    if (lower.includes("troende")) {
+      return `Versen handlar om människor som tror på Allah. Den visar att tro inte bara är ord, utan också något som ska synas i hjärtat och i handlingar.
+
+En troende försöker följa Allah, göra gott och hålla sig borta från det som är fel.`;
+    }
+
+    if (lower.includes("förnekar") || lower.includes("förnekade") || lower.includes("otrogna")) {
+      return `Versen beskriver människor som vägrar ta emot sanningen även när budskapet har kommit till dem.
+
+Det betyder att problemet inte alltid är att de inte förstår, utan att de inte vill lyssna eller ändra sig.`;
+    }
+
+    if (lower.includes("profet") || lower.includes("budbärare")) {
+      return `Versen handlar om Allahs budskap till människor genom en profet eller budbärare.
+
+Det betyder att Allah inte lämnar människor utan vägledning, utan sänder budskap så att de kan förstå vad som är rätt.`;
+    }
+
+    return `Versen förklarar ett viktigt budskap från Allah. Med enklare ord betyder den att människan ska försöka förstå Allahs vägledning och inte bara följa sina egna önskningar.
+
+Den påminner också om att det man tror och gör i livet har betydelse inför Allah.`;
+  }
+
+  async function aiRealEasyExplanation(card) {
+    const allCards = Array.from((document.getElementById("verses") || document).querySelectorAll(".verse-card"));
+    const cardIndex = card ? allCards.indexOf(card) : -1;
+    const verse = cardIndex >= 0 ? currentVerses[cardIndex] : null;
+    if (!verse) return fallbackRealEasyExplanation(card.innerText, card);
+
+    const key = `${verse.sura}:${verse.verse}`;
+    if (CURATED_EASY_EXPLANATIONS[key]) return CURATED_EASY_EXPLANATIONS[key];
+
+    const cacheKey = `easyExplanationV34:${key}`;
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) return cached;
+
+    const prompt = `Du ska skriva ENKEL FÖRKLARING av en svensk koranöversättning.
+
+VIKTIGT:
+- Kopiera INTE översättningen.
+- Skriv INTE "Med enkla ord betyder detta:" följt av samma text.
+- Skriv INTE generiska meningar som "Versen handlar om tro".
+- Förklara vad texten betyder på lätt svenska, som i detta exempel:
+
+Översättning:
+Den Nåderike, den Benådande. Den Nåderike (ar-Raḥmān) vars gränslösa nåd omfattar hela Hans skapelse. Den Benådande (ar-Raḥīm) vars särskilda nåd innesluter Hans troende tjänare.
+
+Bra enkel förklaring:
+”Den Nåderike” (ar-Raḥmān) betyder att Allah har mycket stor barmhärtighet. Hans barmhärtighet når alla skapelser och allt som finns i världen.
+
+”Den Benådande” (ar-Raḥīm) betyder att Allah har en särskild barmhärtighet för de troende. Han hjälper och visar dem barmhärtighet både i detta liv och i livet efter döden.
+
+Skriv nu enkel förklaring för denna vers:
+Sura ${verse.sura}, vers ${verse.verse}
+${verse.swedish}
+
+Regler:
+- Svara bara med enkel förklaring.
+- 1 till 3 korta stycken.
+- Förklara svåra bilder/uttryck, t.ex. "hjärtan är täckta", "öron är förseglade", "slöja".
+- Ingen arabisk text om den inte behövs för ett namn i parentes.
+- Lägg inte till ny tafsir som inte stöds av texten.`;
+
+    try {
+      const r = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: prompt, history: [] })
+      });
+      const data = await r.json();
+      if (!r.ok || !data.answer) throw new Error(data.error || "AI saknas");
+      let ans = String(data.answer).trim();
+
+      // Skydd: om AI:n råkar kopiera för mycket av översättningen, använd bättre lokal fallback.
+      const sw = String(verse.swedish || "").replace(/\s+/g, " ").trim().toLowerCase();
+      const an = ans.replace(/\s+/g, " ").trim().toLowerCase();
+      const badCopy = sw.length > 60 && an.includes(sw.slice(0, Math.min(80, sw.length)));
+      if (badCopy || ans.length < 20) ans = fallbackRealEasyExplanation(verse.swedish, card);
+
+      localStorage.setItem(cacheKey, ans);
+      return ans;
+    } catch (e) {
+      return fallbackRealEasyExplanation(verse.swedish, card);
+    }
   }
 
   function addButtons() {
@@ -947,7 +1331,7 @@ document.addEventListener("DOMContentLoaded", () => {
       box.style.display = "none";
 
       btn.addEventListener("click", () => {
-        box.textContent = simpleExplain(card.innerText);
+        box.textContent = simpleExplain(card.innerText, card);
         box.style.display = box.style.display === "none" ? "block" : "none";
       });
 

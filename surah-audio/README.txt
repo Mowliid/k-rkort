@@ -1,0 +1,1 @@
+Här skapas 001.mp3 till 114.mp3. Varje fil innehåller arabisk vers, svensk AI-röst, nästa vers, tills suran är slut.

@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <audio id="ayahAudio" preload="auto"></audio>
+  <audio id="ayahAudio" preload="auto" playsinline controls style="display:none"></audio>
   <div class="app">
     <aside class="sidebar">
       <div class="brand">
@@ -43,6 +43,7 @@
           <input id="rateRange" type="range" min="0.65" max="1" step="0.05" value="0.8">
           <span id="rateValue">0.80x</span>
           <button id="testVoiceBtn" class="small-btn" type="button">Testa svensk röst</button>
+          <button id="wakeLockBtn" class="small-btn" type="button">Håll skärmen vaken</button>
         </div>
       </section>
 
