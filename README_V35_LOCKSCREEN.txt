@@ -1,0 +1,1 @@
+Kör SKAPA_SURAH_LJUDFILER.bat. Stora play-knappen spelar sedan hel sura-MP3 som fungerar i låsskärm.

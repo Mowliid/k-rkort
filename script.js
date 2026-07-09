@@ -900,6 +900,29 @@ async function playWholeSurahFile(){
 // V29: stora play-knappen spelar nu hela surans färdiga ljudfil.
 $("playAll").onclick = () => playWholeSurahFile();
 
+
+// ===== V35: LÅSSKÄRM-LÖSNING =====
+// Mobilens låsskärm fortsätter bara säkert med riktig MP3.
+// Filformat: surah-audio/001.mp3 ... surah-audio/114.mp3
+function fullSurahAudioUrl(sura){
+  return `surah-audio/${pad3(sura)}.mp3`;
+}
+
+async function playWholeSurahFileFromLockscreen(){
+  if(playing){ stop(); return; }
+  stop(false);
+  playing = true;
+  $("playAll").textContent = "Ⅱ";
+  $("playerTitle").textContent = `Sura ${currentSurah.number} • låsskärms-ljud`;
+  $("playerStatus").textContent = "Spelar hel sura som riktig MP3...";
+  setupMediaSession(`Sura ${currentSurah.number} - ${currentSurah.name}`, "Abdullah Matrood + svensk röst");
+  const ok = await playSingleAudioUrl(fullSurahAudioUrl(currentSurah.number));
+  playing = false;
+  $("playAll").textContent = "▶";
+  $("playerStatus").textContent = ok ? "Klar" : `Saknar surah-audio/${pad3(currentSurah.number)}.mp3. Kör SKAPA_SURAH_LJUDFILER.bat först.`;
+}
+
+$("playAll").onclick = () => playWholeSurahFileFromLockscreen();
 selectSurah(1);
 
 
