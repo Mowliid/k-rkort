@@ -9,7 +9,8 @@ const types = {
   ".js": "text/javascript; charset=utf-8",
   ".css": "text/css; charset=utf-8",
   ".json": "application/json; charset=utf-8",
-  ".mp3": "audio/mpeg"
+  ".mp3": "audio/mpeg",
+  ".webm": "audio/webm; codecs=opus"
 };
 
 function stripHtml(s) {
@@ -182,13 +183,55 @@ const server = http.createServer((req, res) => {
     return res.end("Forbidden");
   }
 
-  fs.readFile(file, (err, data) => {
-    if (err) {
+  fs.stat(file, (err, stat) => {
+    if (err || !stat.isFile()) {
       res.writeHead(404);
       return res.end("Not found");
     }
-    res.writeHead(200, {"Content-Type": types[path.extname(file)] || "application/octet-stream"});
-    res.end(data);
+
+    const contentType = types[path.extname(file)] || "application/octet-stream";
+    const commonHeaders = {
+      "Content-Type": contentType,
+      "Accept-Ranges": "bytes",
+      "Cache-Control": file.includes(`${path.sep}surah-audio${path.sep}`)
+        ? "public, max-age=31536000, immutable"
+        : "no-cache"
+    };
+    const range = req.headers.range;
+
+    if (range) {
+      const match = /^bytes=(\d*)-(\d*)$/.exec(range);
+      if (!match) {
+        res.writeHead(416, {...commonHeaders, "Content-Range": `bytes */${stat.size}`});
+        return res.end();
+      }
+
+      let start = match[1] ? Number(match[1]) : 0;
+      let end = match[2] ? Number(match[2]) : stat.size - 1;
+      if (!match[1] && match[2]) {
+        const suffixLength = Number(match[2]);
+        start = Math.max(0, stat.size - suffixLength);
+        end = stat.size - 1;
+      }
+      end = Math.min(end, stat.size - 1);
+
+      if (!Number.isFinite(start) || !Number.isFinite(end) || start < 0 || start > end || start >= stat.size) {
+        res.writeHead(416, {...commonHeaders, "Content-Range": `bytes */${stat.size}`});
+        return res.end();
+      }
+
+      res.writeHead(206, {
+        ...commonHeaders,
+        "Content-Range": `bytes ${start}-${end}/${stat.size}`,
+        "Content-Length": end - start + 1
+      });
+      if (req.method === "HEAD") return res.end();
+      return fs.createReadStream(file, {start, end}).pipe(res);
+    }
+
+    res.writeHead(200, {...commonHeaders, "Content-Length": stat.size});
+    if (req.method === "HEAD") return res.end();
+    fs.createReadStream(file).pipe(res);
   });
 });
 

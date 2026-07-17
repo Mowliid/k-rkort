@@ -6,7 +6,6 @@
   ],
   "settings": {
     "files.encoding": "utf8",
-    "liveServer.settings.root": "/",
-    "liveServer.settings.port": 5501
+    "liveServer.settings.root": "/"
   }
 }

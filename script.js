@@ -41,11 +41,31 @@ function setupMediaSession(title="Koranen", artist="Abdullah Matrood"){
       artist,
       album: "Koranen offline"
     });
-    navigator.mediaSession.setActionHandler("play", () => { if(audio.paused) audio.play().catch(()=>{}); });
-    navigator.mediaSession.setActionHandler("pause", () => { stop(); });
+    navigator.mediaSession.setActionHandler("play", () => {
+      if(!audio.src || !audio.paused) return;
+      audio.play().then(() => {
+        playing = true;
+        $("playAll").textContent = "Ⅱ";
+        $("playerStatus").textContent = "Spelar vidare...";
+      }).catch(()=>{});
+    });
+    navigator.mediaSession.setActionHandler("pause", () => {
+      audio.pause();
+      playing = false;
+      $("playAll").textContent = "▶";
+      $("playerStatus").textContent = "Pausad – tryck play på låsskärmen för att fortsätta";
+    });
     navigator.mediaSession.setActionHandler("stop", () => { stop(); });
-    navigator.mediaSession.setActionHandler("nexttrack", () => { if(currentIndex + 1 < currentVerses.length) startPlaybackFromUserClick(currentIndex + 1); });
-    navigator.mediaSession.setActionHandler("previoustrack", () => { if(currentIndex > 0) startPlaybackFromUserClick(currentIndex - 1); });
+    navigator.mediaSession.setActionHandler("seekbackward", details => {
+      audio.currentTime = Math.max(0, audio.currentTime - (details.seekOffset || 10));
+    });
+    navigator.mediaSession.setActionHandler("seekforward", details => {
+      const limit = Number.isFinite(audio.duration) ? audio.duration : audio.currentTime + 10;
+      audio.currentTime = Math.min(limit, audio.currentTime + (details.seekOffset || 10));
+    });
+    navigator.mediaSession.setActionHandler("seekto", details => {
+      if(Number.isFinite(details.seekTime)) audio.currentTime = details.seekTime;
+    });
   }catch(e){}
 }
 
@@ -181,7 +201,7 @@ async function saveAudioBlob(key, blob){
   });
 }
 
-function playSingleAudioUrl(url){
+function playSingleAudioUrl(url, artist="Abdullah Matrood"){
   return new Promise(resolve => {
     let done = false;
     const finish = ok => {
@@ -195,7 +215,7 @@ function playSingleAudioUrl(url){
     audio.pause();
     audio.removeAttribute("src");
     audio.load();
-    setupMediaSession($("playerTitle") ? $("playerTitle").textContent : "Koranen", "Abdullah Matrood");
+    setupMediaSession($("playerTitle") ? $("playerTitle").textContent : "Koranen", artist);
     audio.src = url;
     audio.preload = "auto";
     audio.onended = () => finish(true);
@@ -271,10 +291,10 @@ async function downloadCurrentSurahOffline(){
 
   const url = fullSurahAudioUrl(currentSurah.number);
   $("playerTitle").textContent = "Sparar suran offline";
-  $("playerStatus").textContent = `Laddar ner ${pad3(currentSurah.number)}.mp3...`;
+  $("playerStatus").textContent = `Laddar ner ${pad3(currentSurah.number)}.webm...`;
 
   try{
-    const cache = await caches.open("quran-whole-surah-v1");
+    const cache = await caches.open("quran-whole-surah-v2");
     const existing = await cache.match(url);
     if(!existing){
       const response = await fetch(url);
@@ -870,43 +890,12 @@ if(wakeLockBtn){
 }
 
 
-// ===== V29: EN LJUDKÖ/FIL PER SURA =====
-// Filformat: surah-audio/001.mp3, surah-audio/002.mp3 ... surah-audio/114.mp3
-// Varje fil ska redan innehålla: arabisk vers 1 -> svensk översättning 1 ->
-// arabisk vers 2 -> svensk översättning 2 -> ... tills suran är slut.
+// ===== HEL SURA MED LÅSSKÄRM-LJUD =====
+// Mobilens låsskärm fortsätter säkert med en riktig, sammanhängande ljudfil.
+// Filformat: surah-audio/001.webm ... surah-audio/114.webm
+// Varje fil innehåller arabisk vers, svensk översättning och därefter nästa vers.
 function fullSurahAudioUrl(sura){
-  return `surah-audio/${pad3(sura)}.mp3`;
-}
-
-async function playWholeSurahFile(){
-  if(playing){ stop(); return; }
-  stop(false);
-  playing = true;
-  $("playAll").textContent = "Ⅱ";
-  $("playerTitle").textContent = `Sura ${currentSurah.number} • komplett ljudfil`;
-  $("playerStatus").textContent = "Spelar vers + svensk översättning i en sammanhängande ljudfil...";
-  setupMediaSession(`Sura ${currentSurah.number} - ${currentSurah.name}`, "Arabisk recitation + svensk översättning");
-
-  const ok = await playSingleAudioUrl(fullSurahAudioUrl(currentSurah.number));
-  playing = false;
-  $("playAll").textContent = "▶";
-
-  if(ok){
-    $("playerStatus").textContent = "Klar";
-  }else{
-    $("playerStatus").textContent = `Saknar surah-audio/${pad3(currentSurah.number)}.mp3. Kör SKAPA_SURAH_LJUDFILER.bat på datorn en gång.`;
-  }
-}
-
-// V29: stora play-knappen spelar nu hela surans färdiga ljudfil.
-$("playAll").onclick = () => playWholeSurahFile();
-
-
-// ===== V35: LÅSSKÄRM-LÖSNING =====
-// Mobilens låsskärm fortsätter bara säkert med riktig MP3.
-// Filformat: surah-audio/001.mp3 ... surah-audio/114.mp3
-function fullSurahAudioUrl(sura){
-  return `surah-audio/${pad3(sura)}.mp3`;
+  return `surah-audio/${pad3(sura)}.webm`;
 }
 
 async function playWholeSurahFileFromLockscreen(){
@@ -915,12 +904,12 @@ async function playWholeSurahFileFromLockscreen(){
   playing = true;
   $("playAll").textContent = "Ⅱ";
   $("playerTitle").textContent = `Sura ${currentSurah.number} • låsskärms-ljud`;
-  $("playerStatus").textContent = "Spelar hel sura som riktig MP3...";
-  setupMediaSession(`Sura ${currentSurah.number} - ${currentSurah.name}`, "Svensk översättning • Alma");
-  const ok = await playSingleAudioUrl(fullSurahAudioUrl(currentSurah.number));
+  $("playerStatus").textContent = "Abdullah Al-Matrood läser versen, sedan kommer svensk översättning...";
+  setupMediaSession(`Sura ${currentSurah.number} - ${currentSurah.name}`, "Abdullah Al-Matrood + svensk översättning");
+  const ok = await playSingleAudioUrl(fullSurahAudioUrl(currentSurah.number), "Abdullah Al-Matrood + svensk översättning");
   playing = false;
   $("playAll").textContent = "▶";
-  $("playerStatus").textContent = ok ? "Klar" : `Kunde inte öppna surah-audio/${pad3(currentSurah.number)}.mp3.`;
+  $("playerStatus").textContent = ok ? "Klar" : `Kunde inte öppna surah-audio/${pad3(currentSurah.number)}.webm.`;
 }
 
 $("playAll").onclick = () => playWholeSurahFileFromLockscreen();

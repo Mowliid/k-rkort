@@ -1,0 +1,20 @@
+KONTROLLERAD VERSION – 2026-07-17
+
+Den stora play-knappen spelar:
+Abdullah Al-Matrood läser arabisk vers 1
+→ Alma läser svensk översättning 1
+→ Abdullah Al-Matrood läser arabisk vers 2
+→ Alma läser svensk översättning 2
+→ och så vidare tills suran är slut.
+
+Slutkontroll:
+- Exakt 114 ljudfiler: 001.webm–114.webm.
+- Samtliga 6 236 verspar byggdes från appens versdata.
+- Total speltid: cirka 45 timmar och 56 minuter.
+- Alla ljudfiler har avkodats helt utan fel.
+- Alla filer är Opus mono i WebM-behållare.
+- JavaScript, service worker och Node-server klarar syntaxkontroll.
+- Node-servern svarar med HTTP 206 och byte-range för ljudfiler.
+
+Ljudet är hårt komprimerat för att hela appen ska få plats i ett enda
+nedladdningsbart zip-arkiv och kunna användas med låst skärm.

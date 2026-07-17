@@ -6,7 +6,8 @@ KORANAPP – EN ZIP FÖR VISUAL STUDIO CODE
 4. Starta appen med Live Server eller dubbelklicka på STARTA_APPEN.bat om Node.js finns.
 
 VIKTIGT:
-- Flytta inte MP3-filerna ur mappen surah-audio.
-- Mappen innehåller 001.mp3 till 114.mp3.
-- Den stora play-knappen spelar den svenska översättningen med låst skärm.
+- Flytta inte ljudfilerna ur mappen surah-audio.
+- Mappen innehåller 001.webm till 114.webm.
+- Den stora play-knappen spelar Abdullah Al-Matrood vers för vers, med svensk översättning efter varje vers.
+- Uppspelningen fortsätter med låst skärm.
 - Ljudet är extra komprimerat för att hela appen ska kunna laddas ner som en zip.
