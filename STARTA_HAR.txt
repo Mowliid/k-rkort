@@ -1,20 +1,13 @@
-STARTA GRATIS LOKAL AI
+STARTA APPEN
 
-Den här versionen behöver INTE OpenAI API-nyckel.
-Den behöver INTE npm install.
-Den kostar inget.
+På GitHub Pages:
+1. Ladda upp alla filer och mappar precis som de ligger i zip-filen.
+2. Öppna din GitHub Pages-adress.
+3. Välj en sura och tryck på den stora play-knappen.
 
-Gör så här:
+På datorn:
+1. Öppna mappen i Visual Studio Code.
+2. Öppna Terminal och skriv: node server.js
+3. Öppna http://localhost:3000
 
-1. Öppna mappen QuranWebApp_Matrood i Visual Studio Code.
-2. Öppna Terminal.
-3. Skriv:
-   node server.js
-4. Öppna Chrome:
-   http://localhost:3000
-
-Viktigt:
-- Kör inte Live Server.
-- Kör inte npm install.
-- Låt terminalen vara öppen.
-- AI:n använder orden och meningarna från svenska Koran-texten i appen.
+Alla 114 svenska MP3-filer finns redan i mappen surah-audio.

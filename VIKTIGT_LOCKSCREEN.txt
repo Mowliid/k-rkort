@@ -1,4 +1,0 @@
-V36:
-Stora play-knappen använder ENDAST riktiga MP3-filer från surah-audio/001.mp3 osv.
-Om filen saknas spelar appen inte AI-röst, utan visar fel.
-Kör SKAPA_SURAH_LJUDFILER.bat först och ladda upp hela mappen surah-audio till GitHub Pages.

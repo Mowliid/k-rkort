@@ -269,26 +269,27 @@ async function downloadCurrentSurahOffline(){
     return;
   }
 
-  let ok = 0;
-  let already = 0;
-  for(let i=0; i<currentVerses.length; i++){
-    const v = currentVerses[i];
-    $("playerTitle").textContent = "Laddar ner offline";
-    $("playerStatus").textContent = `${i+1}/${currentVerses.length} verser sparas...`;
+  const url = fullSurahAudioUrl(currentSurah.number);
+  $("playerTitle").textContent = "Sparar suran offline";
+  $("playerStatus").textContent = `Laddar ner ${pad3(currentSurah.number)}.mp3...`;
 
-    if(await hasAyahOffline(v.sura, v.verse)){
-      already++;
-      ok++;
-      continue;
+  try{
+    const cache = await caches.open("quran-whole-surah-v1");
+    const existing = await cache.match(url);
+    if(!existing){
+      const response = await fetch(url);
+      if(!response.ok) throw new Error(`HTTP ${response.status}`);
+      await cache.put(url, response.clone());
     }
-
-    const saved = await cacheAyahAudioUrls(v.sura, v.verse);
-    if(saved) ok++;
+    $("playerTitle").textContent = "Offline klar";
+    $("playerStatus").textContent = `Sura ${currentSurah.number} är sparad. Den kan spelas utan internet och med låst skärm.`;
+  }catch(error){
+    console.error("Kunde inte spara suran offline", error);
+    $("playerTitle").textContent = "Kunde inte spara offline";
+    $("playerStatus").textContent = "Kontrollera internetanslutningen och ledigt lagringsutrymme, försök sedan igen.";
+  }finally{
+    if(btn) btn.disabled = false;
   }
-
-  $("playerTitle").textContent = ok === currentVerses.length ? "Offline klar" : "Offline delvis klar";
-  $("playerStatus").textContent = `${ok}/${currentVerses.length} versljud sparade på denna mobil${already ? ` (${already} fanns redan)` : ""}. Testa flygplansläge efteråt.`;
-  if(btn) btn.disabled = false;
 }
 
 
@@ -915,11 +916,11 @@ async function playWholeSurahFileFromLockscreen(){
   $("playAll").textContent = "Ⅱ";
   $("playerTitle").textContent = `Sura ${currentSurah.number} • låsskärms-ljud`;
   $("playerStatus").textContent = "Spelar hel sura som riktig MP3...";
-  setupMediaSession(`Sura ${currentSurah.number} - ${currentSurah.name}`, "Abdullah Matrood + svensk röst");
+  setupMediaSession(`Sura ${currentSurah.number} - ${currentSurah.name}`, "Svensk översättning • Alma");
   const ok = await playSingleAudioUrl(fullSurahAudioUrl(currentSurah.number));
   playing = false;
   $("playAll").textContent = "▶";
-  $("playerStatus").textContent = ok ? "Klar" : `Saknar surah-audio/${pad3(currentSurah.number)}.mp3. Kör SKAPA_SURAH_LJUDFILER.bat först.`;
+  $("playerStatus").textContent = ok ? "Klar" : `Kunde inte öppna surah-audio/${pad3(currentSurah.number)}.mp3.`;
 }
 
 $("playAll").onclick = () => playWholeSurahFileFromLockscreen();
@@ -1369,85 +1370,4 @@ Regler:
     clearTimeout(window.__easyVerseTimer);
     window.__easyVerseTimer = setTimeout(addButtons, 200);
   }).observe(root, {childList:true, subtree:true});
-});
-
-
-
-
-// ===== V36: ÄKTA LÅSSKÄRMSLÄGE =====
-// Stora play-knappen använder bara riktiga MP3-filer.
-// Ingen fallback till mobilens AI-röst.
-function fullSurahAudioUrlV36(sura){
-  return `surah-audio/${pad3(sura)}.mp3`;
-}
-function checkIfSurahMp3Exists(url){
-  return new Promise(resolve => {
-    const test = new Audio();
-    let done = false;
-    const finish = ok => {
-      if(done) return;
-      done = true;
-      test.onloadedmetadata = null;
-      test.oncanplaythrough = null;
-      test.onerror = null;
-      resolve(ok);
-    };
-    test.preload = "metadata";
-    test.onloadedmetadata = () => finish(true);
-    test.oncanplaythrough = () => finish(true);
-    test.onerror = () => finish(false);
-    test.src = url + "?v=" + Date.now();
-    test.load();
-    setTimeout(() => finish(false), 5000);
-  });
-}
-async function playLockscreenOnlyMp3(){
-  if(playing){ stop(); return; }
-  const url = fullSurahAudioUrlV36(currentSurah.number);
-  $("playerTitle").textContent = `Låsskärmsläge • Sura ${currentSurah.number}`;
-  $("playerStatus").textContent = `Kontrollerar ${url}...`;
-  const exists = await checkIfSurahMp3Exists(url);
-  if(!exists){
-    playing = false;
-    $("playAll").textContent = "▶";
-    $("playerTitle").textContent = "MP3 saknas";
-    $("playerStatus").textContent = `Låsskärm fungerar bara när ${url} finns. Kör SKAPA_SURAH_LJUDFILER.bat och ladda upp mappen surah-audio.`;
-    return;
-  }
-  stop(false);
-  playing = true;
-  $("playAll").textContent = "Ⅱ";
-  $("playerTitle").textContent = `Spelar låsskärms-MP3 • Sura ${currentSurah.number}`;
-  $("playerStatus").textContent = "Nu spelas EN riktig MP3. Lås mobilen efter att ljudet har startat.";
-  setupMediaSession(`Sura ${currentSurah.number} - ${currentSurah.name}`, "Arabisk recitation + svensk röst");
-  audio.pause();
-  audio.removeAttribute("src");
-  audio.load();
-  audio.src = url;
-  audio.preload = "auto";
-  audio.controls = true;
-  audio.onended = () => {
-    playing = false;
-    $("playAll").textContent = "▶";
-    $("playerStatus").textContent = "Klar";
-  };
-  audio.onerror = () => {
-    playing = false;
-    $("playAll").textContent = "▶";
-    $("playerTitle").textContent = "Kunde inte spela MP3";
-    $("playerStatus").textContent = `${url} finns men kunde inte spelas. Testa ladda upp filen igen.`;
-  };
-  try{
-    await audio.play();
-  }catch(e){
-    playing = false;
-    $("playAll").textContent = "▶";
-    $("playerStatus").textContent = "Tryck play igen. Mobilen blockerade första starten.";
-  }
-}
-window.addEventListener("load", () => {
-  const btn = document.getElementById("playAll");
-  if(btn) btn.onclick = () => playLockscreenOnlyMp3();
-  const status = document.getElementById("playerStatus");
-  if(status) status.textContent = "Låsskärmsläge: stora play-knappen spelar bara surah-audio/001.mp3 osv.";
 });

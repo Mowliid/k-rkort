@@ -1,0 +1,12 @@
+KORANAPP – EN ZIP FÖR VISUAL STUDIO CODE
+
+1. Packa upp hela zip-filen till en vanlig mapp.
+2. Dubbelklicka på ÖPPNA_I_VISUAL_STUDIO_CODE.bat.
+3. Om knappen inte fungerar: öppna Visual Studio Code, välj Arkiv > Öppna mapp och välj den uppackade mappen.
+4. Starta appen med Live Server eller dubbelklicka på STARTA_APPEN.bat om Node.js finns.
+
+VIKTIGT:
+- Flytta inte MP3-filerna ur mappen surah-audio.
+- Mappen innehåller 001.mp3 till 114.mp3.
+- Den stora play-knappen spelar den svenska översättningen med låst skärm.
+- Ljudet är extra komprimerat för att hela appen ska kunna laddas ner som en zip.
