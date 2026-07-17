@@ -9,29 +9,6 @@ let swedishRate = 0.80;
 let mobileSpeechUnlocked = false;
 let lastSpeechError = "";
 const audio = document.getElementById("ayahAudio");
-let wakeLock = null;
-let keepScreenAwake = localStorage.getItem("quranKeepScreenAwake") !== "0";
-
-async function requestWakeLock(){
-  if(!keepScreenAwake || !("wakeLock" in navigator)) return false;
-  try{
-    wakeLock = await navigator.wakeLock.request("screen");
-    wakeLock.addEventListener("release", () => { wakeLock = null; });
-    const btn = document.getElementById("wakeLockBtn");
-    if(btn) btn.textContent = "Skärmen hålls vaken";
-    return true;
-  }catch(e){
-    console.warn("Wake Lock fungerar inte på denna mobil", e);
-    return false;
-  }
-}
-
-async function releaseWakeLock(){
-  try{ if(wakeLock) await wakeLock.release(); }catch(e){}
-  wakeLock = null;
-  const btn = document.getElementById("wakeLockBtn");
-  if(btn) btn.textContent = keepScreenAwake ? "Håll skärmen vaken" : "Skärm-vaken av";
-}
 
 function setupMediaSession(title="Koranen", artist="Abdullah Matrood"){
   if(!("mediaSession" in navigator)) return;
@@ -71,7 +48,7 @@ function setupMediaSession(title="Koranen", artist="Abdullah Matrood"){
 
 document.addEventListener("visibilitychange", () => {
   // Om mobilen låser skärmen släpper vissa webbläsare wake lock. Försök ta tillbaka den när sidan syns igen.
-  if(document.visibilityState === "visible" && playing) requestWakeLock();
+  // Ingen wake-lock behövs när riktiga ljudfiler används.
 });
 
 const $ = (id) => document.getElementById(id);
@@ -816,7 +793,6 @@ async function playOne(idx){
 
 async function playFrom(idx){
   playing = true;
-  requestWakeLock();
   $("playAll").textContent = "Ⅱ";
   for(let i=idx; i<currentVerses.length && playing; i++){
     await playOne(i);
@@ -831,7 +807,7 @@ async function playFrom(idx){
 
 function stop(reset=true){
   playing = false;
-  releaseWakeLock();
+  if(typeof stopSyncTracking === "function") stopSyncTracking();
   audio.pause(); audio.removeAttribute("src"); audio.load();
   if(window.speechSynthesis) speechSynthesis.cancel();
   $("playAll").textContent = "▶";
@@ -843,14 +819,11 @@ function stop(reset=true){
 }
 
 $("search").addEventListener("input", e => renderSurahs(e.target.value));
-function startPlaybackFromUserClick(idx){
-  if(playing){ stop(); return; }
-  stop(false);
-  unlockSwedishSpeechFromUserClick();
-  playFrom(idx);
+function startLegacyPlaybackFromUserClick(idx){
+  // Gammal vers-för-vers-spelare används inte längre.
+  currentIndex = idx || 0;
+  playWholeSurahFileFromLockscreen(currentIndex);
 }
-
-$("playAll").onclick = () => startPlaybackFromUserClick(currentIndex || 0);
 $("stopBtn").onclick = () => stop();
 const downloadSurahBtn = document.getElementById("downloadSurahBtn");
 if(downloadSurahBtn){
@@ -871,50 +844,300 @@ if(testVoiceBtn){
   };
 }
 
-const wakeLockBtn = document.getElementById("wakeLockBtn");
-if(wakeLockBtn){
-  wakeLockBtn.textContent = keepScreenAwake ? "Håll skärmen vaken" : "Skärm-vaken av";
-  wakeLockBtn.onclick = async () => {
-    keepScreenAwake = !keepScreenAwake;
-    localStorage.setItem("quranKeepScreenAwake", keepScreenAwake ? "1" : "0");
-    if(keepScreenAwake){
-      await requestWakeLock();
-      $("playerTitle").textContent = "Skärmen hålls vaken";
-      $("playerStatus").textContent = "Låt mobilen vara på. Om du låser skärmen kan svensk AI-röst stoppas av iPhone/Android.";
-    }else{
-      await releaseWakeLock();
-      $("playerTitle").textContent = "Skärm-vaken av";
-      $("playerStatus").textContent = "Mobilen kan stoppa svensk röst när skärmen släcks.";
-    }
-  };
-}
-
-
-// ===== HEL SURA MED LÅSSKÄRM-LJUD =====
-// Mobilens låsskärm fortsätter säkert med en riktig, sammanhängande ljudfil.
-// Filformat: surah-audio/001.webm ... surah-audio/114.webm
-// Varje fil innehåller arabisk vers, svensk översättning och därefter nästa vers.
+// ===== HEL SURA MED SYNKRONISERAD MARKERING =====
+// Originalfilen spelas direkt av <audio>-elementet utan gain, kompressor,
+// playbackRate eller annan Web Audio-behandling. Därför låter sidan likadant
+// som när .webm-filen öppnas direkt.
 function fullSurahAudioUrl(sura){
   return `surah-audio/${pad3(sura)}.webm`;
 }
 
-async function playWholeSurahFileFromLockscreen(){
-  if(playing){ stop(); return; }
-  stop(false);
-  playing = true;
-  $("playAll").textContent = "Ⅱ";
-  $("playerTitle").textContent = `Sura ${currentSurah.number} • låsskärms-ljud`;
-  $("playerStatus").textContent = "Abdullah Al-Matrood läser versen, sedan kommer svensk översättning...";
-  setupMediaSession(`Sura ${currentSurah.number} - ${currentSurah.name}`, "Abdullah Al-Matrood + svensk översättning");
-  const ok = await playSingleAudioUrl(fullSurahAudioUrl(currentSurah.number), "Abdullah Al-Matrood + svensk översättning");
-  playing = false;
-  $("playAll").textContent = "▶";
-  $("playerStatus").textContent = ok ? "Klar" : `Kunde inte öppna surah-audio/${pad3(currentSurah.number)}.webm.`;
+let syncFrame = 0;
+let syncProbe = null;
+let syncProbeContext = null;
+let syncProbeSource = null;
+let syncProbeAnalyser = null;
+let syncProbeMuteGain = null;
+let syncProbeData = null;
+let syncVerseIndex = 0;
+let syncPhase = "ar";
+let syncPhaseStartedAt = 0;
+let syncSilenceStartedAt = null;
+let syncLastMediaTime = 0;
+let syncProbeAvailable = false;
+
+function arabicWordCount(verse){
+  return String(verse?.arabic || "")
+    .replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g, "")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length;
 }
 
-$("playAll").onclick = () => playWholeSurahFileFromLockscreen();
-selectSurah(1);
+function arabicLetterCount(verse){
+  return (String(verse?.arabic || "").match(/[\u0621-\u064A\u066E-\u06D3]/g) || []).length;
+}
 
+function swedishReadableLength(verse){
+  return String(verse?.swedish || "")
+    .replace(/\s+/g, " ")
+    .trim().length;
+}
+
+// Detta är bara minimitider. Själva bytet görs vid en riktig paus i ljudfilen.
+// Minimitiderna hindrar att en kort paus mitt i recitationen flyttar highlighten.
+function minimumArabicSeconds(verse){
+  const words = arabicWordCount(verse);
+  const letters = arabicLetterCount(verse);
+  return Math.max(2.0, words * 0.78 + letters * 0.035);
+}
+
+function minimumSwedishSeconds(verse){
+  const chars = swedishReadableLength(verse);
+  // Alma-rösten ligger normalt kring 15–20 tecken/sekund.
+  // 22 tecken/sekund används som säker nedre gräns så nästa vers aldrig går före.
+  return Math.max(2.0, chars / 22);
+}
+
+function setSyncedHighlight(index, phase){
+  if(index < 0 || index >= currentVerses.length) return;
+  syncVerseIndex = index;
+  currentIndex = index;
+  syncPhase = phase;
+  highlight(index, phase);
+  const v = currentVerses[index];
+  $("playerTitle").textContent = `Sura ${v.sura}:${v.verse}`;
+  $("playerStatus").textContent = phase === "sv"
+    ? "Svensk översättning läses..."
+    : "Abdullah Al-Matrood läser versen...";
+}
+
+function resetPhaseClock(mediaTime){
+  syncPhaseStartedAt = mediaTime;
+  syncSilenceStartedAt = null;
+}
+
+function resetSyncToStart(mediaTime=0){
+  syncVerseIndex = 0;
+  syncPhase = "ar";
+  resetPhaseClock(mediaTime);
+  syncLastMediaTime = mediaTime;
+  setSyncedHighlight(0, "ar");
+}
+
+function stopProbeAudio(){
+  if(syncProbe){
+    try{ syncProbe.pause(); }catch(e){}
+    syncProbe.removeAttribute("src");
+    try{ syncProbe.load(); }catch(e){}
+  }
+  syncProbeAvailable = false;
+}
+
+function stopSyncTracking(){
+  if(syncFrame) cancelAnimationFrame(syncFrame);
+  syncFrame = 0;
+  syncSilenceStartedAt = null;
+  stopProbeAudio();
+  // Ändra aldrig originalfilens hastighet eller volym här.
+  audio.playbackRate = 1;
+  audio.volume = 1;
+  audio.muted = false;
+}
+
+async function prepareSilentSyncProbe(){
+  try{
+    if(!syncProbe){
+      syncProbe = document.createElement("audio");
+      syncProbe.preload = "auto";
+      syncProbe.playsInline = true;
+      syncProbe.setAttribute("aria-hidden", "true");
+
+      syncProbeContext = new (window.AudioContext || window.webkitAudioContext)();
+      syncProbeSource = syncProbeContext.createMediaElementSource(syncProbe);
+      syncProbeAnalyser = syncProbeContext.createAnalyser();
+      syncProbeAnalyser.fftSize = 1024;
+      syncProbeAnalyser.smoothingTimeConstant = 0.08;
+      syncProbeMuteGain = syncProbeContext.createGain();
+      syncProbeMuteGain.gain.value = 0;
+      syncProbeSource.connect(syncProbeAnalyser);
+      syncProbeAnalyser.connect(syncProbeMuteGain);
+      syncProbeMuteGain.connect(syncProbeContext.destination);
+      // Endast den separata analysproben tystas. Huvudljudet går aldrig genom Web Audio.
+      syncProbeData = new Uint8Array(syncProbeAnalyser.fftSize);
+    }
+
+    syncProbe.src = audio.currentSrc || audio.src;
+    syncProbe.currentTime = audio.currentTime || 0;
+    await syncProbeContext.resume();
+    await syncProbe.play();
+    syncProbeAvailable = true;
+    return true;
+  }catch(e){
+    console.warn("Tyst synk-probe kunde inte starta", e);
+    syncProbeAvailable = false;
+    return false;
+  }
+}
+
+function probeIsQuiet(){
+  if(!syncProbeAvailable || !syncProbeAnalyser || !syncProbeData) return false;
+  syncProbeAnalyser.getByteTimeDomainData(syncProbeData);
+  let sum = 0;
+  for(let i=0; i<syncProbeData.length; i++){
+    const sample = (syncProbeData[i] - 128) / 128;
+    sum += sample * sample;
+  }
+  const rms = Math.sqrt(sum / syncProbeData.length);
+  return rms < 0.0095;
+}
+
+function applyEstimatedFallback(now){
+  const verse = currentVerses[syncVerseIndex];
+  if(!verse) return;
+  const elapsed = now - syncPhaseStartedAt;
+
+  // Reservläge för webbläsare som inte tillåter den tysta analysproben.
+  if(syncPhase === "ar" && elapsed >= Math.max(3.0, minimumArabicSeconds(verse) * 1.35)){
+    setSyncedHighlight(syncVerseIndex, "sv");
+    resetPhaseClock(now);
+    return;
+  }
+
+  if(syncPhase === "sv" && elapsed >= Math.max(3.5, minimumSwedishSeconds(verse) * 1.28)){
+    if(syncVerseIndex < currentVerses.length - 1){
+      setSyncedHighlight(syncVerseIndex + 1, "ar");
+      resetPhaseClock(now);
+    }
+  }
+}
+
+function beginSyncTracking(){
+  if(syncFrame) cancelAnimationFrame(syncFrame);
+  resetSyncToStart(audio.currentTime || 0);
+  prepareSilentSyncProbe();
+
+  const tick = () => {
+    if(!playing || audio.paused || audio.ended) return;
+
+    const now = audio.currentTime || 0;
+    const verse = currentVerses[syncVerseIndex];
+    if(!verse) return;
+
+    // Håll den tysta proben nära originalspelaren utan att röra originalets ljud.
+    if(syncProbeAvailable && syncProbe){
+      const drift = Math.abs((syncProbe.currentTime || 0) - now);
+      if(drift > 0.18){
+        try{ syncProbe.currentTime = now; }catch(e){}
+      }
+      if(syncProbe.paused && !audio.paused){
+        syncProbe.play().catch(()=>{});
+      }
+    }
+
+    // Vid stor manuell sökning börjar synkningen om säkert från första versen.
+    if(now + 0.5 < syncLastMediaTime){
+      resetSyncToStart(now);
+    }
+    syncLastMediaTime = now;
+
+    if(syncProbeAvailable){
+      const quiet = probeIsQuiet();
+      const elapsed = now - syncPhaseStartedAt;
+      const minElapsed = syncPhase === "ar"
+        ? minimumArabicSeconds(verse)
+        : minimumSwedishSeconds(verse);
+
+      if(quiet && elapsed >= minElapsed){
+        if(syncSilenceStartedAt === null) syncSilenceStartedAt = now;
+      }else if(!quiet && syncSilenceStartedAt !== null){
+        const silenceLength = now - syncSilenceStartedAt;
+        syncSilenceStartedAt = null;
+
+        if(syncPhase === "ar" && silenceLength >= 0.12){
+          // Byt först när pausen är slut och den svenska rösten faktiskt börjar.
+          setSyncedHighlight(syncVerseIndex, "sv");
+          resetPhaseClock(now);
+        }else if(syncPhase === "sv" && silenceLength >= 0.38){
+          // Nästa vers markeras först efter den längre pausen mellan versparen.
+          // Svensk minimitid måste också ha passerat, så arabisk–svensk-pausen
+          // kan aldrig misstolkas som början på nästa vers.
+          if(syncVerseIndex < currentVerses.length - 1){
+            setSyncedHighlight(syncVerseIndex + 1, "ar");
+            resetPhaseClock(now);
+          }
+        }
+      }else if(!quiet){
+        syncSilenceStartedAt = null;
+      }
+    }else{
+      applyEstimatedFallback(now);
+    }
+
+    syncFrame = requestAnimationFrame(tick);
+  };
+
+  syncFrame = requestAnimationFrame(tick);
+}
+
+async function playWholeSurahFileFromLockscreen(startIndex=0){
+  if(playing){ stop(); return; }
+  stop(false);
+  if(window.speechSynthesis) speechSynthesis.cancel();
+  playing = true;
+  $("playAll").textContent = "Ⅱ";
+  $("playerTitle").textContent = `Sura ${currentSurah.number}`;
+  $("playerStatus").textContent = "Startar originalfilen...";
+  setupMediaSession(`Sura ${currentSurah.number} - ${currentSurah.name}`, "Abdullah Al-Matrood + svensk översättning");
+
+  audio.pause();
+  audio.removeAttribute("src");
+  audio.load();
+  audio.src = fullSurahAudioUrl(currentSurah.number);
+  audio.preload = "auto";
+  audio.defaultPlaybackRate = 1;
+  audio.playbackRate = 1;
+  audio.volume = 1;
+  audio.muted = false;
+  audio.preservesPitch = true;
+
+  audio.onplaying = () => {
+    beginSyncTracking();
+  };
+  audio.onpause = () => {
+    if(syncProbe && !syncProbe.paused) syncProbe.pause();
+  };
+  audio.onended = () => {
+    stopSyncTracking();
+    playing = false;
+    $("playAll").textContent = "▶";
+    $("playerStatus").textContent = "Klar";
+    clearHighlight();
+  };
+  audio.onerror = () => {
+    stopSyncTracking();
+    playing = false;
+    $("playAll").textContent = "▶";
+    $("playerStatus").textContent = `Kunde inte öppna surah-audio/${pad3(currentSurah.number)}.webm.`;
+  };
+  audio.oncanplay = () => {
+    audio.play().catch(() => {
+      playing = false;
+      $("playAll").textContent = "▶";
+      $("playerStatus").textContent = "Tryck play igen. Webbläsaren blockerade ljudet.";
+    });
+  };
+  audio.load();
+}
+
+// Versknappen startar hela färdiga surafilen från början. Highlighten följer filens ordning.
+function startPlaybackFromUserClick(idx){
+  currentIndex = 0;
+  playWholeSurahFileFromLockscreen(0);
+}
+
+$("playAll").onclick = () => playWholeSurahFileFromLockscreen(0);
+selectSurah(1);
 
 // ===== RIKTIG AI-CHATT =====
 document.addEventListener("DOMContentLoaded", () => {

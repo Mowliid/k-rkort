@@ -1,0 +1,10 @@
+FIXAT 18 JULI 2026
+
+1. Originalfilen spelas direkt i webbläsarens vanliga audio-element.
+2. Ingen kompressor, gain/förstärkning eller hastighetsändring används på ljudet.
+3. Ljudanalysen sker i en separat tyst kopia och kan därför inte försämra ljudet.
+4. Highlighten väntar på pausen mellan arabiskan och svenskan.
+5. Nästa vers kan inte markeras förrän den svenska textens minimitid har gått och den längre pausen mellan verserna är slut.
+6. Knappen för att hålla skärmen vaken finns inte.
+
+Starta med STARTA_APPEN.bat.
