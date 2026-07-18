@@ -483,3 +483,35 @@
   font-size:16px;
   white-space:pre-wrap;
 }
+
+
+/* Hastighetsreglaget gäller bara svensk översättning */
+.translation-speed-panel{
+  grid-template-columns:auto minmax(220px,1fr) auto auto;
+  align-items:center;
+  margin-top:22px;
+}
+.translation-speed-panel small{
+  grid-column:1 / -1;
+  color:#e6fbf8;
+  font-size:14px;
+  line-height:1.45;
+}
+.translation-speed-panel input[type="range"]{width:100%;}
+.speed-reset{
+  border:1px solid rgba(255,255,255,.55);
+  background:rgba(255,255,255,.14);
+  color:white;
+  border-radius:14px;
+  padding:10px 14px;
+  font-weight:700;
+  cursor:pointer;
+}
+.speed-reset:hover{background:rgba(255,255,255,.24)}
+@media(max-width:700px){
+  .translation-speed-panel{grid-template-columns:1fr auto}
+  .translation-speed-panel label,
+  .translation-speed-panel input,
+  .translation-speed-panel small{grid-column:1 / -1}
+  .speed-reset{grid-column:1 / -1}
+}

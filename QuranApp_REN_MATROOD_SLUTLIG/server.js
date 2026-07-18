@@ -1,5 +1,6 @@
 
 const http = require("http");
+const https = require("https");
 const fs = require("fs");
 const path = require("path");
 
@@ -160,8 +161,149 @@ function readBody(req, cb) {
   req.on("end", () => cb(body));
 }
 
-const server = http.createServer((req, res) => {
-  if (req.method === "POST" && req.url === "/api/chat") {
+
+const MATROOD_CACHE_DIR = path.join(ROOT, "matrood-cache");
+const MATROOD_BASE_URL = "https://everyayah.com/data/Abdullah_Matroud_128kbps/";
+const activeDownloads = new Map();
+fs.mkdirSync(MATROOD_CACHE_DIR, { recursive: true });
+
+function isValidMatroodFile(name) {
+  return /^\d{6}\.mp3$/.test(String(name || ""));
+}
+
+function downloadUrlToFile(url, destination, redirects = 0) {
+  return new Promise((resolve, reject) => {
+    if (redirects > 6) return reject(new Error("För många omdirigeringar"));
+    const client = url.startsWith("https:") ? https : http;
+    const request = client.get(url, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 QuranApp/1.0",
+        "Accept": "audio/mpeg,audio/*;q=0.9,*/*;q=0.8"
+      }
+    }, response => {
+      if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
+        response.resume();
+        const nextUrl = new URL(response.headers.location, url).toString();
+        return downloadUrlToFile(nextUrl, destination, redirects + 1).then(resolve, reject);
+      }
+      if (response.statusCode !== 200) {
+        response.resume();
+        return reject(new Error(`EveryAyah svarade ${response.statusCode}`));
+      }
+
+      const temp = destination + `.part-${process.pid}-${Date.now()}`;
+      const output = fs.createWriteStream(temp);
+      response.pipe(output);
+      output.on("finish", () => {
+        output.close(() => {
+          fs.stat(temp, (error, stat) => {
+            if (error || stat.size < 1000) {
+              fs.unlink(temp, () => {});
+              return reject(error || new Error("Den hämtade MP3-filen var tom"));
+            }
+            fs.rename(temp, destination, renameError => {
+              if (renameError) {
+                fs.unlink(temp, () => {});
+                return reject(renameError);
+              }
+              resolve(destination);
+            });
+          });
+        });
+      });
+      output.on("error", error => {
+        response.destroy();
+        fs.unlink(temp, () => {});
+        reject(error);
+      });
+    });
+    request.setTimeout(45000, () => request.destroy(new Error("Tidsgränsen gick ut")));
+    request.on("error", reject);
+  });
+}
+
+async function ensureMatroodFile(filename) {
+  if (!isValidMatroodFile(filename)) throw new Error("Felaktigt filnamn");
+  const localPath = path.join(MATROOD_CACHE_DIR, filename);
+  try {
+    const stat = await fs.promises.stat(localPath);
+    if (stat.isFile() && stat.size > 1000) return localPath;
+  } catch (_) {}
+
+  if (activeDownloads.has(filename)) return activeDownloads.get(filename);
+  const job = downloadUrlToFile(MATROOD_BASE_URL + filename, localPath)
+    .finally(() => activeDownloads.delete(filename));
+  activeDownloads.set(filename, job);
+  return job;
+}
+
+function serveFile(req, res, file, contentType, cacheControl = "no-cache") {
+  fs.stat(file, (err, stat) => {
+    if (err || !stat.isFile()) {
+      res.writeHead(404, {"Content-Type": "text/plain; charset=utf-8"});
+      return res.end("Filen hittades inte");
+    }
+
+    const headers = {
+      "Content-Type": contentType,
+      "Accept-Ranges": "bytes",
+      "Cache-Control": cacheControl,
+      "X-Content-Type-Options": "nosniff"
+    };
+    const range = req.headers.range;
+    if (range) {
+      const match = /^bytes=(\d*)-(\d*)$/.exec(range);
+      if (!match) {
+        res.writeHead(416, {...headers, "Content-Range": `bytes */${stat.size}`});
+        return res.end();
+      }
+      let start = match[1] ? Number(match[1]) : 0;
+      let end = match[2] ? Number(match[2]) : stat.size - 1;
+      if (!match[1] && match[2]) {
+        const suffixLength = Number(match[2]);
+        start = Math.max(0, stat.size - suffixLength);
+        end = stat.size - 1;
+      }
+      end = Math.min(end, stat.size - 1);
+      if (!Number.isFinite(start) || !Number.isFinite(end) || start < 0 || start > end || start >= stat.size) {
+        res.writeHead(416, {...headers, "Content-Range": `bytes */${stat.size}`});
+        return res.end();
+      }
+      res.writeHead(206, {
+        ...headers,
+        "Content-Range": `bytes ${start}-${end}/${stat.size}`,
+        "Content-Length": end - start + 1
+      });
+      if (req.method === "HEAD") return res.end();
+      return fs.createReadStream(file, {start, end}).pipe(res);
+    }
+
+    res.writeHead(200, {...headers, "Content-Length": stat.size});
+    if (req.method === "HEAD") return res.end();
+    fs.createReadStream(file).pipe(res);
+  });
+}
+
+const server = http.createServer(async (req, res) => {
+  const requestUrl = new URL(req.url, "http://localhost:3000");
+
+  if ((req.method === "GET" || req.method === "HEAD") && requestUrl.pathname.startsWith("/matrood/")) {
+    const filename = decodeURIComponent(requestUrl.pathname.split("/").pop() || "");
+    if (!isValidMatroodFile(filename)) {
+      res.writeHead(400, {"Content-Type": "text/plain; charset=utf-8"});
+      return res.end("Felaktigt MP3-filnamn");
+    }
+    try {
+      const localFile = await ensureMatroodFile(filename);
+      return serveFile(req, res, localFile, "audio/mpeg", "public, max-age=31536000, immutable, no-transform");
+    } catch (error) {
+      console.error("Kunde inte hämta Matrood", filename, error.message);
+      res.writeHead(502, {"Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store"});
+      return res.end("Kunde inte hämta den rena Matrood-filen. Kontrollera internetanslutningen.");
+    }
+  }
+
+  if (req.method === "POST" && requestUrl.pathname === "/api/chat") {
     return readBody(req, body => {
       try {
         const data = JSON.parse(body || "{}");
@@ -175,67 +317,28 @@ const server = http.createServer((req, res) => {
     });
   }
 
-  let url = req.url.split("?")[0];
-  if (url === "/") url = "/index.html";
-  const file = path.normalize(path.join(ROOT, decodeURIComponent(url)));
+  let urlPath = requestUrl.pathname;
+  if (urlPath === "/") urlPath = "/index.html";
+  const file = path.normalize(path.join(ROOT, decodeURIComponent(urlPath)));
   if (!file.startsWith(ROOT)) {
     res.writeHead(403);
     return res.end("Forbidden");
   }
 
-  fs.stat(file, (err, stat) => {
-    if (err || !stat.isFile()) {
-      res.writeHead(404);
-      return res.end("Not found");
-    }
-
-    const contentType = types[path.extname(file)] || "application/octet-stream";
-    const commonHeaders = {
-      "Content-Type": contentType,
-      "Accept-Ranges": "bytes",
-      "Cache-Control": file.includes(`${path.sep}surah-audio${path.sep}`)
-        ? "public, max-age=31536000, immutable"
-        : "no-cache"
-    };
-    const range = req.headers.range;
-
-    if (range) {
-      const match = /^bytes=(\d*)-(\d*)$/.exec(range);
-      if (!match) {
-        res.writeHead(416, {...commonHeaders, "Content-Range": `bytes */${stat.size}`});
-        return res.end();
-      }
-
-      let start = match[1] ? Number(match[1]) : 0;
-      let end = match[2] ? Number(match[2]) : stat.size - 1;
-      if (!match[1] && match[2]) {
-        const suffixLength = Number(match[2]);
-        start = Math.max(0, stat.size - suffixLength);
-        end = stat.size - 1;
-      }
-      end = Math.min(end, stat.size - 1);
-
-      if (!Number.isFinite(start) || !Number.isFinite(end) || start < 0 || start > end || start >= stat.size) {
-        res.writeHead(416, {...commonHeaders, "Content-Range": `bytes */${stat.size}`});
-        return res.end();
-      }
-
-      res.writeHead(206, {
-        ...commonHeaders,
-        "Content-Range": `bytes ${start}-${end}/${stat.size}`,
-        "Content-Length": end - start + 1
-      });
-      if (req.method === "HEAD") return res.end();
-      return fs.createReadStream(file, {start, end}).pipe(res);
-    }
-
-    res.writeHead(200, {...commonHeaders, "Content-Length": stat.size});
-    if (req.method === "HEAD") return res.end();
-    fs.createReadStream(file).pipe(res);
-  });
+  const ext = path.extname(file);
+  const contentType = types[ext] || "application/octet-stream";
+  const isAudio = ext === ".mp3" || ext === ".webm";
+  return serveFile(
+    req,
+    res,
+    file,
+    contentType,
+    isAudio ? "public, max-age=31536000, immutable, no-transform" : "no-cache, no-store, must-revalidate"
+  );
 });
 
-server.listen(3000, () => {
-  console.log("\nGRATIS LOKAL AI KÖR: http://localhost:3000");
-  console.log("Ingen API-nyckel behövs. Kör inte npm install.\n");
+server.listen(3000, "127.0.0.1", () => {
+  console.log("\nKORANAPP KÖR: http://localhost:3000");
+  console.log("Ren Matrood 128 kbps sparas automatiskt i mappen matrood-cache.");
+  console.log("Ingen API-nyckel eller npm install behövs.\n");
 });

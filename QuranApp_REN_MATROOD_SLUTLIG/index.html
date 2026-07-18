@@ -9,14 +9,15 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <audio id="ayahAudio" preload="auto" playsinline controls style="display:none"></audio>
+  <audio id="ayahAudio" preload="metadata" playsinline style="display:none"></audio>
+  <audio id="translationAudio" preload="metadata" playsinline style="display:none"></audio>
   <div class="app">
     <aside class="sidebar">
       <div class="brand">
         <div class="logo">القرآن</div>
         <div>
           <h1>Koranen</h1>
-          <p>Abdullah Al-Matrood + svenska • fungerar med låst skärm</p>
+          <p>Ren Abdullah Al‑Matrood 128 kbps + svensk översättning</p>
         </div>
       </div>
       <input id="search" placeholder="Sök sura..." />
@@ -28,15 +29,21 @@
         <button id="menuBtn" class="icon-btn">☰</button>
         <div>
           <h2 id="surahTitle">Sura 1 - Al-Fātiḥah</h2>
-          <p id="surahSub">Arabisk vers → lugn svensk översättning → nästa vers</p>
+          <p id="surahSub">Arabisk vers → svensk översättning → nästa vers</p>
         </div>
         <button id="settingsBtn" class="icon-btn">⚙</button>
       </header>
 
       <section class="hero">
         <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-        <p>Tryck på den stora play-knappen. Abdullah Al-Matrood läser först versen, sedan kommer den svenska översättningen från samma färdiga ljudfil.</p><button id="downloadSurahBtn" class="offline-btn">Spara suran offline</button>
-        <div class="voice-panel">
+        <p>Abdullah Al‑Matrood spelas från den rena 128 kbps-originalfilen. Därefter spelas endast den svenska delen från den färdiga surafilen.</p>
+        <button id="downloadSurahBtn" class="offline-btn">Spara suran offline</button>
+        <div class="voice-panel translation-speed-panel" aria-label="Hastighet för svensk översättning">
+          <label for="translationRateRange">Endast svensk översättning</label>
+          <input id="translationRateRange" type="range" min="0.65" max="1.25" step="0.05" value="1.00" />
+          <strong id="translationRateValue">1.00x</strong>
+          <button id="translationRateReset" class="speed-reset" type="button">Normal 1.00x</button>
+          <small>Reglaget påverkar endast svenskan. Abdullah Al‑Matrood är alltid låst till 1.00x.</small>
         </div>
       </section>
 
@@ -83,7 +90,8 @@
     </form>
   </section>
 
-  <script src="data.js"></script>
-  <script src="script.js?v=20260718-audio-sync"></script>
+  <script src="data.js?v=20260718-final"></script>
+  <script src="translation-timings.js?v=20260718-final"></script>
+  <script src="script.js?v=20260718-final"></script>
 </body>
 </html>
