@@ -756,6 +756,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const cardIndex = card ? allCards.indexOf(card) : -1;
     const verse = cardIndex >= 0 ? currentVerses[cardIndex] : null;
     const key = verse ? `${verse.sura}:${verse.verse}` : "";
+    if (verse && verse.easySwedish) return verse.easySwedish;
     if (CURATED_EASY_EXPLANATIONS[key]) return CURATED_EASY_EXPLANATIONS[key];
     if (!original) return "Jag hittar ingen svensk text i den här versen.";
 
@@ -873,6 +874,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const verse = cardIndex >= 0 ? currentVerses[cardIndex] : null;
     const key = verse ? `${verse.sura}:${verse.verse}` : "";
 
+    if (verse && verse.easySwedish) return verse.easySwedish;
     if (CURATED_EASY_EXPLANATIONS[key]) return CURATED_EASY_EXPLANATIONS[key];
 
     let t = original
@@ -955,6 +957,7 @@ Den påminner också om att det man tror och gör i livet har betydelse inför A
     if (!verse) return fallbackRealEasyExplanation(card.innerText, card);
 
     const key = `${verse.sura}:${verse.verse}`;
+    if (verse && verse.easySwedish) return verse.easySwedish;
     if (CURATED_EASY_EXPLANATIONS[key]) return CURATED_EASY_EXPLANATIONS[key];
 
     const cacheKey = `easyExplanationV34:${key}`;
@@ -1011,26 +1014,29 @@ Regler:
     }
   }
 
+  function verseForCard(card) {
+    const allCards = Array.from((document.getElementById("verses") || document).querySelectorAll(".verse-card"));
+    const cardIndex = card ? allCards.indexOf(card) : -1;
+    return cardIndex >= 0 ? currentVerses[cardIndex] : null;
+  }
+
   function addButtons() {
     const root = document.getElementById("verses") || document.body;
-    const all = Array.from(root.querySelectorAll("article, .verse-card, .ayah-card, .verse, .ayah, .card, section > div"));
-    const cards = all.filter(el => {
-      const txt = el.innerText || "";
-      return txt.length > 40 && /[åäöÅÄÖ]/.test(txt) && !el.querySelector(".easy-verse-btn") && !el.closest(".ai-chat-panel");
-    });
+    const cards = Array.from(root.querySelectorAll(".verse-card"))
+      .filter(el => !el.querySelector(".easy-verse-btn"));
 
     cards.forEach(card => {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "easy-verse-btn";
-      btn.textContent = "Enkel förklaring";
+      btn.textContent = "Lätt svenska";
 
       const box = document.createElement("div");
       box.className = "easy-verse-box";
       box.style.display = "none";
 
       btn.addEventListener("click", () => {
-        box.textContent = simpleExplain(card.innerText, card);
+        box.textContent = (verseForCard(card)?.easySwedish || simpleExplain(card.innerText, card));
         box.style.display = box.style.display === "none" ? "block" : "none";
       });
 
