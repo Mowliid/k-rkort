@@ -3,6 +3,7 @@ const http = require("http");
 const https = require("https");
 const fs = require("fs");
 const path = require("path");
+const os = require("os");
 
 const ROOT = __dirname;
 const types = {
@@ -337,8 +338,28 @@ const server = http.createServer(async (req, res) => {
   );
 });
 
-server.listen(3000, "127.0.0.1", () => {
-  console.log("\nKORANAPP KÖR: http://localhost:3000");
-  console.log("Ren Matrood 128 kbps sparas automatiskt i mappen matrood-cache.");
-  console.log("Ingen API-nyckel eller npm install behövs.\n");
+function getLanAddresses() {
+  const addresses = [];
+  const nets = os.networkInterfaces();
+  for (const entries of Object.values(nets)) {
+    for (const info of entries || []) {
+      if (info.family === "IPv4" && !info.internal) addresses.push(info.address);
+    }
+  }
+  return [...new Set(addresses)];
+}
+
+server.listen(3000, "0.0.0.0", () => {
+  console.log("\nKORANAPP KÖR PÅ DATORN:");
+  console.log("  http://localhost:3000");
+  const addresses = getLanAddresses();
+  if (addresses.length) {
+    console.log("\nÖPPNA PÅ MOBILEN (samma Wi-Fi):");
+    for (const address of addresses) console.log(`  http://${address}:3000`);
+  } else {
+    console.log("\nIngen lokal nätverksadress hittades. Kontrollera att datorn är ansluten till Wi-Fi.");
+  }
+  console.log("\nLåt detta svarta fönster vara öppet medan mobilen använder appen.");
+  console.log("Om Windows frågar om brandvägg: tillåt Node.js på privata nätverk.");
+  console.log("Ren Matrood 128 kbps sparas automatiskt i mappen matrood-cache.\n");
 });

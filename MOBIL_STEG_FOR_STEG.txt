@@ -1,0 +1,16 @@
+SÅ ÖPPNAR DU APPEN PÅ MOBILEN
+
+1. Packa upp zip-filen på Windows-datorn.
+2. Dubbelklicka på STARTA_APPEN.bat.
+3. Om Windows-brandväggen frågar, välj Tillåt åtkomst på privata nätverk.
+4. Låt det svarta fönstret vara öppet.
+5. Datorn och mobilen måste vara anslutna till samma Wi-Fi.
+6. I det svarta fönstret visas en adress, till exempel:
+   http://192.168.1.45:3000
+7. Skriv exakt den adressen i Chrome eller Safari på mobilen.
+
+VIKTIGT
+- Skriv inte localhost på mobilen. localhost betyder mobilen själv, inte datorn.
+- Datorn måste vara på och STARTA_APPEN-fönstret måste vara öppet.
+- Den här lokala mobiladressen fungerar inom samma Wi-Fi.
+- Full offlineinstallation på mobilen kräver HTTPS/webbhotell. Vanlig lokal HTTP kan spela appen men webbläsaren tillåter inte full PWA/offline-cache.

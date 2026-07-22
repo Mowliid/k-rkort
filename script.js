@@ -20,7 +20,7 @@ let translationPlaybackRate = Number(localStorage.getItem(TRANSLATION_RATE_KEY) 
 if (!Number.isFinite(translationPlaybackRate)) translationPlaybackRate = 1;
 translationPlaybackRate = Math.max(0.65, Math.min(1.25, translationPlaybackRate));
 
-const LOCAL_PROXY = (location.hostname === "localhost" || location.hostname === "127.0.0.1") && location.port === "3000";
+const LOCAL_PROXY = location.port === "3000";
 const PLAYER_CHANNEL_NAME = "quran-clean-player-20260718";
 let playerChannel = null;
 try {
